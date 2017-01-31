@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
     abi="x86"
-    api-level="25"
-    density="420dpi"
+    api-level="16"
+    density="xxhdpi"
     format="8"
     plugin-version="2.2.3"
-    timestamp="123309357379363"
-    token="-1738517611561228495"
+    timestamp="5297545803084"
+    token="8544838062667894083"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="4203" />
+        duration="1251" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="1830" />
+        duration="903" />
     <task
         name="verifier"
-        duration="347" />
+        duration="102" />
 
     <artifact
-        location="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\outputs\apk\app-debug.apk"
+        location="/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/outputs/apk/app-debug.apk"
         type="MAIN" />
 
     <build
-        timestamp="123309357379363"
+        timestamp="5297545803084"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\outputs\apk\app-debug.apk"
+            location="/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />
     </build>
 

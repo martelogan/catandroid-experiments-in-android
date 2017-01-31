@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+        "outputFile": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-zh/values-zh.xml",
         "map": [
             {
                 "to": {
@@ -11,13 +11,13 @@
                     "endOffset": 96
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 1,
-                        "startOffset": 255,
+                        "startOffset": 246,
                         "endColumn": 42,
-                        "endOffset": 296
+                        "endOffset": 287
                     }
                 }
             },
@@ -31,14 +31,14 @@
                     "endOffset": 194
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 1,
-                        "startOffset": 299,
+                        "startOffset": 289,
                         "endLine": 12,
                         "endColumn": 21,
-                        "endOffset": 394
+                        "endOffset": 382
                     }
                 }
             },
@@ -51,13 +51,13 @@
                     "endOffset": 230
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 24,
                         "startColumn": 1,
-                        "startOffset": 721,
+                        "startOffset": 697,
                         "endColumn": 32,
-                        "endOffset": 752
+                        "endOffset": 728
                     }
                 }
             },
@@ -70,13 +70,13 @@
                     "endOffset": 267
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 33,
                         "startColumn": 1,
-                        "startOffset": 995,
+                        "startOffset": 962,
                         "endColumn": 33,
-                        "endOffset": 1027
+                        "endOffset": 994
                     }
                 }
             },
@@ -89,13 +89,13 @@
                     "endOffset": 312
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 178,
                         "startColumn": 1,
-                        "startOffset": 6222,
+                        "startOffset": 6044,
                         "endColumn": 41,
-                        "endOffset": 6262
+                        "endOffset": 6084
                     }
                 }
             },
@@ -108,13 +108,13 @@
                     "endOffset": 362
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 174,
                         "startColumn": 1,
-                        "startOffset": 6045,
+                        "startOffset": 5871,
                         "endColumn": 46,
-                        "endOffset": 6090
+                        "endOffset": 5916
                     }
                 }
             },
@@ -127,13 +127,13 @@
                     "endOffset": 407
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 176,
                         "startColumn": 1,
-                        "startOffset": 6136,
+                        "startOffset": 5960,
                         "endColumn": 41,
-                        "endOffset": 6176
+                        "endOffset": 6000
                     }
                 }
             },
@@ -146,13 +146,13 @@
                     "endOffset": 449
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 172,
                         "startColumn": 1,
-                        "startOffset": 5963,
+                        "startOffset": 5791,
                         "endColumn": 38,
-                        "endOffset": 6000
+                        "endOffset": 5828
                     }
                 }
             },
@@ -165,13 +165,13 @@
                     "endOffset": 494
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 177,
                         "startColumn": 1,
-                        "startOffset": 6179,
+                        "startOffset": 6002,
                         "endColumn": 41,
-                        "endOffset": 6219
+                        "endOffset": 6042
                     }
                 }
             },
@@ -184,13 +184,13 @@
                     "endOffset": 538
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 171,
                         "startColumn": 1,
-                        "startOffset": 5921,
+                        "startOffset": 5750,
                         "endColumn": 40,
-                        "endOffset": 5960
+                        "endOffset": 5789
                     }
                 }
             },
@@ -203,13 +203,13 @@
                     "endOffset": 583
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 170,
                         "startColumn": 1,
-                        "startOffset": 5878,
+                        "startOffset": 5708,
                         "endColumn": 41,
-                        "endOffset": 5918
+                        "endOffset": 5748
                     }
                 }
             },
@@ -222,13 +222,13 @@
                     "endOffset": 628
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 175,
                         "startColumn": 1,
-                        "startOffset": 6093,
+                        "startOffset": 5918,
                         "endColumn": 41,
-                        "endOffset": 6133
+                        "endOffset": 5958
                     }
                 }
             },
@@ -241,13 +241,13 @@
                     "endOffset": 672
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 173,
                         "startColumn": 1,
-                        "startOffset": 6003,
+                        "startOffset": 5830,
                         "endColumn": 40,
-                        "endOffset": 6042
+                        "endOffset": 5869
                     }
                 }
             },
@@ -260,13 +260,13 @@
                     "endOffset": 715
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 179,
                         "startColumn": 1,
-                        "startOffset": 6265,
+                        "startOffset": 6086,
                         "endColumn": 39,
-                        "endOffset": 6303
+                        "endOffset": 6124
                     }
                 }
             },
@@ -279,13 +279,13 @@
                     "endOffset": 753
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 29,
                         "startColumn": 1,
-                        "startOffset": 854,
+                        "startOffset": 825,
                         "endColumn": 34,
-                        "endOffset": 887
+                        "endOffset": 858
                     }
                 }
             },
@@ -298,13 +298,13 @@
                     "endOffset": 801
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 1,
-                        "startOffset": 397,
+                        "startOffset": 384,
                         "endColumn": 44,
-                        "endOffset": 440
+                        "endOffset": 427
                     }
                 }
             },
@@ -317,13 +317,13 @@
                     "endOffset": 846
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 1,
-                        "startOffset": 443,
+                        "startOffset": 429,
                         "endColumn": 41,
-                        "endOffset": 483
+                        "endOffset": 469
                     }
                 }
             },
@@ -336,13 +336,13 @@
                     "endOffset": 889
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 201,
                         "startColumn": 1,
-                        "startOffset": 7307,
+                        "startOffset": 7106,
                         "endColumn": 39,
-                        "endOffset": 7345
+                        "endOffset": 7144
                     }
                 }
             },
@@ -355,13 +355,13 @@
                     "endOffset": 938
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 187,
                         "startColumn": 1,
-                        "startOffset": 6575,
+                        "startOffset": 6388,
                         "endColumn": 45,
-                        "endOffset": 6619
+                        "endOffset": 6432
                     }
                 }
             },
@@ -374,13 +374,13 @@
                     "endOffset": 996
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 193,
                         "startColumn": 1,
-                        "startOffset": 6905,
+                        "startOffset": 6712,
                         "endColumn": 54,
-                        "endOffset": 6958
+                        "endOffset": 6765
                     }
                 }
             },
@@ -393,13 +393,13 @@
                     "endOffset": 1058
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 190,
                         "startColumn": 1,
-                        "startOffset": 6729,
+                        "startOffset": 6539,
                         "endColumn": 58,
-                        "endOffset": 6786
+                        "endOffset": 6596
                     }
                 }
             },
@@ -412,13 +412,13 @@
                     "endOffset": 1107
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 188,
                         "startColumn": 1,
-                        "startOffset": 6622,
+                        "startOffset": 6434,
                         "endColumn": 45,
-                        "endOffset": 6666
+                        "endOffset": 6478
                     }
                 }
             },
@@ -431,13 +431,13 @@
                     "endOffset": 1165
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 195,
                         "startColumn": 1,
-                        "startOffset": 7017,
+                        "startOffset": 6822,
                         "endColumn": 54,
-                        "endOffset": 7070
+                        "endOffset": 6875
                     }
                 }
             },
@@ -450,13 +450,13 @@
                     "endOffset": 1229
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 196,
                         "startColumn": 1,
-                        "startOffset": 7073,
+                        "startOffset": 6877,
                         "endColumn": 60,
-                        "endOffset": 7132
+                        "endOffset": 6936
                     }
                 }
             },
@@ -469,13 +469,13 @@
                     "endOffset": 1278
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 185,
                         "startColumn": 1,
-                        "startOffset": 6481,
+                        "startOffset": 6296,
                         "endColumn": 45,
-                        "endOffset": 6525
+                        "endOffset": 6340
                     }
                 }
             },
@@ -488,13 +488,13 @@
                     "endOffset": 1336
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 194,
                         "startColumn": 1,
-                        "startOffset": 6961,
+                        "startOffset": 6767,
                         "endColumn": 54,
-                        "endOffset": 7014
+                        "endOffset": 6820
                     }
                 }
             },
@@ -507,13 +507,13 @@
                     "endOffset": 1398
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 191,
                         "startColumn": 1,
-                        "startOffset": 6789,
+                        "startOffset": 6598,
                         "endColumn": 58,
-                        "endOffset": 6846
+                        "endOffset": 6655
                     }
                 }
             },
@@ -526,13 +526,13 @@
                     "endOffset": 1447
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 186,
                         "startColumn": 1,
-                        "startOffset": 6528,
+                        "startOffset": 6342,
                         "endColumn": 45,
-                        "endOffset": 6572
+                        "endOffset": 6386
                     }
                 }
             },
@@ -545,13 +545,13 @@
                     "endOffset": 1505
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 192,
                         "startColumn": 1,
-                        "startOffset": 6849,
+                        "startOffset": 6657,
                         "endColumn": 54,
-                        "endOffset": 6902
+                        "endOffset": 6710
                     }
                 }
             },
@@ -564,13 +564,13 @@
                     "endOffset": 1567
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 189,
                         "startColumn": 1,
-                        "startOffset": 6669,
+                        "startOffset": 6480,
                         "endColumn": 58,
-                        "endOffset": 6726
+                        "endOffset": 6537
                     }
                 }
             },
@@ -583,13 +583,13 @@
                     "endOffset": 1624
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 211,
                         "startColumn": 1,
-                        "startOffset": 7783,
+                        "startOffset": 7572,
                         "endColumn": 53,
-                        "endOffset": 7835
+                        "endOffset": 7624
                     }
                 }
             },
@@ -602,13 +602,13 @@
                     "endOffset": 1667
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 209,
                         "startColumn": 1,
-                        "startOffset": 7697,
+                        "startOffset": 7488,
                         "endColumn": 39,
-                        "endOffset": 7735
+                        "endOffset": 7526
                     }
                 }
             },
@@ -621,13 +621,13 @@
                     "endOffset": 1707
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 207,
                         "startColumn": 1,
-                        "startOffset": 7622,
+                        "startOffset": 7415,
                         "endColumn": 36,
-                        "endOffset": 7657
+                        "endOffset": 7450
                     }
                 }
             },
@@ -640,13 +640,13 @@
                     "endOffset": 1770
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 212,
                         "startColumn": 1,
-                        "startOffset": 7838,
+                        "startOffset": 7626,
                         "endColumn": 59,
-                        "endOffset": 7896
+                        "endOffset": 7684
                     }
                 }
             },
@@ -659,13 +659,13 @@
                     "endOffset": 1817
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 210,
                         "startColumn": 1,
-                        "startOffset": 7738,
+                        "startOffset": 7528,
                         "endColumn": 43,
-                        "endOffset": 7780
+                        "endOffset": 7570
                     }
                 }
             },
@@ -678,13 +678,13 @@
                     "endOffset": 1866
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 219,
                         "startColumn": 1,
-                        "startOffset": 8178,
+                        "startOffset": 7959,
                         "endColumn": 45,
-                        "endOffset": 8222
+                        "endOffset": 8003
                     }
                 }
             },
@@ -697,13 +697,13 @@
                     "endOffset": 1907
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 217,
                         "startColumn": 1,
-                        "startOffset": 8085,
+                        "startOffset": 7868,
                         "endColumn": 37,
-                        "endOffset": 8121
+                        "endOffset": 7904
                     }
                 }
             },
@@ -716,13 +716,13 @@
                     "endOffset": 1957
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 184,
                         "startColumn": 1,
-                        "startOffset": 6433,
+                        "startOffset": 6249,
                         "endColumn": 46,
-                        "endOffset": 6478
+                        "endOffset": 6294
                     }
                 }
             },
@@ -735,13 +735,13 @@
                     "endOffset": 2006
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 204,
                         "startColumn": 1,
-                        "startOffset": 7461,
+                        "startOffset": 7257,
                         "endColumn": 45,
-                        "endOffset": 7505
+                        "endOffset": 7301
                     }
                 }
             },
@@ -754,13 +754,13 @@
                     "endOffset": 2045
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 208,
                         "startColumn": 1,
-                        "startOffset": 7660,
+                        "startOffset": 7452,
                         "endColumn": 35,
-                        "endOffset": 7694
+                        "endOffset": 7486
                     }
                 }
             },
@@ -773,13 +773,13 @@
                     "endOffset": 2101
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 218,
                         "startColumn": 1,
-                        "startOffset": 8124,
+                        "startOffset": 7906,
                         "endColumn": 52,
-                        "endOffset": 8175
+                        "endOffset": 7957
                     }
                 }
             },
@@ -792,13 +792,13 @@
                     "endOffset": 2147
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 214,
                         "startColumn": 1,
-                        "startOffset": 7946,
+                        "startOffset": 7732,
                         "endColumn": 42,
-                        "endOffset": 7987
+                        "endOffset": 7773
                     }
                 }
             },
@@ -811,13 +811,13 @@
                     "endOffset": 2197
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 199,
                         "startColumn": 1,
-                        "startOffset": 7221,
+                        "startOffset": 7022,
                         "endColumn": 46,
-                        "endOffset": 7266
+                        "endOffset": 7067
                     }
                 }
             },
@@ -830,13 +830,13 @@
                     "endOffset": 2240
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 183,
                         "startColumn": 1,
-                        "startOffset": 6392,
+                        "startOffset": 6209,
                         "endColumn": 39,
-                        "endOffset": 6430
+                        "endOffset": 6247
                     }
                 }
             },
@@ -849,13 +849,13 @@
                     "endOffset": 2290
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 198,
                         "startColumn": 1,
-                        "startOffset": 7173,
+                        "startOffset": 6975,
                         "endColumn": 46,
-                        "endOffset": 7218
+                        "endOffset": 7020
                     }
                 }
             },
@@ -868,13 +868,13 @@
                     "endOffset": 2346
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 215,
                         "startColumn": 1,
-                        "startOffset": 7990,
+                        "startOffset": 7775,
                         "endColumn": 52,
-                        "endOffset": 8041
+                        "endOffset": 7826
                     }
                 }
             },
@@ -887,13 +887,13 @@
                     "endOffset": 2395
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 213,
                         "startColumn": 1,
-                        "startOffset": 7899,
+                        "startOffset": 7686,
                         "endColumn": 45,
-                        "endOffset": 7943
+                        "endOffset": 7730
                     }
                 }
             },
@@ -906,13 +906,13 @@
                     "endOffset": 2438
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 216,
                         "startColumn": 1,
-                        "startOffset": 8044,
+                        "startOffset": 7828,
                         "endColumn": 39,
-                        "endOffset": 8082
+                        "endOffset": 7866
                     }
                 }
             },
@@ -925,13 +925,13 @@
                     "endOffset": 2485
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 182,
                         "startColumn": 1,
-                        "startOffset": 6347,
+                        "startOffset": 6165,
                         "endColumn": 43,
-                        "endOffset": 6389
+                        "endOffset": 6207
                     }
                 }
             },
@@ -944,13 +944,13 @@
                     "endOffset": 2525
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 200,
                         "startColumn": 1,
-                        "startOffset": 7269,
+                        "startOffset": 7069,
                         "endColumn": 36,
-                        "endOffset": 7304
+                        "endOffset": 7104
                     }
                 }
             },
@@ -963,13 +963,13 @@
                     "endOffset": 2585
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 203,
                         "startColumn": 1,
-                        "startOffset": 7403,
+                        "startOffset": 7200,
                         "endColumn": 56,
-                        "endOffset": 7458
+                        "endOffset": 7255
                     }
                 }
             },
@@ -982,13 +982,13 @@
                     "endOffset": 2642
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 202,
                         "startColumn": 1,
-                        "startOffset": 7348,
+                        "startOffset": 7146,
                         "endColumn": 53,
-                        "endOffset": 7400
+                        "endOffset": 7198
                     }
                 }
             },
@@ -1001,13 +1001,13 @@
                     "endOffset": 2702
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 206,
                         "startColumn": 1,
-                        "startOffset": 7564,
+                        "startOffset": 7358,
                         "endColumn": 56,
-                        "endOffset": 7619
+                        "endOffset": 7413
                     }
                 }
             },
@@ -1020,13 +1020,13 @@
                     "endOffset": 2760
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 205,
                         "startColumn": 1,
-                        "startOffset": 7508,
+                        "startOffset": 7303,
                         "endColumn": 54,
-                        "endOffset": 7561
+                        "endOffset": 7356
                     }
                 }
             },
@@ -1039,13 +1039,13 @@
                     "endOffset": 2800
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 197,
                         "startColumn": 1,
-                        "startOffset": 7135,
+                        "startOffset": 6938,
                         "endColumn": 36,
-                        "endOffset": 7170
+                        "endOffset": 6973
                     }
                 }
             },
@@ -1058,13 +1058,13 @@
                     "endOffset": 2837
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 32,
                         "startColumn": 1,
-                        "startOffset": 960,
+                        "startOffset": 928,
                         "endColumn": 33,
-                        "endOffset": 992
+                        "endOffset": 960
                     }
                 }
             },
@@ -1077,13 +1077,13 @@
                     "endOffset": 2874
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 25,
                         "startColumn": 1,
-                        "startOffset": 755,
+                        "startOffset": 730,
                         "endColumn": 33,
-                        "endOffset": 787
+                        "endOffset": 762
                     }
                 }
             },
@@ -1096,13 +1096,13 @@
                     "endOffset": 2911
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 54,
                         "startColumn": 1,
-                        "startOffset": 1822,
+                        "startOffset": 1768,
                         "endColumn": 33,
-                        "endOffset": 1854
+                        "endOffset": 1800
                     }
                 }
             },
@@ -1115,13 +1115,13 @@
                     "endOffset": 2958
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 70,
                         "startColumn": 1,
-                        "startOffset": 2553,
+                        "startOffset": 2483,
                         "endColumn": 43,
-                        "endOffset": 2595
+                        "endOffset": 2525
                     }
                 }
             },
@@ -1134,13 +1134,13 @@
                     "endOffset": 3006
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 68,
                         "startColumn": 1,
-                        "startOffset": 2458,
+                        "startOffset": 2390,
                         "endColumn": 44,
-                        "endOffset": 2501
+                        "endOffset": 2433
                     }
                 }
             },
@@ -1153,13 +1153,13 @@
                     "endOffset": 3057
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 69,
                         "startColumn": 1,
-                        "startOffset": 2504,
+                        "startOffset": 2435,
                         "endColumn": 47,
-                        "endOffset": 2550
+                        "endOffset": 2481
                     }
                 }
             },
@@ -1172,13 +1172,13 @@
                     "endOffset": 3095
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 30,
                         "startColumn": 1,
-                        "startOffset": 890,
+                        "startOffset": 860,
                         "endColumn": 34,
-                        "endOffset": 923
+                        "endOffset": 893
                     }
                 }
             },
@@ -1191,13 +1191,13 @@
                     "endOffset": 3138
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 1,
-                        "startOffset": 122,
+                        "startOffset": 116,
                         "endColumn": 39,
-                        "endOffset": 160
+                        "endOffset": 154
                     }
                 }
             },
@@ -1210,13 +1210,13 @@
                     "endOffset": 3196
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 43,
                         "startColumn": 1,
-                        "startOffset": 1388,
+                        "startOffset": 1345,
                         "endColumn": 54,
-                        "endOffset": 1441
+                        "endOffset": 1398
                     }
                 }
             },
@@ -1229,13 +1229,13 @@
                     "endOffset": 3242
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 45,
                         "startColumn": 1,
-                        "startOffset": 1498,
+                        "startOffset": 1453,
                         "endColumn": 42,
-                        "endOffset": 1539
+                        "endOffset": 1494
                     }
                 }
             },
@@ -1248,13 +1248,13 @@
                     "endOffset": 3292
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 53,
                         "startColumn": 1,
-                        "startOffset": 1774,
+                        "startOffset": 1721,
                         "endColumn": 46,
-                        "endOffset": 1819
+                        "endOffset": 1766
                     }
                 }
             },
@@ -1267,13 +1267,13 @@
                     "endOffset": 3367
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 67,
                         "startColumn": 1,
-                        "startOffset": 2385,
+                        "startOffset": 2318,
                         "endColumn": 71,
-                        "endOffset": 2455
+                        "endOffset": 2388
                     }
                 }
             },
@@ -1286,13 +1286,13 @@
                     "endOffset": 3411
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 48,
                         "startColumn": 1,
-                        "startOffset": 1623,
+                        "startOffset": 1575,
                         "endColumn": 40,
-                        "endOffset": 1662
+                        "endOffset": 1614
                     }
                 }
             },
@@ -1305,13 +1305,13 @@
                     "endOffset": 3457
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 39,
                         "startColumn": 1,
-                        "startOffset": 1172,
+                        "startOffset": 1133,
                         "endColumn": 42,
-                        "endOffset": 1213
+                        "endOffset": 1174
                     }
                 }
             },
@@ -1324,13 +1324,13 @@
                     "endOffset": 3501
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 38,
                         "startColumn": 1,
-                        "startOffset": 1130,
+                        "startOffset": 1092,
                         "endColumn": 40,
-                        "endOffset": 1169
+                        "endOffset": 1131
                     }
                 }
             },
@@ -1343,13 +1343,13 @@
                     "endOffset": 3566
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 40,
                         "startColumn": 1,
-                        "startOffset": 1216,
+                        "startOffset": 1176,
                         "endColumn": 61,
-                        "endOffset": 1276
+                        "endOffset": 1236
                     }
                 }
             },
@@ -1362,13 +1362,13 @@
                     "endOffset": 3622
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 44,
                         "startColumn": 1,
-                        "startOffset": 1444,
+                        "startOffset": 1400,
                         "endColumn": 52,
-                        "endOffset": 1495
+                        "endOffset": 1451
                     }
                 }
             },
@@ -1381,13 +1381,13 @@
                     "endOffset": 3665
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 47,
                         "startColumn": 1,
-                        "startOffset": 1582,
+                        "startOffset": 1535,
                         "endColumn": 39,
-                        "endOffset": 1620
+                        "endOffset": 1573
                     }
                 }
             },
@@ -1400,13 +1400,13 @@
                     "endOffset": 3721
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 42,
                         "startColumn": 1,
-                        "startOffset": 1334,
+                        "startOffset": 1292,
                         "endColumn": 52,
-                        "endOffset": 1385
+                        "endOffset": 1343
                     }
                 }
             },
@@ -1419,13 +1419,13 @@
                     "endOffset": 3778
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 41,
                         "startColumn": 1,
-                        "startOffset": 1279,
+                        "startOffset": 1238,
                         "endColumn": 53,
-                        "endOffset": 1331
+                        "endOffset": 1290
                     }
                 }
             },
@@ -1438,13 +1438,13 @@
                     "endOffset": 3820
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 46,
                         "startColumn": 1,
-                        "startOffset": 1542,
+                        "startOffset": 1496,
                         "endColumn": 38,
-                        "endOffset": 1579
+                        "endOffset": 1533
                     }
                 }
             },
@@ -1457,13 +1457,13 @@
                     "endOffset": 3861
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 37,
                         "startColumn": 1,
-                        "startOffset": 1091,
+                        "startOffset": 1054,
                         "endColumn": 37,
-                        "endOffset": 1127
+                        "endOffset": 1090
                     }
                 }
             },
@@ -1476,13 +1476,13 @@
                     "endOffset": 3899
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 26,
                         "startColumn": 1,
-                        "startOffset": 790,
+                        "startOffset": 764,
                         "endColumn": 34,
-                        "endOffset": 823
+                        "endOffset": 797
                     }
                 }
             },
@@ -1495,13 +1495,13 @@
                     "endOffset": 3934
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 34,
                         "startColumn": 1,
-                        "startOffset": 1030,
+                        "startOffset": 996,
                         "endColumn": 31,
-                        "endOffset": 1060
+                        "endOffset": 1026
                     }
                 }
             },
@@ -1514,13 +1514,13 @@
                     "endOffset": 3977
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 163,
                         "startColumn": 1,
-                        "startOffset": 5604,
+                        "startOffset": 5441,
                         "endColumn": 39,
-                        "endOffset": 5642
+                        "endOffset": 5479
                     }
                 }
             },
@@ -1533,13 +1533,13 @@
                     "endOffset": 4030
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 159,
                         "startColumn": 1,
-                        "startOffset": 5397,
+                        "startOffset": 5238,
                         "endColumn": 49,
-                        "endOffset": 5445
+                        "endOffset": 5286
                     }
                 }
             },
@@ -1552,13 +1552,13 @@
                     "endOffset": 4083
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 158,
                         "startColumn": 1,
-                        "startOffset": 5346,
+                        "startOffset": 5188,
                         "endColumn": 49,
-                        "endOffset": 5394
+                        "endOffset": 5236
                     }
                 }
             },
@@ -1571,13 +1571,13 @@
                     "endOffset": 4132
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 167,
                         "startColumn": 1,
-                        "startOffset": 5802,
+                        "startOffset": 5635,
                         "endColumn": 45,
-                        "endOffset": 5846
+                        "endOffset": 5679
                     }
                 }
             },
@@ -1590,13 +1590,13 @@
                     "endOffset": 4183
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 166,
                         "startColumn": 1,
-                        "startOffset": 5753,
+                        "startOffset": 5587,
                         "endColumn": 47,
-                        "endOffset": 5799
+                        "endOffset": 5633
                     }
                 }
             },
@@ -1609,13 +1609,13 @@
                     "endOffset": 4239
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 164,
                         "startColumn": 1,
-                        "startOffset": 5645,
+                        "startOffset": 5481,
                         "endColumn": 52,
-                        "endOffset": 5696
+                        "endOffset": 5532
                     }
                 }
             },
@@ -1628,13 +1628,13 @@
                     "endOffset": 4295
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 165,
                         "startColumn": 1,
-                        "startOffset": 5699,
+                        "startOffset": 5534,
                         "endColumn": 52,
-                        "endOffset": 5750
+                        "endOffset": 5585
                     }
                 }
             },
@@ -1647,13 +1647,13 @@
                     "endOffset": 4349
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 162,
                         "startColumn": 1,
-                        "startOffset": 5552,
+                        "startOffset": 5390,
                         "endColumn": 50,
-                        "endOffset": 5601
+                        "endOffset": 5439
                     }
                 }
             },
@@ -1666,13 +1666,13 @@
                     "endOffset": 4403
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 161,
                         "startColumn": 1,
-                        "startOffset": 5500,
+                        "startOffset": 5339,
                         "endColumn": 50,
-                        "endOffset": 5549
+                        "endOffset": 5388
                     }
                 }
             },
@@ -1685,13 +1685,13 @@
                     "endOffset": 4457
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 160,
                         "startColumn": 1,
-                        "startOffset": 5448,
+                        "startOffset": 5288,
                         "endColumn": 50,
-                        "endOffset": 5497
+                        "endOffset": 5337
                     }
                 }
             },
@@ -1704,13 +1704,13 @@
                     "endOffset": 4502
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 63,
                         "startColumn": 1,
-                        "startOffset": 2208,
+                        "startOffset": 2145,
                         "endColumn": 41,
-                        "endOffset": 2248
+                        "endOffset": 2185
                     }
                 }
             },
@@ -1723,13 +1723,13 @@
                     "endOffset": 4548
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 64,
                         "startColumn": 1,
-                        "startOffset": 2251,
+                        "startOffset": 2187,
                         "endColumn": 42,
-                        "endOffset": 2292
+                        "endOffset": 2228
                     }
                 }
             },
@@ -1742,13 +1742,13 @@
                     "endOffset": 4595
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 57,
                         "startColumn": 1,
-                        "startOffset": 1952,
+                        "startOffset": 1895,
                         "endColumn": 43,
-                        "endOffset": 1994
+                        "endOffset": 1937
                     }
                 }
             },
@@ -1761,13 +1761,13 @@
                     "endOffset": 4639
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 58,
                         "startColumn": 1,
-                        "startOffset": 1997,
+                        "startOffset": 1939,
                         "endColumn": 40,
-                        "endOffset": 2036
+                        "endOffset": 1978
                     }
                 }
             },
@@ -1780,13 +1780,13 @@
                     "endOffset": 4684
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 59,
                         "startColumn": 1,
-                        "startOffset": 2039,
+                        "startOffset": 1980,
                         "endColumn": 41,
-                        "endOffset": 2079
+                        "endOffset": 2020
                     }
                 }
             },
@@ -1799,13 +1799,13 @@
                     "endOffset": 4728
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 60,
                         "startColumn": 1,
-                        "startOffset": 2082,
+                        "startOffset": 2022,
                         "endColumn": 40,
-                        "endOffset": 2121
+                        "endOffset": 2061
                     }
                 }
             },
@@ -1818,13 +1818,13 @@
                     "endOffset": 4772
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 61,
                         "startColumn": 1,
-                        "startOffset": 2124,
+                        "startOffset": 2063,
                         "endColumn": 40,
-                        "endOffset": 2163
+                        "endOffset": 2102
                     }
                 }
             },
@@ -1837,13 +1837,13 @@
                     "endOffset": 4820
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 65,
                         "startColumn": 1,
-                        "startOffset": 2295,
+                        "startOffset": 2230,
                         "endColumn": 44,
-                        "endOffset": 2338
+                        "endOffset": 2273
                     }
                 }
             },
@@ -1856,13 +1856,13 @@
                     "endOffset": 4864
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 62,
                         "startColumn": 1,
-                        "startOffset": 2166,
+                        "startOffset": 2104,
                         "endColumn": 40,
-                        "endOffset": 2205
+                        "endOffset": 2143
                     }
                 }
             },
@@ -1875,13 +1875,13 @@
                     "endOffset": 4916
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 56,
                         "startColumn": 1,
-                        "startOffset": 1902,
+                        "startOffset": 1846,
                         "endColumn": 48,
-                        "endOffset": 1949
+                        "endOffset": 1893
                     }
                 }
             },
@@ -1894,13 +1894,13 @@
                     "endOffset": 4963
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 55,
                         "startColumn": 1,
-                        "startOffset": 1857,
+                        "startOffset": 1802,
                         "endColumn": 43,
-                        "endOffset": 1899
+                        "endOffset": 1844
                     }
                 }
             },
@@ -1913,13 +1913,13 @@
                     "endOffset": 5009
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 66,
                         "startColumn": 1,
-                        "startOffset": 2341,
+                        "startOffset": 2275,
                         "endColumn": 42,
-                        "endOffset": 2382
+                        "endOffset": 2316
                     }
                 }
             },
@@ -1932,13 +1932,13 @@
                     "endOffset": 5050
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 1,
-                        "startOffset": 591,
+                        "startOffset": 572,
                         "endColumn": 37,
-                        "endOffset": 627
+                        "endOffset": 608
                     }
                 }
             },
@@ -1951,13 +1951,13 @@
                     "endOffset": 5085
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 23,
                         "startColumn": 1,
-                        "startOffset": 688,
+                        "startOffset": 665,
                         "endColumn": 31,
-                        "endOffset": 718
+                        "endOffset": 695
                     }
                 }
             },
@@ -1970,13 +1970,13 @@
                     "endOffset": 5128
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 115,
                         "startColumn": 1,
-                        "startOffset": 4251,
+                        "startOffset": 4136,
                         "endColumn": 39,
-                        "endOffset": 4289
+                        "endOffset": 4174
                     }
                 }
             },
@@ -1990,14 +1990,14 @@
                     "endOffset": 5440
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 128,
                         "startColumn": 1,
-                        "startOffset": 4768,
+                        "startOffset": 4640,
                         "endLine": 143,
                         "endColumn": 28,
-                        "endOffset": 5090
+                        "endOffset": 4947
                     }
                 }
             },
@@ -2010,13 +2010,13 @@
                     "endOffset": 5487
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 122,
                         "startColumn": 1,
-                        "startOffset": 4563,
+                        "startOffset": 4441,
                         "endColumn": 43,
-                        "endOffset": 4605
+                        "endOffset": 4483
                     }
                 }
             },
@@ -2030,14 +2030,14 @@
                     "endOffset": 5703
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 144,
                         "startColumn": 1,
-                        "startOffset": 5093,
+                        "startOffset": 4949,
                         "endLine": 155,
                         "endColumn": 25,
-                        "endOffset": 5315
+                        "endOffset": 5160
                     }
                 }
             },
@@ -2050,13 +2050,13 @@
                     "endOffset": 5749
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 121,
                         "startColumn": 1,
-                        "startOffset": 4519,
+                        "startOffset": 4398,
                         "endColumn": 42,
-                        "endOffset": 4560
+                        "endOffset": 4439
                     }
                 }
             },
@@ -2070,14 +2070,14 @@
                     "endOffset": 5907
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 123,
                         "startColumn": 1,
-                        "startOffset": 4608,
+                        "startOffset": 4485,
                         "endLine": 127,
                         "endColumn": 38,
-                        "endOffset": 4765
+                        "endOffset": 4638
                     }
                 }
             },
@@ -2090,13 +2090,13 @@
                     "endOffset": 5953
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 119,
                         "startColumn": 1,
-                        "startOffset": 4431,
+                        "startOffset": 4312,
                         "endColumn": 42,
-                        "endOffset": 4472
+                        "endOffset": 4353
                     }
                 }
             },
@@ -2109,13 +2109,13 @@
                     "endOffset": 6001
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 116,
                         "startColumn": 1,
-                        "startOffset": 4292,
+                        "startOffset": 4176,
                         "endColumn": 44,
-                        "endOffset": 4335
+                        "endOffset": 4219
                     }
                 }
             },
@@ -2128,13 +2128,13 @@
                     "endOffset": 6051
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 117,
                         "startColumn": 1,
-                        "startOffset": 4338,
+                        "startOffset": 4221,
                         "endColumn": 46,
-                        "endOffset": 4383
+                        "endOffset": 4266
                     }
                 }
             },
@@ -2147,13 +2147,13 @@
                     "endOffset": 6098
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 118,
                         "startColumn": 1,
-                        "startOffset": 4386,
+                        "startOffset": 4268,
                         "endColumn": 43,
-                        "endOffset": 4428
+                        "endOffset": 4310
                     }
                 }
             },
@@ -2166,13 +2166,13 @@
                     "endOffset": 6144
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 120,
                         "startColumn": 1,
-                        "startOffset": 4475,
+                        "startOffset": 4355,
                         "endColumn": 42,
-                        "endOffset": 4516
+                        "endOffset": 4396
                     }
                 }
             },
@@ -2186,14 +2186,14 @@
                     "endOffset": 6263
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 86,
                         "startColumn": 1,
-                        "startOffset": 3122,
+                        "startOffset": 3036,
                         "endLine": 90,
                         "endColumn": 29,
-                        "endOffset": 3240
+                        "endOffset": 3150
                     }
                 }
             },
@@ -2206,13 +2206,13 @@
                     "endOffset": 6308
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 52,
                         "startColumn": 1,
-                        "startOffset": 1731,
+                        "startOffset": 1679,
                         "endColumn": 41,
-                        "endOffset": 1771
+                        "endOffset": 1719
                     }
                 }
             },
@@ -2225,13 +2225,13 @@
                     "endOffset": 6354
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 1,
-                        "startOffset": 163,
+                        "startOffset": 156,
                         "endColumn": 42,
-                        "endOffset": 204
+                        "endOffset": 197
                     }
                 }
             },
@@ -2244,13 +2244,13 @@
                     "endOffset": 6404
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 1,
-                        "startOffset": 207,
+                        "startOffset": 199,
                         "endColumn": 46,
-                        "endOffset": 252
+                        "endOffset": 244
                     }
                 }
             },
@@ -2263,13 +2263,13 @@
                     "endOffset": 6449
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 1,
-                        "startOffset": 486,
+                        "startOffset": 471,
                         "endColumn": 41,
-                        "endOffset": 526
+                        "endOffset": 511
                     }
                 }
             },
@@ -2282,13 +2282,13 @@
                     "endOffset": 6489
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 1,
-                        "startOffset": 553,
+                        "startOffset": 535,
                         "endColumn": 36,
-                        "endOffset": 588
+                        "endOffset": 570
                     }
                 }
             },
@@ -2301,13 +2301,13 @@
                     "endOffset": 6526
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 51,
                         "startColumn": 1,
-                        "startOffset": 1696,
+                        "startOffset": 1645,
                         "endColumn": 33,
-                        "endOffset": 1728
+                        "endOffset": 1677
                     }
                 }
             },
@@ -2320,13 +2320,13 @@
                     "endOffset": 6565
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 73,
                         "startColumn": 1,
-                        "startOffset": 2629,
+                        "startOffset": 2556,
                         "endColumn": 35,
-                        "endOffset": 2663
+                        "endOffset": 2590
                     }
                 }
             },
@@ -2339,13 +2339,13 @@
                     "endOffset": 6612
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 75,
                         "startColumn": 1,
-                        "startOffset": 2709,
+                        "startOffset": 2634,
                         "endColumn": 43,
-                        "endOffset": 2751
+                        "endOffset": 2676
                     }
                 }
             },
@@ -2358,13 +2358,13 @@
                     "endOffset": 6657
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 74,
                         "startColumn": 1,
-                        "startOffset": 2666,
+                        "startOffset": 2592,
                         "endColumn": 41,
-                        "endOffset": 2706
+                        "endOffset": 2632
                     }
                 }
             },
@@ -2377,13 +2377,13 @@
                     "endOffset": 6695
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 93,
                         "startColumn": 1,
-                        "startOffset": 3270,
+                        "startOffset": 3177,
                         "endColumn": 34,
-                        "endOffset": 3303
+                        "endOffset": 3210
                     }
                 }
             },
@@ -2396,13 +2396,13 @@
                     "endOffset": 6745
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 102,
                         "startColumn": 1,
-                        "startOffset": 3683,
+                        "startOffset": 3581,
                         "endColumn": 46,
-                        "endOffset": 3728
+                        "endOffset": 3626
                     }
                 }
             },
@@ -2415,13 +2415,13 @@
                     "endOffset": 6795
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 98,
                         "startColumn": 1,
-                        "startOffset": 3489,
+                        "startOffset": 3391,
                         "endColumn": 46,
-                        "endOffset": 3534
+                        "endOffset": 3436
                     }
                 }
             },
@@ -2434,13 +2434,13 @@
                     "endOffset": 6839
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 110,
                         "startColumn": 1,
-                        "startOffset": 4079,
+                        "startOffset": 3969,
                         "endColumn": 40,
-                        "endOffset": 4118
+                        "endOffset": 4008
                     }
                 }
             },
@@ -2453,13 +2453,13 @@
                     "endOffset": 6888
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 96,
                         "startColumn": 1,
-                        "startOffset": 3395,
+                        "startOffset": 3299,
                         "endColumn": 45,
-                        "endOffset": 3439
+                        "endOffset": 3343
                     }
                 }
             },
@@ -2472,13 +2472,13 @@
                     "endOffset": 6942
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 103,
                         "startColumn": 1,
-                        "startOffset": 3731,
+                        "startOffset": 3628,
                         "endColumn": 50,
-                        "endOffset": 3780
+                        "endOffset": 3677
                     }
                 }
             },
@@ -2491,13 +2491,13 @@
                     "endOffset": 6991
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 112,
                         "startColumn": 1,
-                        "startOffset": 4168,
+                        "startOffset": 4056,
                         "endColumn": 45,
-                        "endOffset": 4212
+                        "endOffset": 4100
                     }
                 }
             },
@@ -2510,13 +2510,13 @@
                     "endOffset": 7045
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 101,
                         "startColumn": 1,
-                        "startOffset": 3631,
+                        "startOffset": 3530,
                         "endColumn": 50,
-                        "endOffset": 3680
+                        "endOffset": 3579
                     }
                 }
             },
@@ -2529,13 +2529,13 @@
                     "endOffset": 7089
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 108,
                         "startColumn": 1,
-                        "startOffset": 3985,
+                        "startOffset": 3877,
                         "endColumn": 40,
-                        "endOffset": 4024
+                        "endOffset": 3916
                     }
                 }
             },
@@ -2548,13 +2548,13 @@
                     "endOffset": 7143
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 105,
                         "startColumn": 1,
-                        "startOffset": 3834,
+                        "startOffset": 3729,
                         "endColumn": 50,
-                        "endOffset": 3883
+                        "endOffset": 3778
                     }
                 }
             },
@@ -2567,13 +2567,13 @@
                     "endOffset": 7192
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 95,
                         "startColumn": 1,
-                        "startOffset": 3348,
+                        "startOffset": 3253,
                         "endColumn": 45,
-                        "endOffset": 3392
+                        "endOffset": 3297
                     }
                 }
             },
@@ -2586,13 +2586,13 @@
                     "endOffset": 7244
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 100,
                         "startColumn": 1,
-                        "startOffset": 3581,
+                        "startOffset": 3481,
                         "endColumn": 48,
-                        "endOffset": 3628
+                        "endOffset": 3528
                     }
                 }
             },
@@ -2605,13 +2605,13 @@
                     "endOffset": 7290
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 99,
                         "startColumn": 1,
-                        "startOffset": 3537,
+                        "startOffset": 3438,
                         "endColumn": 42,
-                        "endOffset": 3578
+                        "endOffset": 3479
                     }
                 }
             },
@@ -2624,13 +2624,13 @@
                     "endOffset": 7343
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 104,
                         "startColumn": 1,
-                        "startOffset": 3783,
+                        "startOffset": 3679,
                         "endColumn": 49,
-                        "endOffset": 3831
+                        "endOffset": 3727
                     }
                 }
             },
@@ -2643,13 +2643,13 @@
                     "endOffset": 7392
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 111,
                         "startColumn": 1,
-                        "startOffset": 4121,
+                        "startOffset": 4010,
                         "endColumn": 45,
-                        "endOffset": 4165
+                        "endOffset": 4054
                     }
                 }
             },
@@ -2662,13 +2662,13 @@
                     "endOffset": 7441
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 97,
                         "startColumn": 1,
-                        "startOffset": 3442,
+                        "startOffset": 3345,
                         "endColumn": 45,
-                        "endOffset": 3486
+                        "endOffset": 3389
                     }
                 }
             },
@@ -2681,13 +2681,13 @@
                     "endOffset": 7486
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 107,
                         "startColumn": 1,
-                        "startOffset": 3942,
+                        "startOffset": 3835,
                         "endColumn": 41,
-                        "endOffset": 3982
+                        "endOffset": 3875
                     }
                 }
             },
@@ -2700,13 +2700,13 @@
                     "endOffset": 7530
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 94,
                         "startColumn": 1,
-                        "startOffset": 3306,
+                        "startOffset": 3212,
                         "endColumn": 40,
-                        "endOffset": 3345
+                        "endOffset": 3251
                     }
                 }
             },
@@ -2719,13 +2719,13 @@
                     "endOffset": 7588
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 106,
                         "startColumn": 1,
-                        "startOffset": 3886,
+                        "startOffset": 3780,
                         "endColumn": 54,
-                        "endOffset": 3939
+                        "endOffset": 3833
                     }
                 }
             },
@@ -2738,13 +2738,13 @@
                     "endOffset": 7642
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 109,
                         "startColumn": 1,
-                        "startOffset": 4027,
+                        "startOffset": 3918,
                         "endColumn": 50,
-                        "endOffset": 4076
+                        "endOffset": 3967
                     }
                 }
             },
@@ -2757,13 +2757,13 @@
                     "endOffset": 7679
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 78,
                         "startColumn": 1,
-                        "startOffset": 2780,
+                        "startOffset": 2702,
                         "endColumn": 33,
-                        "endOffset": 2812
+                        "endOffset": 2734
                     }
                 }
             },
@@ -2776,13 +2776,13 @@
                     "endOffset": 7726
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 81,
                         "startColumn": 1,
-                        "startOffset": 2907,
+                        "startOffset": 2826,
                         "endColumn": 43,
-                        "endOffset": 2949
+                        "endOffset": 2868
                     }
                 }
             },
@@ -2795,13 +2795,13 @@
                     "endOffset": 7770
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 82,
                         "startColumn": 1,
-                        "startOffset": 2952,
+                        "startOffset": 2870,
                         "endColumn": 40,
-                        "endOffset": 2991
+                        "endOffset": 2909
                     }
                 }
             },
@@ -2814,13 +2814,13 @@
                     "endOffset": 7811
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 83,
                         "startColumn": 1,
-                        "startOffset": 2994,
+                        "startOffset": 2911,
                         "endColumn": 37,
-                        "endOffset": 3030
+                        "endOffset": 2947
                     }
                 }
             },
@@ -2833,13 +2833,13 @@
                     "endOffset": 7857
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 84,
                         "startColumn": 1,
-                        "startOffset": 3033,
+                        "startOffset": 2949,
                         "endColumn": 42,
-                        "endOffset": 3074
+                        "endOffset": 2990
                     }
                 }
             },
@@ -2852,13 +2852,13 @@
                     "endOffset": 7904
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 85,
                         "startColumn": 1,
-                        "startOffset": 3077,
+                        "startOffset": 2992,
                         "endColumn": 43,
-                        "endOffset": 3119
+                        "endOffset": 3034
                     }
                 }
             },
@@ -2871,13 +2871,13 @@
                     "endOffset": 7952
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 80,
                         "startColumn": 1,
-                        "startOffset": 2861,
+                        "startOffset": 2781,
                         "endColumn": 44,
-                        "endOffset": 2904
+                        "endOffset": 2824
                     }
                 }
             },
@@ -2890,13 +2890,13 @@
                     "endOffset": 8000
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 79,
                         "startColumn": 1,
-                        "startOffset": 2815,
+                        "startOffset": 2736,
                         "endColumn": 44,
-                        "endOffset": 2858
+                        "endOffset": 2779
                     }
                 }
             },
@@ -2909,13 +2909,13 @@
                     "endOffset": 8040
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 1,
-                        "startOffset": 630,
+                        "startOffset": 610,
                         "endColumn": 36,
-                        "endOffset": 665
+                        "endOffset": 645
                     }
                 }
             },
@@ -2928,13 +2928,13 @@
                     "endOffset": 8076
                 },
                 "from": {
-                    "file": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\values-zh\\strings.xml",
+                    "file": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/values-zh/strings.xml",
                     "position": {
                         "startLine": 31,
                         "startColumn": 1,
-                        "startOffset": 926,
+                        "startOffset": 895,
                         "endColumn": 32,
-                        "endOffset": 957
+                        "endOffset": 926
                     }
                 }
             }

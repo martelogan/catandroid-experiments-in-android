@@ -1,50 +1,50 @@
 [
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\accepttrade.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\accepttrade.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/localgame.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/localgame.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\playertrade.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\playertrade.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/reference_build.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/reference_build.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\status_player.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\status_player.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/rules.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/rules.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\reference_build.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\reference_build.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/accepttrade.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/accepttrade.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\reference_buy.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\reference_buy.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/reference_buy.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/reference_buy.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\reference.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\reference.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/discard.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/discard.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\rules.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\rules.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/status_player.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/status_player.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\status.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\status.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/status.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/status.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\discard.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\discard.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/reference_development.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/reference_development.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\counteroffer.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\counteroffer.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/counteroffer.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/counteroffer.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\localgame.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\localgame.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/playertrade.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/playertrade.xml"
     },
     {
-        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\layout\\reference_development.xml",
-        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\layout\\reference_development.xml"
+        "merged": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/build/intermediates/res/merged/debug/layout/reference.xml",
+        "source": "/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/CatAndroid/app/src/main/res/layout/reference.xml"
     }
 ]

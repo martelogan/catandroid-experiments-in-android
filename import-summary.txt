@@ -1,6 +1,16 @@
 ECLIPSE ANDROID PROJECT IMPORT SUMMARY
 ======================================
 
+Risky Project Location:
+-----------------------
+The tools *should* handle project locations in any directory. However,
+due to bugs, placing projects in directories containing spaces in the
+path, or characters like ", ' and &, have had issues. We're working to
+eliminate these bugs, but to save yourself headaches you may want to
+move your project to a location where this is not a problem.
+/Users/Fred/Documents/Undergraduate #2/Winter 2017/COMP361/Ongoing/AndroidSettlers-master-5
+                                   -         -                                             
+
 Ignored Files:
 --------------
 The following files were *not* copied into the new Gradle project; you
@@ -12,11 +22,11 @@ so manually move them:
 * README
 * build.xml
 * proguard-project.txt
-* scripts\
-* scripts\find_missing_strings.csh
-* scripts\gen_images.csh
-* scripts\gen_vertex.py
-* scripts\resize2.py
+* scripts/
+* scripts/find_missing_strings.csh
+* scripts/gen_images.csh
+* scripts/gen_vertex.py
+* scripts/resize2.py
 
 Replaced Jars with Dependencies:
 --------------------------------
@@ -35,9 +45,9 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => app\src\main\AndroidManifest.xml
-* res\ => app\src\main\res\
-* src\ => app\src\main\java\
+* AndroidManifest.xml => app/src/main/AndroidManifest.xml
+* res/ => app/src/main/res/
+* src/ => app/src/main/java/
 
 Next Steps:
 -----------
