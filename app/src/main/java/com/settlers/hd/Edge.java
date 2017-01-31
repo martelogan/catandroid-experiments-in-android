@@ -108,7 +108,7 @@ public class Edge {
 	 * 
 	 * @return the first vertex
 	 */
-	public Vertex getVertex1() {
+	public Vertex getV0Clockwise() {
 		return vertex[0];
 	}
 
@@ -117,7 +117,7 @@ public class Edge {
 	 * 
 	 * @return the second vertex
 	 */
-	public Vertex getVertex2() {
+	public Vertex getV1Clockwise() {
 		return vertex[1];
 	}
 

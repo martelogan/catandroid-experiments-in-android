@@ -28,8 +28,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
 			// check if we have a location to build a town or city
 			for (int i = 0; i < roads.size(); i++) {
-				Vertex v1 = roads.get(i).getVertex1();
-				Vertex v2 = roads.get(i).getVertex2();
+				Vertex v1 = roads.get(i).getV0Clockwise();
+				Vertex v2 = roads.get(i).getV1Clockwise();
 
 				if (v1.canBuild(this, Vertex.TOWN)
 						|| v2.canBuild(this, Vertex.TOWN))
@@ -97,12 +97,12 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 					}
 				}
 
-				// try and add to another recent road
+				// try and addCubic to another recent road
 				if (!builtRoad) {
 					for (int i = roads.size() - 1; i >= 0; i--) {
 						Edge road = roads.get(i);
-						Vertex v1 = road.getVertex1();
-						Vertex v2 = road.getVertex2();
+						Vertex v1 = road.getV0Clockwise();
+						Vertex v2 = road.getV1Clockwise();
 
 						for (int j = 0; j < 3; j++) {
 							Edge edge1 = v1.getEdge(j);
@@ -198,7 +198,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
 	@Override
 	public int setupRoad(Edge[] edges) {
-		// build from random settlement and build in a random direction
+		// build from random settlement and build in a random cubicDirection
 		while (true) {
 			Vertex vertex = settlements.get((int) (Math.random() * settlements
 					.size()));
@@ -215,11 +215,11 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		if (road == null)
 			return -1;
 
-		Vertex from = road.getVertex1();
+		Vertex from = road.getV0Clockwise();
 		if (from.getOwner() == this || from.hasRoad(this) && build(road))
 			return road.getIndex();
 
-		from = road.getVertex2();
+		from = road.getV1Clockwise();
 		if (from.getOwner() == this || from.hasRoad(this) && build(road))
 			return road.getIndex();
 
@@ -292,8 +292,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		int highest = 0;
 
 		for (int i = 0; i < roads.size(); i++) {
-			Vertex v1 = roads.get(i).getVertex1();
-			Vertex v2 = roads.get(i).getVertex2();
+			Vertex v1 = roads.get(i).getV0Clockwise();
+			Vertex v2 = roads.get(i).getV1Clockwise();
 
 			int value1 = v1.canBuild(this, Vertex.TOWN) ? vertexValue(v1,
 					preference) : 0;
@@ -323,11 +323,11 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 			}
 		}
 
-		// try and add to another recent road
+		// try and addCubic to another recent road
 		for (int i = roads.size() - 1; i >= 0; i--) {
 			Edge road = roads.get(i);
-			Vertex v1 = road.getVertex1();
-			Vertex v2 = road.getVertex2();
+			Vertex v1 = road.getV0Clockwise();
+			Vertex v2 = road.getV1Clockwise();
 
 			for (int j = 0; j < 3; j++) {
 				// null checking is in canBuild
@@ -401,7 +401,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 						for (int l = 0; l < have.length; l++)
 							have[l] -= offer[l];
 
-						// add to list of trades
+						// addCubic to list of trades
 						types.add(Hexagon.TYPES[i]);
 						trades.add(offer);
 						break;
@@ -487,7 +487,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		if (extra[type.ordinal()] <= 0)
 			return null;
 
-		// add in the offer
+		// addCubic in the offer
 		addList(extra, offer);
 
 		// see if we can build anything new

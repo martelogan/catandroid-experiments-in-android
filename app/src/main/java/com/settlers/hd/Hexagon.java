@@ -6,6 +6,13 @@ public class Hexagon {
 
 	public static final int NUM_HEXAGONS = 19;
 
+	//TODO: generalize to any board size
+	/* NOTE: for a perfectly-centered hexagon
+	with centered hexagonal number K, the map
+	radius n is the positive integer solution of
+	3n^2 - 3n + 1*/
+	public static final int RADIUS = 2;
+
 	public enum Type {
 		LUMBER, WOOL, GRAIN, BRICK, ORE, DESERT, ANY, LIGHT, DIM, SHORE
 	}
@@ -24,7 +31,8 @@ public class Hexagon {
 	private Board board;
 	private int roll;
 	private Type type;
-	private Vertex[] vertex;
+	private Vertex[] vertices;
+	private Edge[] edges;
 	private int id;
 
 	/**
@@ -39,7 +47,8 @@ public class Hexagon {
 		this.board = board;
 		this.type = type;
 		this.roll = 0;
-		vertex = new Vertex[6];
+		vertices = new Vertex[6];
+		edges = new Edge[6];
 		id = index;
 	}
 
@@ -47,29 +56,51 @@ public class Hexagon {
 	 * Set the connected vertices for hexagon
 	 * 
 	 * @param v1
-	 *            first vertex
+	 *            first vertices
 	 * @param v2
-	 *            second vertex
+	 *            second vertices
 	 * @param v3
-	 *            third vertex
+	 *            third vertices
 	 * @param v4
-	 *            fourth vertex
+	 *            fourth vertices
 	 * @param v5
-	 *            fifth vertex
+	 *            fifth vertices
 	 * @param v6
-	 *            sixth vertex
+	 *            sixth vertices
 	 */
 	public void setVertices(Vertex v1, Vertex v2, Vertex v3, Vertex v4,
 			Vertex v5, Vertex v6) {
-		vertex[0] = v1;
-		vertex[1] = v2;
-		vertex[2] = v3;
-		vertex[3] = v4;
-		vertex[4] = v5;
-		vertex[5] = v6;
+		vertices[0] = v1;
+		vertices[1] = v2;
+		vertices[2] = v3;
+		vertices[3] = v4;
+		vertices[4] = v5;
+		vertices[5] = v6;
 
 		for (int i = 0; i < 6; i++)
-			vertex[i].addHexagon(this);
+			vertices[i].addHexagon(this);
+	}
+
+	/**
+	 * Set a vertex of the hexagon
+	 *
+	 * @param index
+	 *            the index to set
+	 * @return
+	 */
+	public void setVertex(Vertex v, int index) {
+		vertices[index] = v;
+	}
+
+	/**
+	 * Get a vertices of the hexagon
+	 *
+	 * @param index
+	 *            the index of the vertices
+	 * @return the vertices
+	 */
+	public Vertex getVertex(int index) {
+		return vertices[index];
 	}
 
 	/**
@@ -91,15 +122,27 @@ public class Hexagon {
 		this.type = type;
 	}
 
+
 	/**
-	 * Get a vertex of the hexagon
-	 * 
-	 * @param index
-	 *            the index of the vertex
-	 * @return the vertex
+	 * Get an edge of the hexagon
+	 *
+	 * @param direction
+	 *            the index of the edge
+	 * @return the edge
 	 */
-	public Vertex getVertex(int index) {
-		return vertex[index];
+	public Edge getEdge(int direction) {
+		return edges[direction];
+	}
+
+	/**
+	 * Set an edge of the hexagon
+	 *
+	 * @param direction
+	 *            index to set the edge
+	 * @return
+	 */
+	public void setEdge(Edge edge, int direction) {
+		edges[direction] = edge;
 	}
 
 	/**
@@ -141,7 +184,7 @@ public class Hexagon {
 			return;
 
 		for (int i = 0; i < 6; i++)
-			vertex[i].distributeResources(type);
+			vertices[i].distributeResources(type);
 	}
 
 	/**
@@ -153,7 +196,7 @@ public class Hexagon {
 	 */
 	public boolean hasPlayer(Player player) {
 		for (int i = 0; i < 6; i++) {
-			if (vertex[i].getOwner() == player)
+			if (vertices[i].getOwner() == player)
 				return true;
 		}
 
@@ -168,7 +211,7 @@ public class Hexagon {
 	public Vector<Player> getPlayers() {
 		Vector<Player> players = new Vector<Player>();
 		for (int i = 0; i < 6; i++) {
-			Player owner = vertex[i].getOwner();
+			Player owner = vertices[i].getOwner();
 			if (owner != null && !players.contains(owner))
 				players.add(owner);
 		}
@@ -186,7 +229,7 @@ public class Hexagon {
 	public boolean isAdjacent(Hexagon hexagon) {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
-				Hexagon adjacent = vertex[i].getHexagon(j);
+				Hexagon adjacent = vertices[i].getHexagon(j);
 				if (adjacent == null || adjacent == this)
 					continue;
 
@@ -274,16 +317,17 @@ public class Hexagon {
 	 * @param hexagon
 	 *            the hexagon array
 	 */
-	public static void assignRoles(Hexagon[] hexagon) {
+	public static void assignRoles(Hexagon[] hexagon, int numHighRollers) {
 
 		// initialize count of dice sums used to allocate roll numbers
 		int[] rollCount = new int[SUM_COUNT.length];
-		for (int i = 0; i < rollCount.length; i++)
+		for (int i = 0; i < rollCount.length; i++) {
 			rollCount[i] = 0;
+		}
 
 		// place 6s and 8s (high probability rolls)
-		Hexagon[] highRollers = new Hexagon[4];
-		for (int i = 0; i < 4; i++) {
+		Hexagon[] highRollers = new Hexagon[numHighRollers];
+		for (int i = 0; i < numHighRollers; i++) {
 			// pick a random hexagon
 			int pick = -1;
 			while (pick < 0) {

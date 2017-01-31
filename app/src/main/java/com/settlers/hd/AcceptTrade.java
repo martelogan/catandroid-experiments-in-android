@@ -93,7 +93,7 @@ public class AcceptTrade extends Activity {
 				else if (offer != null)
 					counter = offer;
 			} else if (player.isHuman()) {
-				// add button on human players
+				// addCubic button on human players
 				Button make = (Button) findViewById(OFFER_BUTTONS[index]);
 				make.setVisibility(View.VISIBLE);
 

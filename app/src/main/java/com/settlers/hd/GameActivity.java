@@ -482,7 +482,7 @@ public class GameActivity extends Activity {
 		} else if (board.isSetupPhase()) {
 			// no extra buttons in setup phase
 		} else if (board.isProgressPhase()) {
-			// TODO: add ability to cancel card use
+			// TODO: addCubic ability to cancel card use
 			// consider what happens if there's nowhere to build a road
 		} else if (board.isRobberPhase()) {
 			// do nothing
@@ -707,7 +707,7 @@ public class GameActivity extends Activity {
 			if (player == current || !robbing.hasPlayer(player))
 				continue;
 
-			// add to list of players to steal from
+			// addCubic to list of players to steal from
 			int count = player.getResourceCount();
 			list[index++] = getString(R.string.game_steal_from) + " "
 					+ player.getName() + " (" + count + " "

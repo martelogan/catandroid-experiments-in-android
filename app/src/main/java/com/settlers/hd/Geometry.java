@@ -1,5 +1,20 @@
 package com.settlers.hd;
 
+import android.util.Log;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class Geometry {
 
 	public static final int TILE_SIZE = 256;
@@ -25,7 +40,7 @@ public class Geometry {
 		float minZoomX = 0.5f * (float) width / (5.5f * TILE_SIZE);
 		float minZoomY = 0.5f * (float) width / aspect / (5.1f * TILE_SIZE);
 		
-		minZoom = Math.min(minZoomX, minZoomY);
+		minZoom = min(minZoomX, minZoomY);
 		highZoom = 2 * minZoom;
 		maxZoom = 3 * minZoom;
 		
@@ -132,6 +147,21 @@ public class Geometry {
 		return best;
 	}
 
+
+	// TODO: Move helper functions to Utils
+    public static <E> List<E> pickNRandomElements(List<E> list, int n, Random r) {
+        int length = list.size();
+
+        if (length < n) return null;
+
+        //We don't need to shuffle the whole list
+        for (int i = length - 1; i >= length - n; --i)
+        {
+            Collections.swap(list, i , r.nextInt(i + 1));
+        }
+        return list.subList(length - n, length);
+    }
+
 	public int getNearestHexagon(int userX, int userY) {
 		return getNearest(userX, userY, HEXAGON_X, HEXAGON_Y, Hexagon.NUM_HEXAGONS);
 	}
@@ -185,7 +215,7 @@ public class Geometry {
 	}
 
 	public static void setAssociations(Hexagon[] hexagon, Vertex[] vertex,
-			Edge[] edge, Trader[] trader) {
+			Edge[] edge, Harbor[] harbor) {
 		// associate vertices with hexagons
 		hexagon[0].setVertices(vertex[6], vertex[7], vertex[12], vertex[13],
 				vertex[18], vertex[19]);
@@ -302,9 +332,174 @@ public class Geometry {
 
 		// associate vertices with traders
 		for (int i = 0; i < TRADER_EDGE.length; i++) {
-			edge[TRADER_EDGE[i]].getVertex1().setTrader(trader[i]);
-			edge[TRADER_EDGE[i]].getVertex2().setTrader(trader[i]);
+			edge[TRADER_EDGE[i]].getV0Clockwise().setHarbor(harbor[i]);
+			edge[TRADER_EDGE[i]].getV1Clockwise().setHarbor(harbor[i]);
 		}
+	}
+
+    public static Edge resolveNeighborHex(HashSet<Edge> portEdges, Hexagon myHex,
+                                          Hexagon myNeighbor, int myV0index, int myV1index) {
+        Vertex myClockwiseV0, myClockwiseV1;
+        int neighborEdgeDirect = AxialHexLocation.complementAxialDirection(myV0index);
+        Edge neighborEdge = myNeighbor.getEdge(neighborEdgeDirect);
+        // forfeit neighborEdge candidacy for harbor
+        try {
+            // should fail silently if edge not present
+            portEdges.remove(neighborEdge);
+        } catch (Exception e) {
+            // Warn exception (in case an intended removal failed)
+            System.out.println("WARNING: failed to remove edge. Exception:\n");
+            e.printStackTrace();
+        }
+        // axialDirection is reversed to that of edge creator
+        myClockwiseV0 = neighborEdge.getV1Clockwise();
+        myClockwiseV1 = neighborEdge.getV0Clockwise();
+        myHex.setEdge(neighborEdge, myV0index);
+        myHex.setVertex(myClockwiseV0, myV0index);
+        myHex.setVertex(myClockwiseV1, myV1index);
+
+        return neighborEdge;
+    }
+
+    public static void placeClockwiseEdge(Edge clockwiseEdge, Vertex clockwiseV0,
+                                          Vertex clockwiseV1, Hexagon curHex, int vDirect) {
+        clockwiseEdge.setVertices(clockwiseV0, clockwiseV1);
+        curHex.setEdge(clockwiseEdge, vDirect);
+        curHex.setVertex(clockwiseV0, vDirect);
+        curHex.setVertex(clockwiseV1, (vDirect + 1) % 6);
+    }
+
+	public static void populateBoard(Hexagon[] hexagons, Vertex[] vertices,
+									 Edge[] edges, Harbor[] harbors, HashMap<Long, Hexagon> hexMap)  {
+
+		// edges available to neighbour harbors
+		HashSet<Edge> portEdges = new HashSet<Edge>();
+
+        // shuffled array of hexagons
+		Hexagon[] randomHexes = Arrays.copyOf(hexagons, Hexagon.NUM_HEXAGONS);
+        Collections.shuffle(Arrays.asList(randomHexes));
+
+		// TODO: remove debugging
+		HashSet<Hexagon> successfullyHashed = new HashSet<Hexagon>();
+
+        // variables for hexagon population logic
+		int map_radius = Hexagon.RADIUS;
+		int hexagonIndex = 0, edgeIndex = 0, vertexIndex = 0;
+        Long hexLocationHash;
+		Hexagon curHex = null, curNeighborHex = null;
+        AxialHexLocation curHexLocation = null, neighborLocation = null;
+        Boolean hadClockwiseNeighbor = false, hadAntiClockwiseNeighbor = false;
+		Edge clockwiseEdge = null, neighborEdge = null;
+
+        // iteration to generate perfectly-centered hex shape
+        for (int q = -map_radius; q <= map_radius; q++) {
+            int r1 = max(-map_radius, -q - map_radius);
+            int r2 = min(map_radius, -q + map_radius);
+            for (int r = r1; r <= r2; r++) { // for each (q, r) axial coordinate
+
+                // for each hexagon we seek to place
+                curHex = randomHexes[hexagonIndex];
+                curHexLocation = new AxialHexLocation(q, r);
+
+                // iterate clockwise from top vertex around hexagon
+                Vertex clockwiseV0 = null, clockwiseV1 = null;
+                for (int vDirect = 0; vDirect < 6; vDirect++) {
+                    //TODO: remove debugging
+                    if (vertexIndex >= 51) {
+                        Log.d("t", "here");
+                    }
+                    hadClockwiseNeighbor = false;
+                    hadAntiClockwiseNeighbor = false;
+                    // is there a clockwise axialNeighbor w.r.t vDirect?
+                    neighborLocation = AxialHexLocation.axialNeighbor(curHexLocation, vDirect);
+                    hexLocationHash = HexGridUtils.perfectHash(neighborLocation);
+                    curNeighborHex = hexMap.get(hexLocationHash);
+                    if (curNeighborHex != null) { // we have a clockwise axialNeighbor
+                        hadClockwiseNeighbor = true;
+                        resolveNeighborHex(portEdges, curHex, curNeighborHex,
+                                vDirect, (vDirect + 1) % 6);
+                    } else { // there was no clockwise axialNeighbor
+                        // get and increment next available edge
+                        clockwiseEdge = edges[edgeIndex];
+                        edgeIndex += 1;
+                        // new edge is candidate for harbor
+                        portEdges.add(clockwiseEdge);
+                        // use current hex's next vertex if already placed
+                        clockwiseV1 = curHex.getVertex((vDirect + 1) % 6);
+                        if (clockwiseV1 == null) {
+                            // is there a clockwise axialNeighbor w.r.t vDirect + 1?
+                            neighborLocation = AxialHexLocation.axialNeighbor(
+                                    curHexLocation, (vDirect + 1) % 6);
+                            hexLocationHash = HexGridUtils.perfectHash(neighborLocation);
+                            curNeighborHex = hexMap.get(hexLocationHash);
+                            if (curNeighborHex != null) { // we have a clockwise axialNeighbor
+                                neighborEdge = resolveNeighborHex(portEdges, curHex, curNeighborHex,
+                                        (vDirect + 1) % 6, (vDirect + 2) % 6);
+                                clockwiseV1 = neighborEdge.getV1Clockwise();
+                                curHex.setVertex(clockwiseV0, (vDirect + 1) % 6);
+                            } else { // there was no clockwise axialNeighbor
+                                // place new vertex at clockwiseV1
+                                clockwiseV1 = vertices[vertexIndex];
+                                vertexIndex += 1;
+                            }
+                        }
+                    }
+                    // is there a counter-clockwise axialNeighbor w.r.t vDirect?
+                    neighborLocation =
+							AxialHexLocation.axialNeighbor(curHexLocation,
+									Math.abs(((((vDirect - 1)  % 6) + 6) % 6)));
+                    hexLocationHash = HexGridUtils.perfectHash(neighborLocation);
+                    curNeighborHex = hexMap.get(hexLocationHash);
+                    if (curNeighborHex != null) { // we have an anti-clockwise axialNeighbor
+                        hadAntiClockwiseNeighbor = true;
+                        neighborEdge = resolveNeighborHex(portEdges, curHex, curNeighborHex,
+                                Math.abs(((((vDirect - 1)  % 6) + 6) % 6)), vDirect);
+                        if (!hadClockwiseNeighbor) {
+                            // reuse less-clockwise vertex of anti-clockwise axialNeighbor
+                            clockwiseV0 = neighborEdge.getV0Clockwise();
+                            curHex.setVertex(clockwiseV0, vDirect);
+
+                            placeClockwiseEdge(clockwiseEdge, clockwiseV0,
+                                    clockwiseV1, curHex, vDirect);
+                        }
+                    } else { // we did not have an anti-clockwise axialNeighbor
+                        if (!hadClockwiseNeighbor) { // vertex and edge are both new in vDirect
+                            // use current hex's vertex if already placed
+                            clockwiseV0 = curHex.getVertex(vDirect);
+                            if (clockwiseV0 == null) {
+                                // get next available vertex
+                                clockwiseV0 = vertices[vertexIndex];
+                                vertexIndex += 1;
+                            }
+
+                            placeClockwiseEdge(clockwiseEdge, clockwiseV0,
+                                    clockwiseV1, curHex, vDirect);
+                        }
+                    }
+                }
+                // hexagon is ready to place
+                hexLocationHash = HexGridUtils.perfectHash(curHexLocation);
+                hexMap.put(hexLocationHash, curHex);
+                successfullyHashed.add(curHex);
+                hexagonIndex += 1;
+            }
+        }
+
+		if (successfullyHashed.size() != Hexagon.NUM_HEXAGONS) {
+			Log.d("WARNING","Some hexes were not hashed!");
+		}
+
+        List<Edge> randomPortEdges  = pickNRandomElements(
+                new ArrayList<Edge>(portEdges),
+                harbors.length, new Random());
+
+        // associate vertices with harbors
+        for (int i = 0; i < harbors.length; i++) {
+            clockwiseEdge = randomPortEdges.get(i);
+            clockwiseEdge.getV0Clockwise().setHarbor(harbors[i]);
+            clockwiseEdge.getV1Clockwise().setHarbor(harbors[i]);
+        }
+
 	}
 
 	private static final float[] HEXAGON_X = { -1.44f, -1.44f, -1.44f, -0.72f,

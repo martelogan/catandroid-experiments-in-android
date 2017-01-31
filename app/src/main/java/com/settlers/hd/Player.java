@@ -130,7 +130,7 @@ public class Player {
 	 * Function called at the end of the build phase
 	 */
 	public void endTurn() {
-		// add new cards to the set of usable cards
+		// addCubic new cards to the set of usable cards
 		for (int i = 0; i < newCards.size(); i++)
 			cards[newCards.get(i).ordinal()] += 1;
 
@@ -176,11 +176,11 @@ public class Player {
 
 		roads.add(edge);
 
-		Vertex vertex = edge.getVertex1();
+		Vertex vertex = edge.getV0Clockwise();
 		if (!reaching.contains(vertex))
 			reaching.add(vertex);
 
-		vertex = edge.getVertex2();
+		vertex = edge.getV1Clockwise();
 		if (!reaching.contains(vertex))
 			reaching.add(vertex);
 
@@ -266,7 +266,7 @@ public class Player {
 
 		if (board.isSetupPhase()) {
 			// check if the edge is adjacent to the last town built
-			if (lastTown != edge.getVertex1() && lastTown != edge.getVertex2())
+			if (lastTown != edge.getV0Clockwise() && lastTown != edge.getV1Clockwise())
 				return false;
 		}
 
@@ -305,9 +305,9 @@ public class Player {
 	 * Add resources to the player
 	 * 
 	 * @param type
-	 *            type of resources to add
+	 *            type of resources to addCubic
 	 * @param count
-	 *            number of that resource to add
+	 *            number of that resource to addCubic
 	 */
 	public void addResources(Type type, int count) {
 		resources[type.ordinal()] += count;

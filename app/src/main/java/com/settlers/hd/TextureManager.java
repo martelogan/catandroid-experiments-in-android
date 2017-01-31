@@ -143,17 +143,17 @@ public class TextureManager {
 				res);
 
 		// load large trader textures
-		add(Type.TRADER, Trader.Position.NORTH.ordinal(),
+		add(Type.TRADER, Harbor.Position.NORTH.ordinal(),
 				R.drawable.trader_north, res);
-		add(Type.TRADER, Trader.Position.SOUTH.ordinal(),
+		add(Type.TRADER, Harbor.Position.SOUTH.ordinal(),
 				R.drawable.trader_south, res);
-		add(Type.TRADER, Trader.Position.NORTHEAST.ordinal(),
+		add(Type.TRADER, Harbor.Position.NORTHEAST.ordinal(),
 				R.drawable.trader_northeast, res);
-		add(Type.TRADER, Trader.Position.NORTHWEST.ordinal(),
+		add(Type.TRADER, Harbor.Position.NORTHWEST.ordinal(),
 				R.drawable.trader_northwest, res);
-		add(Type.TRADER, Trader.Position.SOUTHEAST.ordinal(),
+		add(Type.TRADER, Harbor.Position.SOUTHEAST.ordinal(),
 				R.drawable.trader_southeast, res);
-		add(Type.TRADER, Trader.Position.SOUTHWEST.ordinal(),
+		add(Type.TRADER, Harbor.Position.SOUTHWEST.ordinal(),
 				R.drawable.trader_southwest, res);
 
 		// load corner ornaments
@@ -293,13 +293,13 @@ public class TextureManager {
 		gl.glPopMatrix();
 	}
 
-	public void draw(Trader trader, GL10 gl, Geometry geometry) {
-		int id = trader.getIndex();
+	public void draw(Harbor harbor, GL10 gl, Geometry geometry) {
+		int id = harbor.getIndex();
 
 		// draw shore access notches
 		gl.glPushMatrix();
 		gl.glTranslatef(geometry.getTraderX(id), geometry.getTraderY(id), 0);
-		square.get(hash(Type.TRADER, trader.getPosition().ordinal()))
+		square.get(hash(Type.TRADER, harbor.getPosition().ordinal()))
 				.render(gl);
 		gl.glPopMatrix();
 
@@ -307,17 +307,17 @@ public class TextureManager {
 		gl.glPushMatrix();
 		gl.glTranslatef((float) geometry.getTraderIconX(id),
 				(float) geometry.getTraderIconY(id), 0);
-		square.get(hash(Type.RESOURCE, trader.getType().ordinal())).render(gl);
+		square.get(hash(Type.RESOURCE, harbor.getType().ordinal())).render(gl);
 		gl.glPopMatrix();
 	}
 
 	public void draw(Edge edge, boolean build, GL10 gl, Geometry geometry) {
 		float[] x = new float[2];
 		float[] y = new float[2];
-		x[0] = geometry.getVertexX(edge.getVertex1().getIndex());
-		x[1] = geometry.getVertexX(edge.getVertex2().getIndex());
-		y[0] = geometry.getVertexY(edge.getVertex1().getIndex());
-		y[1] = geometry.getVertexY(edge.getVertex2().getIndex());
+		x[0] = geometry.getVertexX(edge.getV0Clockwise().getIndex());
+		x[1] = geometry.getVertexX(edge.getV1Clockwise().getIndex());
+		y[0] = geometry.getVertexY(edge.getV0Clockwise().getIndex());
+		y[1] = geometry.getVertexY(edge.getV1Clockwise().getIndex());
 
 		Player owner = edge.getOwner();
 		float[] color;

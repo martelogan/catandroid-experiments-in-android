@@ -15,7 +15,7 @@ public class Vertex {
 
 	private Edge[] edge;
 	private Hexagon[] hexagon;
-	private Trader trader;
+	private Harbor harbor;
 
 	/**
 	 * Initialize a vertex with edges set to null
@@ -33,14 +33,14 @@ public class Vertex {
 
 		hexagon = new Hexagon[3];
 		hexagon[0] = hexagon[1] = hexagon[2] = null;
-		setTrader(null);
+		setHarbor(null);
 	}
 
 	/**
 	 * Associate an edge with vertex
 	 * 
 	 * @param e
-	 *            the edge to add (ignored if already associated)
+	 *            the edge to addCubic (ignored if already associated)
 	 */
 	public void addEdge(Edge e) {
 		for (int i = 0; i < 3; i++) {
@@ -57,7 +57,7 @@ public class Vertex {
 	 * Associate an hexagon with vertex
 	 * 
 	 * @param h
-	 *            the hexagon to add (ignored if already associated)
+	 *            the hexagon to addCubic (ignored if already associated)
 	 */
 	public void addHexagon(Hexagon h) {
 		for (int i = 0; i < 3; i++) {
@@ -257,18 +257,18 @@ public class Vertex {
 			return false;
 		}
 
-		if (trader != null)
-			player.setTradeValue(trader.getType());
+		if (harbor != null)
+			player.setTradeValue(harbor.getType());
 
 		return true;
 	}
 
-	public void setTrader(Trader trader) {
-		this.trader = trader;
+	public void setHarbor(Harbor harbor) {
+		this.harbor = harbor;
 	}
 
-	public Trader getTrader() {
-		return trader;
+	public Harbor getHarbor() {
+		return harbor;
 	}
 
 	/**

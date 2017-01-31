@@ -140,7 +140,7 @@ public class GameRenderer implements Renderer {
 			texture.draw4(board.getHexagon(i), gl, geometry);
 
 		// draw traders
-		for (int i = 0; i < Trader.NUM_TRADER; i++)
+		for (int i = 0; i < Harbor.NUM_HARBOR; i++)
 			texture.draw(board.getTrader(i), gl, geometry);
 
 		// draw edges

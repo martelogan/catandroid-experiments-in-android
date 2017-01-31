@@ -1,7 +1,9 @@
 package com.settlers.hd;
 
 import java.util.EmptyStackException;
+import java.util.HashMap;
 import java.util.Stack;
+import android.util.Log;
 
 public class Board {
 
@@ -21,13 +23,14 @@ public class Board {
 
 	private Phase phase, returnPhase;
 
-	private Hexagon[] hexagon;
+	private Hexagon[] hexagons;
 	private Vertex[] vertex;
 	private Edge[] edge;
 	private Player[] player;
-	private Trader[] trader;
+	private Harbor[] harbor;
 	private int[] cards;
 	private Stack<Player> discardQueue;
+	private HashMap<Long, Hexagon> hexMap;
 
 	private int robber, turn, turnNumber, roadCountId, longestRoad,
 			largestArmy, maxPoints, humans, robberLast, lastRoll;
@@ -86,10 +89,11 @@ public class Board {
 		largestArmy = 2;
 		longestRoadOwner = null;
 		largestArmyOwner = null;
-		hexagon = null;
+		hexagons = null;
 		winner = null;
 
 		discardQueue = new Stack<Player>();
+		hexMap = new HashMap<Long, Hexagon>();
 
 		// initialize development cards
 		cards = new int[Cards.values().length];
@@ -100,16 +104,21 @@ public class Board {
 		cards[Cards.MONOPOLY.ordinal()] = NUM_MONOPOLY;
 
 		// randomly initialize hexagons
-		hexagon = Hexagon.initialize(this);
-		trader = Trader.initialize();
+		hexagons = Hexagon.initialize(this);
+		harbor = Harbor.initialize();
 		vertex = Vertex.initialize();
 		edge = Edge.initialize();
 
-		// associate hexagons, vertices, edges, and traders
-		Geometry.setAssociations(hexagon, vertex, edge, trader);
 
+		// populate board map with starting parameters
+		Geometry.populateBoard(hexagons, vertex, edge, harbor, hexMap);
+
+		// TODO: replace this with populateBoard
+//		Geometry.setAssociations(hexagons, vertex, edge, harbor);
+
+		// TODO: remove hard-coding / replace this function
 		// assign roll numbers randomly
-		Hexagon.assignRoles(hexagon);
+		Hexagon.assignRoles(hexagons, 4);
 	}
 
 	/**
@@ -170,8 +179,8 @@ public class Board {
 			robberPhase();
 		} else {
 			// distribute resources
-			for (int i = 0; i < hexagon.length; i++)
-				hexagon[i].distributeResources(roll);
+			for (int i = 0; i < hexagons.length; i++)
+				hexagons[i].distributeResources(roll);
 		}
 
 		lastRoll = roll;
@@ -196,19 +205,19 @@ public class Board {
 	 *            current ai player
 	 */
 	private void aiRobberPhase(AutomatedPlayer current) {
-		int hex = current.placeRobber(hexagon, hexagon[robberLast]);
+		int hex = current.placeRobber(hexagons, hexagons[robberLast]);
 		setRobber(hex);
 
 		int count = 0;
 		for (int i = 0; i < 4; i++)
-			if (player[i] != player[turn] && hexagon[hex].hasPlayer(player[i]))
+			if (player[i] != player[turn] && hexagons[hex].hasPlayer(player[i]))
 				count++;
 
 		if (count > 0) {
 			Player[] stealList = new Player[count];
 			for (int i = 0; i < 4; i++)
 				if (player[i] != player[turn]
-						&& hexagon[hex].hasPlayer(player[i]))
+						&& hexagons[hex].hasPlayer(player[i]))
 					stealList[--count] = player[i];
 
 			int who = current.steal(stealList);
@@ -396,29 +405,29 @@ public class Board {
 	}
 
 	/**
-	 * Get the dice roll value for a hexagon
+	 * Get the dice roll value for a hexagons
 	 * 
 	 * @param index
-	 *            the index of the hexagon
+	 *            the index of the hexagons
 	 * @return the roll value
 	 */
 	public int getRoll(int index) {
-		return hexagon[index].getRoll();
+		return hexagons[index].getRoll();
 	}
 
 	/**
-	 * Get the resource type for one hexagon
+	 * Get the resource type for one hexagons
 	 * 
 	 * @param index
-	 *            the index of the hexagon
+	 *            the index of the hexagons
 	 * @return the resource type
 	 */
 	public Hexagon.Type getResource(int index) {
-		return hexagon[index].getType();
+		return hexagons[index].getType();
 	}
 
 	/**
-	 * Get indexed hexagon type mapping
+	 * Get indexed hexagons type mapping
 	 * 
 	 * @return array of resource types
 	 * @note this is intended only to be used to stream out the board layout
@@ -426,41 +435,41 @@ public class Board {
 	public int[] getMapping() {
 		int hexMapping[] = new int[Hexagon.NUM_HEXAGONS];
 		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
-			hexMapping[i] = hexagon[i].getType().ordinal();
+			hexMapping[i] = hexagons[i].getType().ordinal();
 
 		return hexMapping;
 	}
 
 	/**
-	 * Get a given hexagon
+	 * Get a given hexagons
 	 * 
 	 * @param index
-	 *            the index of the hexagon
-	 * @return the hexagon
+	 *            the index of the hexagons
+	 * @return the hexagons
 	 */
 	public Hexagon getHexagon(int index) {
 		if (index < 0 || index >= Hexagon.NUM_HEXAGONS)
 			return null;
 
-		return hexagon[index];
+		return hexagons[index];
 	}
 	
 	public Hexagon[] getHexagons() {
-		return hexagon;
+		return hexagons;
 	}
 
 	/**
-	 * Get a given trader
+	 * Get a given harbor
 	 * 
 	 * @param index
-	 *            the index of the trader
-	 * @return the trader
+	 *            the index of the harbor
+	 * @return the harbor
 	 */
-	public Trader getTrader(int index) {
-		if (index < 0 || index >= Trader.NUM_TRADER)
+	public Harbor getTrader(int index) {
+		if (index < 0 || index >= Harbor.NUM_HARBOR)
 			return null;
 
-		return trader[index];
+		return harbor[index];
 	}
 
 	/**
@@ -739,28 +748,28 @@ public class Board {
 	}
 
 	/**
-	 * Get the hexagon with the robber
+	 * Get the hexagons with the robber
 	 * 
-	 * @return the hexagon with the robber
+	 * @return the hexagons with the robber
 	 */
 	public Hexagon getRobber() {
 		if (robber < 0)
 			return null;
 
-		return hexagon[robber];
+		return hexagons[robber];
 	}
 
 	/**
-	 * If the robber is being moved, return the last hexagon where it last
+	 * If the robber is being moved, return the last hexagons where it last
 	 * resided, or otherwise the current location
 	 * 
 	 * @return the last location of the robber
 	 */
 	public Hexagon getRobberLast() {
 		if (robber < 0 && robberLast >= 0 && robberLast < Hexagon.NUM_HEXAGONS)
-			return hexagon[robberLast];
+			return hexagons[robberLast];
 		else if (robber >= 0 && robber < Hexagon.NUM_HEXAGONS)
-			return hexagon[robber];
+			return hexagons[robber];
 		else
 			return null;
 	}
@@ -769,7 +778,7 @@ public class Board {
 	 * Set the index for the robber
 	 * 
 	 * @param robber
-	 *            id of the hexagon with the robber
+	 *            id of the hexagons with the robber
 	 * @return true if the robber was placed
 	 */
 	public boolean setRobber(int robber) {

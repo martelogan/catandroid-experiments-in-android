@@ -152,7 +152,7 @@
 	<string name="status_soldier_cards">Soldier cards</string>
 	<string name="status_progress_cards">Progress cards</string>
 	<string name="status_victory_cards">Victory cards (1 point)</string>
-	<string name="status_trader">trader</string>
+	<string name="status_trader">harbor</string>
 	<string name="status_points">points</string>
 	<string name="status_victory_points">Victory points</string>
 	<string name="status_color">Color</string>

@@ -184,7 +184,7 @@ public class Settings extends SQLiteOpenHelper {
 				+ "humans INTEGER, winner TEXT, points INTEGER, "
 				+ "TURNS integer)");
 
-		// add default options and players
+		// addCubic default options and players
 		LocalGame.setup(this);
 	}
 
@@ -196,7 +196,7 @@ public class Settings extends SQLiteOpenHelper {
 
 		switch (oldVersion) {
 		case 1:
-			// add default value for turn delay
+			// addCubic default value for turn delay
 			set("option_turn_delay", DEFAULT_TURN_DELAY);
 		}
 	}
