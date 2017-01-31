@@ -1,0 +1,230 @@
+[
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_3.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_3.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_southwest.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_southwest.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_northeast.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_northeast.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\bl_corner.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\bl_corner.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\city_purple.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\city_purple.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_any.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_any.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_wool.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_wool.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_road.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_road.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_8.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_8.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_status.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_status.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_4.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_4.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\city_green.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\city_green.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_settlement.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_settlement.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\settlement_orange.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\settlement_orange.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tl_corner.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tl_corner.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_cancel.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_cancel.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_lumber.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_lumber.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_city.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_city.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_dim.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_dim.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\res_lumber.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\res_lumber.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_backdrop.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_backdrop.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\res_brick.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\res_brick.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\res_ore.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\res_ore.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_robber.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_robber.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\res_grain.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\res_grain.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_trade.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_trade.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_9.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_9.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_6.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_6.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\settlement_purple.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\settlement_purple.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_desert.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_desert.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_southeast.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_southeast.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_12.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_12.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_north.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_north.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\settlement_green.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\settlement_green.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_ore.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_ore.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_light.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_light.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\settlement_red.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\settlement_red.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\city_red.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\city_red.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_11.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_11.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_south.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_south.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_development.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_development.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_10.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_10.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_grain.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_grain.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_shore.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_shore.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_2.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_2.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tr_corner.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tr_corner.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\city_blue.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\city_blue.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_roll.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_roll.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\city_orange.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\city_orange.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\roll_5.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\roll_5.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\settlement_blue.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\settlement_blue.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\trader_northwest.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\trader_northwest.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\road.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\road.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_endturn.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_endturn.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\button_press.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\button_press.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\tile_brick.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\tile_brick.png"
+    },
+    {
+        "merged": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\res_wool.png",
+        "source": "C:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\src\\main\\res\\drawable-nodpi\\res_wool.png"
+    }
+]

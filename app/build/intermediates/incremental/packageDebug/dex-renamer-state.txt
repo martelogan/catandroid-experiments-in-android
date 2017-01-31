@@ -1,0 +1,7 @@
+#Tue Jan 31 02:03:55 EST 2017
+base.0=C\:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_4c4f64f0dfd2839b41839d1030b5d959601b460f
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=C\:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_ef03ce190a1bb633eee797981ddbfce0ef886d94\\classes.dex
+base.1=C\:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_ef03ce190a1bb633eee797981ddbfce0ef886d94
+file.0=C\:\\Users\\logan\\StudioProjects\\AndroidSettlers-mod\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_4c4f64f0dfd2839b41839d1030b5d959601b460f\\classes.dex

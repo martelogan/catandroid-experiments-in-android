@@ -1,9 +1,0 @@
-bin/*
-gen/*
-dev
-doc
-.pydevproject
-.settings
-*~
-local.properties
-Thumbs.db

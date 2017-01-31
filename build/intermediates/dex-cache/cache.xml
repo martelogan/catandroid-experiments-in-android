@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7ad605558b148e1aa1e6782610ff1335c38764c">
+        <dex dex="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_ef03ce190a1bb633eee797981ddbfce0ef886d94\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\logan\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
+        <dex dex="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-v4-19.1.0_7f54ea74c36995d62b5eaa1557a97e83bca61162\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9a0a0079181e93c5a1f6f1ac20bcd23a7b5035c9">
+        <dex dex="C:\Users\logan\StudioProjects\AndroidSettlers-mod\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_4c4f64f0dfd2839b41839d1030b5d959601b460f\classes.dex" />
+    </item>
+
+</items>
