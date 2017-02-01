@@ -88,7 +88,7 @@
 		\n도시: 곡식 2, 광석 3
 		\n카드: 양모, 곡식, 광석</string>
 
-	<!-- Status screen -->
+	<!-- PlayerStatus screen -->
 	<string name="status">상태</string>
 	<string name="status_turn">차례</string>
 	<string name="status_resources">자원</string>

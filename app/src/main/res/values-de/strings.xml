@@ -86,7 +86,7 @@
 		\nStadt: 2 Getreide, 3 Erz
 		\nEntwicklung: Wolle, Getreide, Erz</string>
 
-	<!-- Status screen -->
+	<!-- PlayerStatus screen -->
 	<string name="status">Status</string>
 	<string name="status_turn">Zug</string>
 	<string name="status_resources">Rohstoffe</string>

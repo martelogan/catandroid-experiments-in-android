@@ -141,7 +141,7 @@
 	<string name="player_monopoly">Ha robado de otros jugadores %s</string>
 	
 
-	<!-- Status screen -->
+	<!-- PlayerStatus screen -->
 	<string name="status">Estado</string>
 	<string name="status_turn">Turno</string>
 	<string name="status_resources">Recursos</string>

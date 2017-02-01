@@ -85,7 +85,7 @@
 		\nStad: 2 graan, 3 erts
 		\nKaart: wol, graan, erts</string>
 
-	<!-- Status screen -->
+	<!-- PlayerStatus screen -->
 	<string name="status">Status</string>
 	<string name="status_turn">Beurt</string>
 	<string name="status_resources">Grondstoffen</string>

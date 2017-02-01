@@ -90,7 +90,7 @@
 		\n城市需: 2 个麦子, 3 个矿石
 		\n发展卡需: 羊毛, 麦子, 矿石</string>
 
-	<!-- Status screen -->
+	<!-- PlayerStatus screen -->
 	<string name="status">进程</string>
 	<string name="status_turn">轮次：</string>
 	<string name="status_resources">资源卡</string>
