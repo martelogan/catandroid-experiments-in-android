@@ -4,7 +4,7 @@ package com.catandroid.app.common.components.hexGridUtils;
  * Created by logan on 2017-01-31.
  */
 
-class HexPoint
+public class HexPoint
 {
     public HexPoint(double x, double y)
     {

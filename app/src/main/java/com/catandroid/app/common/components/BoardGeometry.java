@@ -3,7 +3,9 @@ package com.catandroid.app.common.components;
 import android.util.Log;
 
 import com.catandroid.app.common.components.hexGridUtils.AxialHexLocation;
+import com.catandroid.app.common.components.hexGridUtils.HexGridLayout;
 import com.catandroid.app.common.components.hexGridUtils.HexGridUtils;
+import com.catandroid.app.common.components.hexGridUtils.HexPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -479,6 +481,7 @@ public class BoardGeometry {
                     }
                 }
                 // hexagon is ready to place
+				curHex.setCoord(curHexLocation);
                 hexLocationHash = HexGridUtils.perfectHash(curHexLocation);
                 hexMap.put(hexLocationHash, curHex);
                 successfullyHashed.add(curHex);
@@ -501,19 +504,62 @@ public class BoardGeometry {
             clockwiseEdge.getV1Clockwise().setHarbor(harbors[i]);
         }
 
+		initCoordinates(hexagons, vertices, edges, harbors, hexMap);
+
+	}
+
+	public static void initCoordinates(Hexagon[] hexagons, Vertex[] vertices,
+									 Edge[] edges, Harbor[] harbors, HashMap<Long, Hexagon> hexMap) {
+		HexGridLayout layout = new HexGridLayout(HexGridLayout.flat, HexGridLayout.size_default, HexGridLayout.origin_default);
+		AxialHexLocation axialCoord;
+		float center_X, center_Y;
+		HexPoint cartesianCoord, vertexOffset;
+		int index;
+		for (Hexagon h : hexagons) {
+			// set hex cartesian coordinates
+			index = h.getId();
+			axialCoord = h.getCoord();
+			cartesianCoord = HexGridLayout.hexToPixel(layout, axialCoord);
+			center_X = (float) cartesianCoord.x;
+			center_Y = (float) cartesianCoord.y;
+			HEXAGONS_X[index] = center_X;
+			HEXAGONS_Y[index] = center_Y;
+		}
+        Hexagon myHex;
+        int myHexIndex, angleDirection;
+        for (Vertex v: vertices)
+        {
+            // set vertex cartesian coordinates
+            index = v.getIndex();
+            myHex = v.getHexagon(0);
+            myHexIndex = myHex.getId();
+            angleDirection = -((((myHex.findVertex(v) - 1)  % 6) + 6) % 6);
+            vertexOffset = HexGridLayout.hexCornerOffset(layout, angleDirection);
+            VERTICES_X[index] = HEXAGONS_X[myHexIndex] + ((float) vertexOffset.x);
+            VERTICES_Y[index] = HEXAGONS_Y[myHexIndex] + ((float) vertexOffset.y);
+        }
+		int v0_index, v1_index;
+		for (Edge e : edges) {
+			// set edge cartesian coordinates
+			index = e.getIndex();
+			v0_index = e.getV0Clockwise().getIndex();
+			v1_index = e.getV1Clockwise().getIndex();
+			EDGES_X[index] = (float) ((VERTICES_X[v0_index] + VERTICES_X[v1_index])/2.0);
+			EDGES_Y[index] = (float) ((VERTICES_Y[v0_index] + VERTICES_Y[v1_index])/2.0);
+		}
 	}
 
 	// OLD GEOMETRY CONSTANTS
 
-	private static final float[] HEXAGONS_X = { -1.44f, -1.44f, -1.44f, -0.72f,
+	private static final float[] HEXAGONS_X_o = { -1.44f, -1.44f, -1.44f, -0.72f,
 			-0.72f, -0.72f, -0.72f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f, 0.72f,
 			0.72f, 0.72f, 1.44f, 1.44f, 1.44f };
 
-	private static final float[] HEXAGONS_Y = { 0.84f, -0.0f, -0.84f, 1.26f,
+	private static final float[] HEXAGONS_Y_o = { 0.84f, -0.0f, -0.84f, 1.26f,
 			0.42f, -0.42f, -1.26f, 1.68f, 0.84f, -0.0f, -0.84f, -1.68f, 1.26f,
 			0.42f, -0.42f, -1.26f, 0.84f, -0.0f, -0.84f };
 
-	private static final float[] VERTICES_X = { -0.24f, 0.24f, -0.96f, -0.5f,
+	private static final float[] VERTICES_X_o = { -0.24f, 0.24f, -0.96f, -0.5f,
 			0.48f, 0.96f, -1.68f, -1.22f, -0.24f, 0.22f, 1.2f, 1.68f, -1.94f,
 			-0.96f, -0.5f, 0.48f, 0.94f, 1.94f, -1.68f, -1.22f, -0.24f, 0.22f,
 			1.2f, 1.68f, -1.94f, -0.96f, -0.5f, 0.48f, 0.94f, 1.94f, -1.68f,
@@ -521,7 +567,7 @@ public class BoardGeometry {
 			0.94f, 1.94f, -1.68f, -1.22f, -0.24f, 0.22f, 1.2f, 1.68f, -0.96f,
 			-0.5f, 0.48f, 0.96f, -0.24f, 0.24f };
 
-	private static final float[] VERTICES_Y = { 2.1f, 2.1f, 1.68f, 1.68f, 1.68f,
+	private static final float[] VERTICES_Y_o = { 2.1f, 2.1f, 1.68f, 1.68f, 1.68f,
 			1.68f, 1.26f, 1.26f, 1.26f, 1.26f, 1.26f, 1.26f, 0.84f, 0.84f,
 			0.84f, 0.84f, 0.84f, 0.84f, 0.42f, 0.42f, 0.42f, 0.42f, 0.42f,
 			0.42f, -0.0f, -0.0f, -0.0f, -0.0f, -0.0f, -0.0f, -0.42f, -0.42f,
@@ -529,7 +575,7 @@ public class BoardGeometry {
 			-0.84f, -0.84f, -1.26f, -1.26f, -1.26f, -1.26f, -1.26f, -1.26f,
 			-1.68f, -1.68f, -1.68f, -1.68f, -2.1f, -2.1f };
 
-	private static final float[] EDGES_X = { 0.0f, -0.37f, 0.36f, -0.73f,
+	private static final float[] EDGES_X_o = { 0.0f, -0.37f, 0.36f, -0.73f,
 			-1.09f, -0.37f, 0.72f, 0.35f, 1.08f, -1.45f, -1.81f, -1.09f,
 			-0.01f, -0.37f, 0.35f, 1.44f, 1.07f, 1.81f, -1.81f, -0.73f, -1.09f,
 			-0.37f, 0.71f, 0.35f, 1.07f, 1.81f, -1.45f, -1.81f, -1.09f, -0.01f,
@@ -539,7 +585,7 @@ public class BoardGeometry {
 			0.35f, 1.07f, 1.81f, -1.45f, -1.09f, -0.01f, -0.37f, 0.35f, 1.44f,
 			1.08f, -0.73f, -0.37f, 0.72f, 0.36f, 0.0f };
 
-	private static final float[] EDGES_Y = { 2.1f, 1.89f, 1.89f, 1.68f, 1.47f,
+	private static final float[] EDGES_Y_o = { 2.1f, 1.89f, 1.89f, 1.68f, 1.47f,
 			1.47f, 1.68f, 1.47f, 1.47f, 1.26f, 1.05f, 1.05f, 1.26f, 1.05f,
 			1.05f, 1.26f, 1.05f, 1.05f, 0.63f, 0.84f, 0.63f, 0.63f, 0.84f,
 			0.63f, 0.63f, 0.63f, 0.42f, 0.21f, 0.21f, 0.42f, 0.21f, 0.21f,
@@ -563,17 +609,17 @@ public class BoardGeometry {
 
 	//TODO: replace hard-coded constants with below dynamic arrays
 
-	private static final float[] HEXAGONS_X_n = new float[Hexagon.NUM_HEXAGONS];
+	private static final float[] HEXAGONS_X = new float[Hexagon.NUM_HEXAGONS];
 
-	private static final float[] HEXAGONS_Y_n = new float[Hexagon.NUM_HEXAGONS];
+	private static final float[] HEXAGONS_Y = new float[Hexagon.NUM_HEXAGONS];
 
-	private static final float[] VERTICES_X_n = new float[Vertex.NUM_VERTICES];
+	private static final float[] VERTICES_X = new float[Vertex.NUM_VERTICES];
 
-	private static final float[] VERTICES_Y_n =  new float[Vertex.NUM_VERTICES];
+	private static final float[] VERTICES_Y =  new float[Vertex.NUM_VERTICES];
 
-	private static final float[] EDGES_X_n = new float[Edge.NUM_EDGES];
+	private static final float[] EDGES_X = new float[Edge.NUM_EDGES];
 
-	private static final float[] EDGES_Y_n = new float[Edge.NUM_EDGES];
+	private static final float[] EDGES_Y = new float[Edge.NUM_EDGES];
 
 	private static final int[] HARBOR_EDGES_n = new int[Harbor.NUM_HARBORS];
 

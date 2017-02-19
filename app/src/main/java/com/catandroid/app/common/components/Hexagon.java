@@ -1,5 +1,6 @@
 package com.catandroid.app.common.components;
 
+import com.catandroid.app.common.components.hexGridUtils.AxialHexLocation;
 import com.settlers.hd.R;
 import com.catandroid.app.common.players.Player;
 
@@ -36,6 +37,7 @@ public class Hexagon {
 	private Type type;
 	private Vertex[] vertices;
 	private Edge[] edges;
+	private AxialHexLocation coord;
 	private int id;
 
 	/**
@@ -93,6 +95,7 @@ public class Hexagon {
 	 */
 	public void setVertex(Vertex v, int index) {
 		vertices[index] = v;
+		v.addHexagon(this);
 	}
 
 	/**
@@ -104,6 +107,22 @@ public class Hexagon {
 	 */
 	public Vertex getVertex(int index) {
 		return vertices[index];
+	}
+
+	/**
+	 * Get a vertex index from vertices
+	 *
+	 * @param v
+	 *            the vertex to find
+	 * @return index of the vertex
+	 */
+	public int findVertex(Vertex v) {
+		for (int i = 0; i < 6; i++) {
+			if (vertices[i] == v) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -174,6 +193,27 @@ public class Hexagon {
 	 */
 	public int getProbability() {
 		return PROBABILITY[roll];
+	}
+
+	/**
+	 * Set hexagon's axial coordinate
+	 *
+	 * @param coord
+	 *            axial coordinate to set
+	 * @return
+	 */
+	public void setCoord(AxialHexLocation coord) {
+		this.coord = coord;
+	}
+
+	/**
+	 * Get hexagon's axial coordinate
+	 *
+	 * @param
+	 * @return the vertices
+	 */
+	public AxialHexLocation getCoord() {
+		return coord;
 	}
 
 	/**

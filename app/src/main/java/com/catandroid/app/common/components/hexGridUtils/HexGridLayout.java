@@ -1,12 +1,14 @@
 package com.catandroid.app.common.components.hexGridUtils;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 
 /**
  * Created by logan on 2017-01-31.
  */
 
-class HexGridLayout
+public class HexGridLayout
 {
     public HexGridLayout(HexGridOrientation hexGridOrientation, HexPoint size, HexPoint origin)
     {
@@ -19,8 +21,10 @@ class HexGridLayout
     public final HexPoint origin;
     static public HexGridOrientation pointy = new HexGridOrientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
     static public HexGridOrientation flat = new HexGridOrientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
+    static public HexPoint size_default = new HexPoint(0.48, 0.84 /(((Math.sqrt(3.0)/2.0)* -2.0) + ((Math.sqrt(3.0))*0.0)));
+    static public HexPoint origin_default = new HexPoint(0.0, 0.0);
 
-    static public HexPoint hexToPixel(HexGridLayout hexGridLayout, CubicHexLocation h)
+    static public HexPoint hexToPixel(HexGridLayout hexGridLayout, AxialHexLocation h)
     {
         HexGridOrientation M = hexGridLayout.hexGridOrientation;
         HexPoint size = hexGridLayout.size;
@@ -52,7 +56,7 @@ class HexGridLayout
     }
 
 
-    static public ArrayList<HexPoint> polygonCorners(HexGridLayout hexGridLayout, CubicHexLocation h)
+    static public ArrayList<HexPoint> polygonCorners(HexGridLayout hexGridLayout, AxialHexLocation h)
     {
         ArrayList<HexPoint> corners = new ArrayList<HexPoint>(){{}};
         HexPoint center = HexGridLayout.hexToPixel(hexGridLayout, h);
