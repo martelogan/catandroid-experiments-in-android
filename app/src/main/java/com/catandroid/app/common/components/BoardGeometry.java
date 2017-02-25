@@ -25,6 +25,8 @@ public class BoardGeometry {
 
 	private static final float MAX_PAN = 2.5f;
 
+    private static HexPoint size = HexGridLayout.size_default;
+
 	private int width, height;
 	private float cx, cy, zoom;
 	private float minZoom, maxZoom, highZoom;
@@ -201,20 +203,22 @@ public class BoardGeometry {
 		return VERTICES_Y[index];
 	}
 
-	public float getTraderX(int index) {
+	public float getHarborX(int index) {
 		return HEXAGONS_X[HARBOR_HEXES[index]];
 	}
 
-	public float getTraderY(int index) {
+	public float getHarborY(int index) {
 		return HEXAGONS_Y[HARBOR_HEXES[index]];
 	}
 
-	public float getTraderIconX(int index) {
-		return EDGES_X[HARBOR_EDGES[index]] + 1.5f * HARBORS_OFFSET_X[index];
+	public float getHarborIconX(int index, Edge e) {
+        float edgeX = EDGES_X[HARBOR_EDGES[index]];
+		return edgeX + ((float) Math.abs(size.x)) * (e.getOriginHexDirectXsign());
 	}
 
-	public float getTraderIconY(int index) {
-		return EDGES_Y[HARBOR_EDGES[index]] + 1.5f * HARBORS_OFFSET_Y[index];
+	public float getHarborIconY(int index, Edge e) {
+        float edgeY = EDGES_Y[HARBOR_EDGES[index]];
+        return edgeY + ((float) Math.abs(size.y)) * (e.getOriginHexDirectYsign());
 	}
 
 	public static void setAssociations(Hexagon[] hexagon, Vertex[] vertex,
@@ -424,6 +428,7 @@ public class BoardGeometry {
                     } else { // there was no clockwise axialNeighbor
                         // get and increment next available edge
                         clockwiseEdge = edges[edgeIndex];
+						clockwiseEdge.setOriginHex(curHex);
                         edgeIndex += 1;
                         // new edge is candidate for harbor
                         portEdges.add(clockwiseEdge);
@@ -493,15 +498,62 @@ public class BoardGeometry {
 			Log.d("WARNING","Some hexes were not hashed!");
 		}
 
-        List<Edge> randomPortEdges  = pickNRandomElements(
-                new ArrayList<Edge>(portEdges),
-                harbors.length, new Random());
+
+        // shuffled array of edges
+        ArrayList<Edge> randomPortEdges = new ArrayList<Edge>(portEdges);
+        Collections.shuffle(randomPortEdges);
 
         // associate vertices with harbors
-        for (int i = 0; i < harbors.length; i++) {
-            clockwiseEdge = randomPortEdges.get(i);
-            clockwiseEdge.getV0Clockwise().setHarbor(harbors[i]);
-            clockwiseEdge.getV1Clockwise().setHarbor(harbors[i]);
+        Harbor harbor;
+        int neighborDirect, forbiddenNeighborEdgeDirect;
+        HashSet<Edge> forbiddenPortEdges = new HashSet<Edge>();
+        for (int i = 0, j = 0; i < harbors.length; i++, j++) {
+            while (j < randomPortEdges.size()) {
+                clockwiseEdge = randomPortEdges.get(j);
+                if (forbiddenPortEdges.contains(clockwiseEdge)) {
+                    j++;
+                    continue;
+                }
+                curHex = clockwiseEdge.getOriginHex();
+                curHexLocation = curHex.getCoord();
+                //TODO: modularize
+                // add clockwise forbidden edge
+                neighborDirect = (clockwiseEdge.getOriginHexDirect() + 1) % 6;
+                neighborLocation =
+                        AxialHexLocation.axialNeighbor(curHexLocation, neighborDirect);
+                curNeighborHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));
+                if (curNeighborHex != null) {
+                    forbiddenNeighborEdgeDirect =
+                            (AxialHexLocation.complementAxialDirection(neighborDirect) + 1) % 6;
+                    forbiddenPortEdges.add(curNeighborHex.getEdge(forbiddenNeighborEdgeDirect));
+                }
+                // add counter-clockwise forbidden edge
+                neighborDirect = (((((clockwiseEdge.getOriginHexDirect() - 1)  % 6) + 6) % 6));
+                neighborLocation =
+                        AxialHexLocation.axialNeighbor(curHexLocation, neighborDirect);
+                curNeighborHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));
+                if (curNeighborHex != null) {
+                    forbiddenNeighborEdgeDirect =
+                            ((((AxialHexLocation.complementAxialDirection(neighborDirect) - 1)
+                                    % 6) + 6) % 6);
+                    forbiddenPortEdges.add(curNeighborHex.getEdge(forbiddenNeighborEdgeDirect));
+                }
+                // track current edge
+                forbiddenPortEdges.add(clockwiseEdge);
+                break;
+            }
+            if (j > randomPortEdges.size()) {
+                Log.d("ERROR", "insufficient port edges");
+                break;
+            }
+            harbor = harbors[i];
+            edgeIndex = curHex.findEdge(clockwiseEdge);
+            harbor.setPosition(Harbor.vdirectToPosition(edgeIndex));
+            clockwiseEdge.setMyHarbor(harbor);
+            clockwiseEdge.getV0Clockwise().setHarbor(harbor);
+            clockwiseEdge.getV1Clockwise().setHarbor(harbor);
+			HARBOR_EDGES[i] = clockwiseEdge.getIndex();
+			HARBOR_HEXES[i] = clockwiseEdge.getOriginHex().getId();
         }
 
 		initCoordinates(hexagons, vertices, edges, harbors, hexMap);
@@ -595,9 +647,9 @@ public class BoardGeometry {
 			-1.05f, -1.05f, -1.05f, -1.26f, -1.47f, -1.26f, -1.47f, -1.47f,
 			-1.26f, -1.47f, -1.68f, -1.89f, -1.68f, -1.89f, -2.1f };
 
-	private static final int[] HARBOR_EDGES = { 0, 4, 8, 27, 34, 52, 59, 67, 69 };
+	private static final int[] HARBOR_EDGES_o = { 0, 4, 8, 27, 34, 52, 59, 67, 69 };
 
-	private static final int[] HARBOR_HEXES = { 7, 3, 12, 1, 17, 2, 18, 6, 15 };
+	private static final int[] HARBOR_HEXES_o = { 7, 3, 12, 1, 17, 2, 18, 6, 15 };
 
 	private static final float[] HARBORS_OFFSET_X = { 0.0f, -0.16f, 0.15f,
 			-0.15f, 0.15f, -0.15f, 0.15f, 0.0f, 0.0f };
@@ -621,9 +673,9 @@ public class BoardGeometry {
 
 	private static final float[] EDGES_Y = new float[Edge.NUM_EDGES];
 
-	private static final int[] HARBOR_EDGES_n = new int[Harbor.NUM_HARBORS];
+	private static final int[] HARBOR_EDGES = new int[Harbor.NUM_HARBORS];
 
-	private static final int[] HARBOR_HEXES_n = new int[Harbor.NUM_HARBORS];
+	private static final int[] HARBOR_HEXES = new int[Harbor.NUM_HARBORS];
 
 	private static final float[] HARBORS_OFFSET_X_n = new float[Harbor.NUM_HARBORS];
 

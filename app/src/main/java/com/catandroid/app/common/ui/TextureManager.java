@@ -308,15 +308,15 @@ public class TextureManager {
 
 		// draw shore access notches
 		gl.glPushMatrix();
-		gl.glTranslatef(boardGeometry.getTraderX(id), boardGeometry.getTraderY(id), 0);
+		gl.glTranslatef(boardGeometry.getHarborX(id), boardGeometry.getHarborY(id), 0);
 		square.get(hash(Type.TRADER, harbor.getPosition().ordinal()))
 				.render(gl);
 		gl.glPopMatrix();
 
 		// draw type icon
 		gl.glPushMatrix();
-		gl.glTranslatef(boardGeometry.getTraderIconX(id),
-				boardGeometry.getTraderIconY(id), 0);
+		gl.glTranslatef(boardGeometry.getHarborIconX(id, harbor.getMyEdge()),
+				boardGeometry.getHarborIconY(id, harbor.getMyEdge()), 0);
 		square.get(hash(Type.RESOURCE, harbor.getType().ordinal())).render(gl);
 		gl.glPopMatrix();
 	}

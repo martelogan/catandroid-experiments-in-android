@@ -126,6 +126,22 @@ public class Hexagon {
 	}
 
 	/**
+	 * Get an edge index from edges
+	 *
+	 * @param e
+	 *            the edge to find
+	 * @return index of the edge
+	 */
+	public int findEdge(Edge e) {
+		for (int i = 0; i < 6; i++) {
+			if (edges[i] == e) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
 	 * Get the resource type
 	 * 
 	 * @return the resource type
@@ -164,6 +180,7 @@ public class Hexagon {
 	 * @return
 	 */
 	public void setEdge(Edge edge, int direction) {
+		edge.setOriginHexDirect(direction);
 		edges[direction] = edge;
 	}
 

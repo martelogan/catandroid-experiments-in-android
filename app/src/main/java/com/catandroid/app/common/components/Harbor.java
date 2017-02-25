@@ -9,21 +9,21 @@ public class Harbor {
 	public enum Position {
 		NORTH, SOUTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
 	}
-	
-	private static final Position[] POSITION_LIST = {
-		Position.NORTH, Position.NORTHWEST, Position.NORTHEAST, 
-		Position.NORTHWEST, Position.NORTHEAST, Position.SOUTHWEST, 
-		Position.SOUTHEAST, Position.SOUTH, Position.SOUTH 
+
+	// default positions
+	private static final Position[] POSITIONS_BY_VDIRECT = {
+		Position.NORTHEAST, Position.SOUTHEAST, Position.SOUTH,
+			Position.SOUTHWEST, Position.NORTHWEST, Position.NORTH
 	};
 
 	private Type type;
 	private Position position;
 	private int index;
+	private Edge myEdge = null;
 
 	public Harbor(Type type, int index) {
 		this.type = type;
 		this.index = index;
-		position = POSITION_LIST[index];
 	}
 	
 	public void setType(Type type) {
@@ -33,9 +33,25 @@ public class Harbor {
 	public Type getType() {
 		return type;
 	}
-	
+
+	public void setPosition(Position p) {
+		this.position = p;
+	}
+
 	public Position getPosition() {
 		return position;
+	}
+
+	public void setMyEdge(Edge e) {
+		this.myEdge = e;
+	}
+
+	public Edge getMyEdge() {
+		return myEdge;
+	}
+
+	public static Position vdirectToPosition(int vdirect) {
+		return POSITIONS_BY_VDIRECT[vdirect];
 	}
 	
 	public int getIndex() {

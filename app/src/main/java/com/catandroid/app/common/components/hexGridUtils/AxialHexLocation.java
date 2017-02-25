@@ -1,6 +1,7 @@
 package com.catandroid.app.common.components.hexGridUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by logan on 2017-01-31.
@@ -43,6 +44,19 @@ public class AxialHexLocation
     static public AxialHexLocation axialNeighbor(AxialHexLocation hexLocation, int direction)
     {
         return AxialHexLocation.addAxial(hexLocation, AxialHexLocation.axialDirection(direction));
+    }
+
+    static public boolean isCloseTo(AxialHexLocation a, Collection<AxialHexLocation> locations)
+    {
+        Boolean inQrange, inRrange;
+        for (AxialHexLocation location : locations) {
+            inQrange = location.q == (a.q - 1) || location.q == a.q || location.q == (a.q + 1);
+            inRrange = location.r == (a.r - 1) || location.r == a.r || location.r == (a.r + 1);
+            if (inQrange && inRrange) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

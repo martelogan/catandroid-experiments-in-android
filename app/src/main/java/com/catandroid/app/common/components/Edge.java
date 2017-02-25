@@ -10,6 +10,9 @@ public class Edge {
 	private Vertex[] vertex;
 	private Player owner;
 	private int lastRoadCountId;
+	private Hexagon originHex;
+    private int originHexDirect;
+    private Harbor myHarbor = null;
 
 	/**
 	 * Initialize edge with vertices set to null
@@ -104,6 +107,109 @@ public class Edge {
 
 		return false;
 	}
+
+	/**
+	 * Set the origin hexagon
+	 * @param h
+	 *            the hex to set
+	 * @return
+	 */
+	public void setOriginHex(Hexagon h) {
+		this.originHex = h;
+	}
+
+
+	/**
+	 * Get the origin hexagon
+	 *
+	 * @return the origin hexagon
+	 */
+	public Hexagon getOriginHex() {
+		return originHex;
+	}
+
+    /**
+     * Set the origin hexagon direction
+     * @param direct
+     *            the edge direction on origin hexagon
+     * @return
+     */
+    public void setOriginHexDirect(int direct) {
+        this.originHexDirect = direct;
+    }
+
+    /**
+     * Get the origin hexagon direction
+     * @return the origin hexagon direction
+     */
+    public int getOriginHexDirect() {
+        return this.originHexDirect;
+    }
+
+    /**
+     * Get the marginal X sign of the origin hexagon direction
+     * @return the marginal X sign of the origin hexagon direction
+     */
+    public int getOriginHexDirectXsign() {
+        switch(this.originHexDirect) {
+            case 0:
+                return 1;
+            case 1:
+                return 1;
+            case 2:
+                return 0;
+            case 3:
+                return -1;
+            case 4:
+                return -1;
+            case 5:
+                return 0;
+            default:
+                return Integer.MIN_VALUE;
+        }
+    }
+
+    /**
+     * Get the marginal X sign of the origin hexagon direction
+     * @return the marginal X sign of the origin hexagon direction
+     */
+    public int getOriginHexDirectYsign() {
+        switch(this.originHexDirect) {
+            case 0:
+                return 1;
+            case 1:
+                return -1;
+            case 2:
+                return -1;
+            case 3:
+                return -1;
+            case 4:
+                return 1;
+            case 5:
+                return 1;
+            default:
+                return Integer.MIN_VALUE;
+        }
+    }
+
+    /**
+     * Set a harbor on this edge
+     * @param harbor
+     *            the harbor to set
+     * @return
+     */
+    public void setMyHarbor(Harbor harbor) {
+        harbor.setMyEdge(this);
+        this.myHarbor = harbor;
+    }
+
+    /**
+     * Get the harbor on this edge
+     * @return the harbor
+     */
+    public Harbor getMyHarbor() {
+        return this.myHarbor;
+    }
 
 	/**
 	 * Get the first vertex
