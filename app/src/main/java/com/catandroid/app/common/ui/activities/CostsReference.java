@@ -3,15 +3,19 @@ package com.catandroid.app.common.ui.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.settlers.hd.R;
+import com.catandroid.app.common.ui.views.GameView;
 
-public class CostsReference extends Activity {
+import com.catandroid.app.R;
+
+public class CostsReference extends Fragment {
 
 	private static final int[] LAYOUTS = { R.layout.reference_build, R.layout.reference_buy,
 			R.layout.reference_development };
@@ -20,23 +24,31 @@ public class CostsReference extends Activity {
 
 	private View[] views;
 
+	public CostsReference(){
+
+	}
+
 	@Override
-	public void onCreate(Bundle state) {
-		super.onCreate(state);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//super.onCreate(state);
 
-		setContentView(R.layout.reference);
-		setTitle(getString(R.string.reference));
+		//getActivity().setContentView(R.layout.reference);
+		getActivity().setTitle(getString(R.string.reference));
 
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		//LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.reference, null, false);
 
 		views = new View[LAYOUTS.length];
 		
 		for (int i = 0; i < LAYOUTS.length; i++)
 			views[i] = inflater.inflate(LAYOUTS[i], null);
 		
-		ViewPager viewPager = (ViewPager) findViewById(R.id.reference);
+		ViewPager viewPager = (ViewPager) view.findViewById(R.id.reference);
 		viewPager.setAdapter(new ReferenceTabAdapter());
 		viewPager.setCurrentItem(1);
+
+		Log.d("myTag", "about to return costs view");
+		return view;
 	}
 
 	public class ReferenceTabAdapter extends PagerAdapter {

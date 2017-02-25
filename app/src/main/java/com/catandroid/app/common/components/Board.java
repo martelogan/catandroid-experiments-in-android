@@ -1,6 +1,6 @@
 package com.catandroid.app.common.components;
 
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.common.logistics.Settings;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.BalancedAI;

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 
 public class Stats extends Activity {

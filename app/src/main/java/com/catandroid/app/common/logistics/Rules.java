@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 
 public class Rules extends Activity {
 	@Override

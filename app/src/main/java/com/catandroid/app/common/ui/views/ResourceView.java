@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.controllers.actions.trade.PlayerTrade;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 

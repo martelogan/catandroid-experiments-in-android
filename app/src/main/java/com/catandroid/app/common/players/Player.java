@@ -9,7 +9,7 @@ import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.components.Hexagon.Type;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Vertex;
 

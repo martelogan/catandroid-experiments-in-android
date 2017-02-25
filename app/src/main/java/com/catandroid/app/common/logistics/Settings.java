@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.catandroid.app.common.controllers.GameSetup;
-import com.settlers.hd.R;
+import com.catandroid.app.R;;
 
 public class Settings extends SQLiteOpenHelper {
 

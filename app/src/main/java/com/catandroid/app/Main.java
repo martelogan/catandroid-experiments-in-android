@@ -19,7 +19,7 @@ import com.catandroid.app.common.controllers.GameManager;
 import com.catandroid.app.common.logistics.Rules;
 import com.catandroid.app.common.logistics.Settings;
 import com.catandroid.app.common.logistics.Stats;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 
 public class Main extends Activity {
 
@@ -57,13 +57,13 @@ public class Main extends Activity {
 			}
 		});
 
-		labels.add(getString(R.string.stats));
-		actions.add(new Runnable() {
-			@Override
-			public void run() {
-				Main.this.startActivity(new Intent(Main.this, Stats.class));
-			}
-		});
+//		labels.add(getString(R.string.stats));
+//		actions.add(new Runnable() {
+//			@Override
+//			public void run() {
+//				Main.this.startActivity(new Intent(Main.this, Stats.class));
+//			}
+//		});
 
 		labels.add(getString(R.string.rules_button));
 		actions.add(new Runnable() {
@@ -83,22 +83,6 @@ public class Main extends Activity {
 				aboutDialog.setMessage(getString(R.string.about_text) + "\n\n" + getString(R.string.acknowledgements)
 						+ "\n\n" + getString(R.string.translators));
 				aboutDialog.show();
-			}
-		});
-
-		labels.add(getString(R.string.site_button));
-		actions.add(new Runnable() {
-			@Override
-			public void run() {
-				Main.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.website_url))));
-			}
-		});
-
-		labels.add(getString(R.string.donate_button));
-		actions.add(new Runnable() {
-			@Override
-			public void run() {
-				Main.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_URL)));
 			}
 		});
 

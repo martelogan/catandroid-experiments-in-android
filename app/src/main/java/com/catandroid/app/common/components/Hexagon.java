@@ -1,7 +1,7 @@
 package com.catandroid.app.common.components;
 
 import com.catandroid.app.common.components.hexGridUtils.AxialHexLocation;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.common.players.Player;
 
 import java.util.Vector;

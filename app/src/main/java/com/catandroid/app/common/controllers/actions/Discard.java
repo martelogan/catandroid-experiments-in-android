@@ -2,18 +2,21 @@ package com.catandroid.app.common.controllers.actions;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.players.Player;
 
-public class Discard extends Activity {
+public class Discard extends Fragment {
 
 	public static final String QUANTITY_KEY = "com.settlers.hd.DiscardQuantity";
 	public static final String PLAYER_KEY = "com.settlers.hd.DiscardPlayer";
@@ -35,48 +38,49 @@ public class Discard extends Activity {
 	private int quantity;
 
 	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//super.onCreate(bundle);
 		
-		setFinishOnTouchOutside(false);
+		//getActivity().ActivsetFinishOnTouchOutside(false);
 
-		setContentView(R.layout.discard);
+		//setContentView(R.layout.discard);
+		final View discardView = inflater.inflate(R.layout.discard, null, false);
 
 		quantity = 0;
 		player = null;
 
-		Board board = ((CatAndroidApp) getApplicationContext()).getBoardInstance();
+		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		if (board == null) {
-			finish();
-			return;
+			//finish();
+			return null;
 		}
 
-		Bundle extras = getIntent().getExtras();
+		Bundle extras = this.getArguments();
 		if (extras != null) {
 			quantity = extras.getInt(QUANTITY_KEY);
 			player = board.getPlayer(extras.getInt(PLAYER_KEY));
 		}
 		
 		if (extras == null || quantity == 0) {
-			finish();
-			return;
+			//finish();
+			return null;
 		}
 
-		setTitle(String.format(getString(R.string.discard_reason), board.getCurrentPlayer().getName()));
+		getActivity().setTitle(String.format(getString(R.string.discard_reason), board.getCurrentPlayer().getName()));
 
 		String instructionText = getString(R.string.discard_instruction);
-		TextView instruction = (TextView) findViewById(R.id.discard_instruction);
+		TextView instruction = (TextView) discardView.findViewById(R.id.discard_instruction);
 		instruction.setText(player.getName() + ": "
 				+ String.format(instructionText, quantity));
 
 		for (int i = 0; i < RESOURCES.length; i++) {
 			int count = player.getResources(Hexagon.TYPES[i]);
 
-			TextView text = (TextView) findViewById(RESOURCES[i]);
+			TextView text = (TextView) discardView.findViewById(RESOURCES[i]);
 			text.setText(Integer.toString(count));
 
-			Button plus = (Button) findViewById(PLUS[i]);
-			Button minus = (Button) findViewById(MINUS[i]);
+			Button plus = (Button) discardView.findViewById(PLUS[i]);
+			Button minus = (Button) discardView.findViewById(MINUS[i]);
 
 			plus.setOnClickListener(new OnClickListener() {
 				@Override
@@ -84,15 +88,15 @@ public class Discard extends Activity {
 					int total = 0;
 
 					for (int i = 0; i < PLUS.length; i++) {
-						TextView offer = (TextView) findViewById(SELECTIONS[i]);
+						TextView offer = (TextView) discardView.findViewById(SELECTIONS[i]);
 						String str = offer.getText().toString();
 						int value = Integer.parseInt(str, 10);
 
-						if (v == findViewById(PLUS[i])) {
+						if (v == discardView.findViewById(PLUS[i])) {
 							value += 1;
 							offer.setText(Integer.toString(value));
 
-							findViewById(MINUS[i]).setEnabled(true);
+							discardView.findViewById(MINUS[i]).setEnabled(true);
 
 							if (value >= player.getResources(Hexagon.Type
 									.values()[i]))
@@ -104,9 +108,9 @@ public class Discard extends Activity {
 
 					if (total == quantity) {
 						for (int i = 0; i < PLUS.length; i++)
-							findViewById(PLUS[i]).setEnabled(false);
+							discardView.findViewById(PLUS[i]).setEnabled(false);
 
-						findViewById(R.id.discard_button).setEnabled(true);
+						discardView.findViewById(R.id.discard_button).setEnabled(true);
 					}
 				}
 			});
@@ -115,11 +119,11 @@ public class Discard extends Activity {
 				@Override
 				public void onClick(View v) {
 					for (int i = 0; i < MINUS.length; i++) {
-						TextView offer = (TextView) findViewById(SELECTIONS[i]);
+						TextView offer = (TextView) discardView.findViewById(SELECTIONS[i]);
 						String str = offer.getText().toString();
 						int value = Integer.parseInt(str, 10);
 
-						if (v == findViewById(MINUS[i])) {
+						if (v == discardView.findViewById(MINUS[i])) {
 							value -= 1;
 							offer.setText(Integer.toString(value));
 
@@ -129,35 +133,33 @@ public class Discard extends Activity {
 
 						int count = player.getResources(Hexagon.TYPES[i]);
 						if (value < count)
-							findViewById(PLUS[i]).setEnabled(true);
+							discardView.findViewById(PLUS[i]).setEnabled(true);
 					}
 
-					findViewById(R.id.discard_button).setEnabled(false);
+					discardView.findViewById(R.id.discard_button).setEnabled(false);
 				}
 			});
 
 			plus.setEnabled(count > 0);
 		}
 
-		Button discard = (Button) findViewById(R.id.discard_button);
+		Button discard = (Button) discardView.findViewById(R.id.discard_button);
 		discard.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				for (int i = 0; i < RESOURCES.length; i++) {
-					TextView number = (TextView) findViewById(SELECTIONS[i]);
+					TextView number = (TextView) discardView.findViewById(SELECTIONS[i]);
 					int count = Integer.parseInt((String) number.getText(), 10);
 
 					for (int j = 0; j < count; j++)
 						player.discard(Hexagon.TYPES[i]);
 				}
 
-				finish();
+				//finish();
+				getActivity().getSupportFragmentManager().popBackStack();
 			}
 		});
-	}
-	
-	@Override
-	public void onBackPressed() {
-		// don't allow bypassing discard stage by pressing back
+
+	return discardView;
 	}
 }

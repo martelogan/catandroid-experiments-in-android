@@ -3,8 +3,11 @@ package com.catandroid.app.common.controllers.actions.trade;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,11 +18,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Hexagon;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 
-public class PlayerTrade extends Activity {
+public class PlayerTrade extends Fragment {
 
 	public static final int REQUEST_TRADE_COMPLETED = 0;
 
@@ -50,29 +53,31 @@ public class PlayerTrade extends Activity {
 	private int selected;
 
 	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//super.onCreate(bundle);
 
 		selected = 0;
 
-		Bundle extras = getIntent().getExtras();
+		Bundle extras = this.getArguments();
 		if (extras != null)
 			selected = extras.getInt(TYPE_KEY);
 
-		setContentView(R.layout.playertrade);
-		setTitle(R.string.trade);
+		//setContentView(R.layout.playertrade);
 
-		Board board = ((CatAndroidApp) getApplicationContext()).getBoardInstance();
+		getActivity().setTitle(R.string.trade);
+
+		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		if (board == null) {
-			finish();
-			return;
+			//finish();
+			return null;
 		}
 
+		final View tradeView = inflater.inflate(R.layout.playertrade, null, false);
 		player = board.getCurrentPlayer();
 
-		Spinner select = (Spinner) findViewById(R.id.trade_type);
+		Spinner select = (Spinner) tradeView.findViewById(R.id.trade_type);
 		ArrayAdapter<CharSequence> choices = new ArrayAdapter<CharSequence>(
-				this, android.R.layout.simple_spinner_item);
+				getActivity().getApplicationContext(), android.R.layout.simple_spinner_item);
 		choices
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -86,27 +91,27 @@ public class PlayerTrade extends Activity {
 			if (player.hasTrader(Hexagon.TYPES[i]))
 				ratio = 2;
 
-			TextView text = (TextView) findViewById(RESOURCES[i]);
+			TextView text = (TextView) tradeView.findViewById(RESOURCES[i]);
 			text.setText(Integer.toString(count));
 
-			TextView ratioView = (TextView) findViewById(RES_VIEW[i]);
+			TextView ratioView = (TextView) tradeView.findViewById(RES_VIEW[i]);
 			ratioView.setText(String.format(getString(R.string.trade_ratio),
 					getString(RES_STRING[i]), ratio));
 
-			Button plus = (Button) findViewById(PLUS[i]);
-			Button minus = (Button) findViewById(MINUS[i]);
+			Button plus = (Button) tradeView.findViewById(PLUS[i]);
+			Button minus = (Button) tradeView.findViewById(MINUS[i]);
 
 			plus.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					for (int i = 0; i < PLUS.length; i++) {
-						if (v == findViewById(PLUS[i])) {
-							TextView offer = (TextView) findViewById(OFFERS[i]);
+						if (v == tradeView.findViewById(PLUS[i])) {
+							TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 							String str = offer.getText().toString();
 							int value = Integer.parseInt(str, 10) + 1;
 							offer.setText(Integer.toString(value));
 
-							Button minus = (Button) findViewById(MINUS[i]);
+							Button minus = (Button) tradeView.findViewById(MINUS[i]);
 							minus.setEnabled(true);
 
 							if (value >= player.getResources(Hexagon.Type
@@ -117,10 +122,10 @@ public class PlayerTrade extends Activity {
 						}
 					}
 
-					Button propose = (Button) findViewById(R.id.trade_propose);
+					Button propose = (Button) tradeView.findViewById(R.id.trade_propose);
 					propose.setEnabled(true);
 
-					checkAmounts();
+					checkAmounts(tradeView);
 				}
 			});
 
@@ -129,15 +134,15 @@ public class PlayerTrade extends Activity {
 				public void onClick(View v) {
 					boolean valid = false;
 					for (int i = 0; i < MINUS.length; i++) {
-						TextView offer = (TextView) findViewById(OFFERS[i]);
+						TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 						String str = offer.getText().toString();
 						int value = Integer.parseInt(str, 10);
 
-						if (v == findViewById(MINUS[i])) {
+						if (v == tradeView.findViewById(MINUS[i])) {
 							value -= 1;
 							offer.setText(Integer.toString(value));
 
-							Button plus = (Button) findViewById(PLUS[i]);
+							Button plus = (Button) tradeView.findViewById(PLUS[i]);
 							plus.setEnabled(true);
 
 							if (value == 0)
@@ -148,11 +153,11 @@ public class PlayerTrade extends Activity {
 							valid = true;
 					}
 
-					Button propose = (Button) findViewById(R.id.trade_propose);
+					Button propose = (Button) tradeView.findViewById(R.id.trade_propose);
 					if (!valid)
 						propose.setEnabled(false);
 
-					checkAmounts();
+					checkAmounts(tradeView);
 				}
 			});
 
@@ -172,17 +177,17 @@ public class PlayerTrade extends Activity {
 				for (int i = 0; i < RESOURCES.length; i++) {
 					int count = player.getResources(Hexagon.Type.values()[i]);
 
-					TextView offer = (TextView) findViewById(OFFERS[i]);
+					TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 					offer.setText("0");
 
-					Button plus = (Button) findViewById(PLUS[i]);
-					Button minus = (Button) findViewById(MINUS[i]);
+					Button plus = (Button) tradeView.findViewById(PLUS[i]);
+					Button minus = (Button) tradeView.findViewById(MINUS[i]);
 
 					minus.setEnabled(false);
 					plus.setEnabled(count > 0 && i != selected);
 				}
 
-				Button propose = (Button) findViewById(R.id.trade_propose);
+				Button propose = (Button) tradeView.findViewById(R.id.trade_propose);
 				propose.setEnabled(false);
 			}
 
@@ -191,27 +196,30 @@ public class PlayerTrade extends Activity {
 			}
 		});
 
-		Button propose = (Button) findViewById(R.id.trade_propose);
+		Button propose = (Button) tradeView.findViewById(R.id.trade_propose);
 		propose.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				int[] trade = new int[Hexagon.TYPES.length];
 				for (int i = 0; i < trade.length; i++) {
-					TextView offer = (TextView) findViewById(OFFERS[i]);
+					TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 					trade[i] = Integer.parseInt((String) offer.getText(), 10);
 				}
 
-				Intent intent = new Intent(PlayerTrade.this, AcceptTrade.class);
-				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.trade.AcceptTrade");
-				intent.putExtra(TYPE_KEY, selected);
-				intent.putExtra(OFFER_KEY, trade);
+				//@TODO
+				//ADD THE LOGIC TO SEND MESSAGE FOR TRADE PROPOSAL
 
-				PlayerTrade.this.startActivityForResult(intent,
-						REQUEST_TRADE_COMPLETED);
+//				Intent intent = new Intent(PlayerTrade.this, AcceptTrade.class);
+//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.trade.AcceptTrade");
+//				intent.putExtra(TYPE_KEY, selected);
+//				intent.putExtra(OFFER_KEY, trade);
+//
+//				PlayerTrade.this.startActivityForResult(intent,
+//						REQUEST_TRADE_COMPLETED);
 			}
 		});
 
-		Button tradeButton = (Button) findViewById(R.id.trade_bank);
+		Button tradeButton = (Button) tradeView.findViewById(R.id.trade_bank);
 		tradeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -219,7 +227,7 @@ public class PlayerTrade extends Activity {
 
 				int[] offer = new int[Hexagon.TYPES.length];
 				for (int i = 0; i < RESOURCES.length; i++) {
-					CharSequence offerChar = ((TextView) findViewById(OFFERS[i]))
+					CharSequence offerChar = ((TextView) tradeView.findViewById(OFFERS[i]))
 							.getText();
 					int number = Integer.parseInt(offerChar.toString());
 					offer[i] = number;
@@ -228,21 +236,23 @@ public class PlayerTrade extends Activity {
 				if (player.trade(type, offer)) {
 					toast(getString(R.string.trade_for_past) + " "
 							+ getString(Hexagon.getTypeStringResource(type)));
-					finish();
+					//finish();
+					getActivity().getSupportFragmentManager().popBackStack();
 				} else {
 					toast(getString(R.string.trade_invalid));
 				}
 			}
 		});
+	return tradeView;
 	}
 
-	private void checkAmounts() {
+	private void checkAmounts(View tradeView) {
 		Hexagon.Type type = Hexagon.TYPES[selected];
 		int types = 0;
 		int[] offer = new int[Hexagon.TYPES.length];
 
 		for (int i = 0; i < RESOURCES.length; i++) {
-			CharSequence offerChar = ((TextView) findViewById(OFFERS[i]))
+			CharSequence offerChar = ((TextView) tradeView.findViewById(OFFERS[i]))
 					.getText();
 			int number = Integer.parseInt(offerChar.toString());
 			offer[i] = number;
@@ -250,7 +260,7 @@ public class PlayerTrade extends Activity {
 				types += 1;
 		}
 
-		Button tradeButton = (Button) findViewById(R.id.trade_bank);
+		Button tradeButton = (Button) tradeView.findViewById(R.id.trade_bank);
 		if (!Player.canTradeMixed() && types != 1)
 			tradeButton.setEnabled(false);
 		else
@@ -258,15 +268,15 @@ public class PlayerTrade extends Activity {
 	}
 
 	private void toast(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
+		Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT)
 				.show();
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
+	public void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		if (requestCode == REQUEST_TRADE_COMPLETED
 				&& resultCode == Activity.RESULT_OK)
-			finish();
+			return;
 	}
 }

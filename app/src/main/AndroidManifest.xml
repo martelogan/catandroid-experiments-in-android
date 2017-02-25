@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.settlers.hd"
+    package="com.catandroid.app"
     android:installLocation="auto"
     android:versionCode="16"
     android:versionName="2.0.1" >
@@ -16,6 +16,13 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:allowBackup="true" >
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name="com.catandroid.app.Main"
             android:configChanges="locale"
@@ -33,63 +40,62 @@
         <activity
             android:name="com.catandroid.app.common.controllers.GameSetup"
             android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+            android:launchMode="standard">
         </activity>
-        <activity
-            android:name="com.catandroid.app.common.ui.activities.CostsReference"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.ui.activities.PlayerStatus"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.controllers.actions.Discard"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.logistics.Stats"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.controllers.GameManager"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo" >
-        </activity>
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.ui.activities.CostsReference"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.ui.activities.PlayerStatus"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.Discard"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.logistics.Stats"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.controllers.GameManager"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo" >-->
+        <!--</activity>-->
         <activity
             android:name="com.catandroid.app.common.logistics.Rules"
             android:label="@string/app_name"
             android:launchMode="standard"
             android:theme="@android:style/Theme.Holo" >
         </activity>
-        <activity
-            android:name="com.catandroid.app.common.controllers.actions.trade.PlayerTrade"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.controllers.actions.trade.AcceptTrade"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
-        <activity
-            android:name="com.catandroid.app.common.controllers.actions.trade.CounterOffer"
-            android:label="@string/app_name"
-            android:launchMode="standard"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.PlayerTrade"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.AcceptTrade"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.CounterOffer"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:launchMode="standard"-->
+            <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
+        <!--</activity>-->
     </application>
 
 </manifest>

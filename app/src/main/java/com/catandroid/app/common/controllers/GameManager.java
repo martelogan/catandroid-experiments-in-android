@@ -2,7 +2,7 @@ package com.catandroid.app.common.controllers;
 
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.controllers.actions.Discard;
-import com.settlers.hd.R;
+import com.catandroid.app.R;;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.controllers.GameRenderer.Action;
@@ -34,20 +34,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
-public class GameManager extends Activity {
+public class GameManager extends Fragment {
 
 	private static final int MIN_BOT_DELAY = 1000;
 
 	private static final int UPDATE_MESSAGE = 1, LOG_MESSAGE = 2, DISCARD_MESSAGE = 3;
+
+	private RelativeLayout rl;
+	private FragmentActivity fa;
 
 	private GameView view;
 	private Board board;
@@ -61,6 +71,15 @@ public class GameManager extends Activity {
 	private boolean isActive;
 
 	private static final String[] ROLLS = { "", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅" };
+
+	public GameManager(){
+
+	}
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		getActivity().findViewById(R.id.setup).setVisibility(View.GONE);
+	}
 
 	class TurnThread implements Runnable {
 		private boolean done;
@@ -138,11 +157,24 @@ public class GameManager extends Activity {
 				if (extra == 0)
 					break;
 
-				Intent intent = new Intent(GameManager.this, Discard.class);
-				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.Discard");
-				intent.putExtra(Discard.PLAYER_KEY, toDiscard.getIndex());
-				intent.putExtra(Discard.QUANTITY_KEY, extra);
-				GameManager.this.startActivity(intent);
+//				//Intent intent = new Intent(GameManager.this, Discard.class);
+//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.Discard");
+//				intent.putExtra(Discard.PLAYER_KEY, toDiscard.getIndex());
+//				intent.putExtra(Discard.QUANTITY_KEY, extra);
+//				GameManager.this.startActivity(intent);
+
+				Bundle bundle = new Bundle();
+				bundle.putInt(Discard.PLAYER_KEY, toDiscard.getIndex());
+				bundle.putInt(Discard.QUANTITY_KEY, extra);
+				Discard discardFragment = new Discard();
+				discardFragment.setArguments(bundle);
+
+				FragmentTransaction discardFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+				discardFragmentTransaction.replace(R.id.fragment_container, discardFragment,"DISCARD");
+				discardFragmentTransaction.addToBackStack("DISCARD");
+				discardFragmentTransaction.commit();
+
+
 				break;
 			}
 
@@ -166,7 +198,8 @@ public class GameManager extends Activity {
 			break;
 			
 		default:
-			Log.e(getClass().getName(), "invalid selection type");
+			// REMOVED
+			//Log.e(getClass().getName(), "invalid selection type");
 			break;
 		}
 	}
@@ -234,7 +267,16 @@ public class GameManager extends Activity {
 		
 		switch (button) {
 		case INFO:
-			GameManager.this.startActivity(new Intent(GameManager.this, PlayerStatus.class));
+			//INFO IS THE BUTTON THAT IS ALWAYS VISIBLE IN TOP LEFT CORNER
+			Log.d("myTag", "about to launch PLAYER INFO");
+
+			PlayerStatus playerStatus = new PlayerStatus();
+
+			FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
+			fragmentTransaction.replace(R.id.fragment_container, playerStatus,playerStatus.getClass().getSimpleName());
+			fragmentTransaction.addToBackStack(playerStatus.getClass().getSimpleName());
+			fragmentTransaction.commit();
 			break;
 
 		case ROLL:
@@ -279,8 +321,8 @@ public class GameManager extends Activity {
 
 			renderer.setAction(Action.ROAD);
 			setButtons(Action.ROAD);
-			this.setTitle(board.getCurrentPlayer().getName() + ": "
-					+ getString(R.string.game_build_road));
+			getActivity().setTitle(board.getCurrentPlayer().getName() + ": "
+					+ getActivity().getString(R.string.game_build_road));
 			break;
 
 		case TOWN:
@@ -302,8 +344,8 @@ public class GameManager extends Activity {
 
 			renderer.setAction(Action.TOWN);
 			setButtons(Action.TOWN);
-			this.setTitle(board.getCurrentPlayer().getName() + ": "
-					+ getString(R.string.game_build_town));
+			getActivity().setTitle(board.getCurrentPlayer().getName() + ": "
+					+ getActivity().getString(R.string.game_build_town));
 			break;
 
 		case CITY:
@@ -325,8 +367,8 @@ public class GameManager extends Activity {
 
 			renderer.setAction(Action.CITY);
 			setButtons(Action.CITY);
-			this.setTitle(board.getCurrentPlayer().getName() + ": "
-					+ getString(R.string.game_build_city));
+			getActivity().setTitle(board.getCurrentPlayer().getName() + ": "
+					 + getActivity().getString(R.string.game_build_city));
 			break;
 
 		case DEVCARD:
@@ -334,8 +376,17 @@ public class GameManager extends Activity {
 			break;
 
 		case TRADE:
-			this.startActivity(new Intent(this, PlayerTrade.class));
+//			getActivity().startActivity(new Intent(this, PlayerTrade.class));
+
+			FragmentManager tradeFragmentManager = getActivity().getSupportFragmentManager();
+			PlayerTrade tradeFragment = new PlayerTrade();
+			FragmentTransaction tradeFragmentTransaction =  tradeFragmentManager.beginTransaction();
+			tradeFragmentTransaction.replace(R.id.fragment_container, tradeFragment,tradeFragment.getClass().getSimpleName());
+			tradeFragmentTransaction.addToBackStack(tradeFragment.getClass().getSimpleName());
+			tradeFragmentTransaction.commit();
+
 			setup(false);
+
 			break;
 
 		case ENDTURN:
@@ -358,16 +409,26 @@ public class GameManager extends Activity {
 		if (!board.getCurrentPlayer().isHuman() || !board.isBuild())
 			return false;
 
-		Intent intent = new Intent(this, PlayerTrade.class);
-		intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.PlayerTrade");
-		intent.putExtra(PlayerTrade.TYPE_KEY, index);
-		startActivity(intent);
+//		Intent intent = new Intent(this, PlayerTrade.class);
+//		intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.PlayerTrade");
+//		intent.putExtra(PlayerTrade.TYPE_KEY, index);
+//		startActivity(intent);
+
+		Bundle bundle = new Bundle();
+		bundle.putInt(PlayerTrade.TYPE_KEY, index);
+		PlayerTrade tradeFragment = new PlayerTrade();
+		tradeFragment.setArguments(bundle);
+
+		FragmentTransaction tradeFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
+		tradeFragmentTransaction.replace(R.id.fragment_container, tradeFragment,tradeFragment.getClass().getSimpleName());
+		tradeFragmentTransaction.addToBackStack(tradeFragment.getClass().getSimpleName());
+		tradeFragmentTransaction.commit();
 
 		return true;
 	}
 
 	private void cantBuild(Action action) {
-		Board board = ((CatAndroidApp) getApplicationContext()).getBoardInstance();
+		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		Player player = board.getCurrentPlayer();
 
 		String message = "";
@@ -375,7 +436,7 @@ public class GameManager extends Activity {
 		case ROAD:
 
 			if (player.getNumRoads() == Player.MAX_ROADS)
-				message = getString(R.string.game_build_road_max);
+				message = getActivity().getString(R.string.game_build_road_max);
 			else
 				message = getString(R.string.game_build_road_fail);
 
@@ -417,9 +478,11 @@ public class GameManager extends Activity {
 	}
 
 	private void setup(boolean setZoom) {
-		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
+		CatAndroidApp app = (CatAndroidApp) getActivity().getApplicationContext();
 		TextureManager texture = app.getTextureManagerInstance();
 		Player player = board.getCurrentPlayer();
+
+
 
 		renderer.setState(board, player.isHuman() ? player : null, texture, board.getRoll());
 		
@@ -432,11 +495,11 @@ public class GameManager extends Activity {
 
 		// display winner
 		boolean hadWinner = board.getWinner(null) != null;
-		Player winner = board.getWinner(((CatAndroidApp) getApplicationContext())
+		Player winner = board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
 				.getSettingsInstance());
 		if (!hadWinner && winner != null) {
 			// declare winner
-			final Builder infoDialog = new AlertDialog.Builder(this);
+			final Builder infoDialog = new AlertDialog.Builder(getActivity());
 			infoDialog.setTitle(getString(R.string.phase_game_over));
 			infoDialog.setIcon(R.drawable.icon);
 			infoDialog.setMessage(winner.getName() + " "
@@ -447,7 +510,9 @@ public class GameManager extends Activity {
 					new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							GameManager.this.finish();
+							//GameManager.this.finish();
+							// must ask the activity to close this Main Fragment
+							getActivity().getSupportFragmentManager().popBackStack();
 						}
 					});
 			infoDialog.show();
@@ -464,24 +529,26 @@ public class GameManager extends Activity {
 		renderer.setAction(action);
 		setButtons(action);
 
-		setTitleColor(Color.WHITE);
+		getActivity().setTitleColor(Color.WHITE);
 
 		int color = TextureManager.getColor(board.getCurrentPlayer().getColor());
 		color = TextureManager.darken(color, 0.35);
 
-		ActionBar actionBar = getActionBar();
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowCustomEnabled(true);
-		actionBar.setBackgroundDrawable(new ColorDrawable(color));
+//		ActionBar actionBar = getActivity().getActionBar();
+//		actionBar.setHomeButtonEnabled(true);
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setDisplayShowCustomEnabled(true);
+//		actionBar.setBackgroundDrawable(new ColorDrawable(color));
 
 		int resourceId = board.getPhaseResource();
 		if (resourceId != 0)
-			setTitle(player.getName() + ": " + getString(resourceId));
+			getActivity().setTitle(player.getName() + ": " + getActivity().getString(resourceId));
 		else
-			setTitle(player.getName());
+			getActivity().setTitle(player.getName());
 		
 		resources.setValues(player);
+
+		Log.d("myTag", "end of setup");
 	}
 
 	private void setButtons(Action action) {
@@ -562,7 +629,7 @@ public class GameManager extends Activity {
 		for (int i = 0; i < index; i++)
 			items[i] = list[i];
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.game_dev_cards));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
@@ -575,7 +642,7 @@ public class GameManager extends Activity {
 						if (card != null)
 							toast(getString(R.string.game_bought)
 									+ " "
-									+ getString(Board
+									+ getActivity().getString(Board
 											.getCardStringResource(card)) + " "
 									+ getString(R.string.game_card));
 						else
@@ -645,9 +712,9 @@ public class GameManager extends Activity {
 		CharSequence[] items = new CharSequence[Hexagon.TYPES.length];
 		for (int i = 0; i < items.length; i++)
 			items[i] = String.format(getString(R.string.game_monopoly_select),
-					getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
+					getActivity().getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.game_monopoly_prompt));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
@@ -672,10 +739,10 @@ public class GameManager extends Activity {
 		CharSequence[] items = new CharSequence[Hexagon.TYPES.length];
 		for (int i = 0; i < items.length; i++)
 			items[i] = String.format(getString(R.string.game_harvest_select),
-					getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
+					getActivity().getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.game_harvest_prompt));
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(getActivity().getString(R.string.game_harvest_prompt));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -696,14 +763,14 @@ public class GameManager extends Activity {
 
 	private void steal() {
 		if (!board.isRobberPhase()) {
-			Log.w(this.getClass().getName(),
+			Log.w(getActivity().getClass().getName(),
 					"shouldn't be calling steal() out of robber phase");
 			return;
 		}
 
 		Hexagon robbing = board.getRobber();
 		if (robbing == null) {
-			Log.w(this.getClass().getName(),
+			Log.w(getActivity().getClass().getName(),
 					"shouldn't be calling steal() without robber location set");
 			setup(false);
 			return;
@@ -747,7 +814,7 @@ public class GameManager extends Activity {
 		for (int i = 0; i < index; i++)
 			items[i] = list[i];
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.game_dev_cards));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
@@ -781,7 +848,7 @@ public class GameManager extends Activity {
 
 				if (type != null)
 					toast(getString(R.string.game_stole) + " "
-							+ getString(Hexagon.getTypeStringResource(type))
+							+ getActivity().getString(Hexagon.getTypeStringResource(type))
 							+ " " + getString(R.string.game_from) + " "
 							+ player.getName());
 				else
@@ -798,12 +865,12 @@ public class GameManager extends Activity {
 	}
 
 	private void toast(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT)
+		Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT)
 				.show();
 	}
 
 	private void popup(String title, String message) {
-		final Builder infoDialog = new AlertDialog.Builder(this);
+		final Builder infoDialog = new AlertDialog.Builder(getActivity());
 		infoDialog.setTitle(title);
 		infoDialog.setIcon(R.drawable.icon);
 		infoDialog.setMessage(message);
@@ -813,7 +880,7 @@ public class GameManager extends Activity {
 
 	private void notifyTurn() {
 		// vibrate if enabled
-		Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 		vibrator.vibrate(400);
 
 		// show turn log
@@ -834,7 +901,7 @@ public class GameManager extends Activity {
 			Player player = board.getPlayer(i % 4);
 			String name = player.getName()
 					+ " ("
-					+ getString(Player
+					+ getActivity().getString(Player
 							.getColorStringResource(player.getColor())) + ")";
 			String log = player.getActionLog();
 
@@ -853,20 +920,26 @@ public class GameManager extends Activity {
 	}
 
 	@Override
-	public void onCreate(Bundle state) {
-		super.onCreate(state);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		fa = (FragmentActivity) super.getActivity();
 
-		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
-		
-		RelativeLayout frame = new RelativeLayout(this);
+		CatAndroidApp app = (CatAndroidApp) getActivity().getApplicationContext();
+
+		RelativeLayout frame = new RelativeLayout(getActivity());
+
+//		View v=inflater.inflate(R.layout.hotel_search,container,false);
+//
+//		relativeLayout=((RelativeLayout) v.findViewById(R.id.rootlayout));
 
 		TextureManager texture = app.getTextureManagerInstance();
+
 		if (texture == null) {
-			texture = new TextureManager(getResources());
+			texture = new TextureManager(getActivity().getResources());
 			app.setTextureManagerInstance(texture);
 		}
-		
-		view = new GameView(this);
+
+		//changed constructor
+		view = new GameView(this,getActivity());
 		renderer = new GameRenderer(view);
 		view.setRenderer(renderer);
 		view.requestFocus();
@@ -874,8 +947,8 @@ public class GameManager extends Activity {
 				LinearLayout.LayoutParams.MATCH_PARENT, 1));
 		frame.addView(view);
 		
-		boolean horizontal = getResources().getDisplayMetrics().widthPixels < getResources().getDisplayMetrics().heightPixels;	
-		resources = new ResourceView(this);
+		boolean horizontal = getActivity().getResources().getDisplayMetrics().widthPixels < getActivity().getResources().getDisplayMetrics().heightPixels;
+		resources = new ResourceView(getActivity());
 		resources.setOrientation(horizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
 		RelativeLayout.LayoutParams params;
 		if (horizontal)
@@ -884,26 +957,35 @@ public class GameManager extends Activity {
 			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 		params.addRule(horizontal ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 		frame.addView(resources, params);
-		
-		setContentView(frame);
 
 		board = app.getBoardInstance();
 
-		if (board == null) {
-			finish();
-			return;
-		}
+//
+//		if (board == null) {
+//			finish();
+//			return;
+//		}
+
+		((ViewGroup)view.getParent()).removeView(view);
 
 		turnHandler = new UpdateHandler();
+
+//		//return frame;
+//		getActivity().setContentView(frame);
+
+		//return frame;
+		return view;
 	}
 
 	@Override
 	public void onResume() {
+
 		super.onResume();
 
 		turnThread = new TurnThread();
 		new Thread(turnThread).start();
 
+		Log.d("myTag", "Created Thread");
 		isActive = true;
 		setup(false);
 	}
@@ -916,28 +998,39 @@ public class GameManager extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	//http://stackoverflow.com/questions/15653737/oncreateoptionsmenu-inside-fragments
 		inflater.inflate(R.menu.gamemenu, menu);
-		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			//finish();
+			// must ask the activity to close this Main Fragment
+			getActivity().getSupportFragmentManager().popBackStack();
 			return true;
 		case R.id.reference:
-			GameManager.this.startActivity(new Intent(GameManager.this, CostsReference.class));
+			CostsReference costsReference = new CostsReference();
+
+			Log.d("myTag", "about to launch costs fragment");
+			FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
+			fragmentTransaction.replace(R.id.fragment_container, costsReference);
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.commit();
+
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
+//	@Override
+//	public void onBackPressed() {
+//		//finish();
+//		// must ask the activity to close this Main Fragment
+//		fa.getSupportFragmentManager().popBackStack();
+//	}
 }

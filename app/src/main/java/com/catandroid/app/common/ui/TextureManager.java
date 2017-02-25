@@ -18,7 +18,7 @@ import com.catandroid.app.common.components.Harbor;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.ui.resources.Square;
 import com.catandroid.app.common.ui.resources.UIButton;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.common.components.Vertex;
 import com.catandroid.app.common.players.Player;
 

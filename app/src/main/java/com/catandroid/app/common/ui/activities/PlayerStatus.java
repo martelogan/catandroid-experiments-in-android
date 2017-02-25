@@ -4,13 +4,14 @@ import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.ui.TextureManager;
-import com.settlers.hd.R;
+import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
@@ -21,25 +22,25 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class PlayerStatus extends Activity {
+public class PlayerStatus extends Fragment {
 	
 	private View[] views;
 
 	@Override
-	public void onCreate(Bundle state) {
-		super.onCreate(state);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//super.onCreate(state);
 		
-		setContentView(R.layout.status);
-		setTitle(getString(R.string.status));
+		//getActivity().setContentView(R.layout.status);
+		getActivity().setTitle(getString(R.string.status));
 
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		//LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		views = new View[4];
 		
-		Board board = ((CatAndroidApp) getApplicationContext()).getBoardInstance();
+		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		if (board == null) {
-			finish();
-			return;
+			//finish();
+			return null;
 		}
 		
 		for (int i = 0; i < 4; i++) {
@@ -49,7 +50,7 @@ public class PlayerStatus extends Activity {
 
 			boolean showAll = player == board.getCurrentPlayer()
 					&& player.isHuman()
-					|| board.getWinner(((CatAndroidApp) getApplicationContext())
+					|| board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
 							.getSettingsInstance()) != null;
 
 			int points;
@@ -134,12 +135,14 @@ public class PlayerStatus extends Activity {
 			progress.setMax(board.getMaxPoints());
 			progress.setProgress(points);
 		}
-		
-		ViewPager viewPager = (ViewPager) findViewById(R.id.status);
+
+		final View view = inflater.inflate(R.layout.status, null, false);
+
+		ViewPager viewPager = (ViewPager) view.findViewById(R.id.status);
 		viewPager.setAdapter(new StatusTabAdapter());
 		viewPager.setCurrentItem(board.getCurrentPlayer().getIndex());
 		
-		PagerTitleStrip titleStrip = (PagerTitleStrip) findViewById(R.id.status_title_strip);
+		PagerTitleStrip titleStrip = (PagerTitleStrip) view.findViewById(R.id.status_title_strip);
 		titleStrip.setBackgroundColor(TextureManager.darken(TextureManager.getColor(
 				CatAndroidApp.getInstance().getBoardInstance().getPlayer(board.getCurrentPlayer().getIndex()).getColor()), 0.35));
 		
@@ -157,10 +160,13 @@ public class PlayerStatus extends Activity {
 				int color = TextureManager.getColor(CatAndroidApp.getInstance().getBoardInstance().getPlayer(position).getColor());
 				color = TextureManager.darken(color, 0.35);
 				
-				PagerTitleStrip titleStrip = (PagerTitleStrip) findViewById(R.id.status_title_strip);
+				PagerTitleStrip titleStrip = (PagerTitleStrip) view.findViewById(R.id.status_title_strip);
 				titleStrip.setBackgroundColor(color);
 			}
 		});
+
+		return view;
+
 	}
 
 	public class StatusTabAdapter extends PagerAdapter {

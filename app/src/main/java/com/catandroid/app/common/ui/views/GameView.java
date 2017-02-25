@@ -35,10 +35,10 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 	private boolean buttonsPlaced = false;
 	private GameManager game;
 
-	public GameView(Context context) {
+	public GameView(GameManager manager, Context context) {
 		super(context);
 		
-		game = (GameManager) context;
+		game = manager;
 		
 		gesture = new GestureDetector(context, this);
 		pinch = new ScaleGestureDetector(context, this);
