@@ -8,28 +8,14 @@ import java.util.Vector;
 
 public class Hexagon {
 
-	public static final int NUM_HEXAGONS = 19;
-
-	//TODO: generalize to any board size
-	/* NOTE: for a perfectly-centered hexagon
-	with centered hexagonal number K, the map
-	radius n is the positive integer solution of
-	3n^2 - 3n + 1*/
-	public static final int RADIUS = 2;
-
 	public enum Type {
-		LUMBER, WOOL, GRAIN, BRICK, ORE, DESERT, ANY, LIGHT, DIM, SHORE
+		LUMBER, WOOL, GRAIN, BRICK, ORE, DESERT, SEA, GOLD, ANY, LIGHT, DIM, SHORE
 	}
 
 	public static final Type[] TYPES = { Type.LUMBER, Type.WOOL, Type.GRAIN,
 			Type.BRICK, Type.ORE };
 
-	public final static int[] RESOURCE_COUNT = { 4, 4, 4, 3, 3, 1 };
-
 	private final static int[] PROBABILITY = { 0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3,
-			2, 1 };
-
-	private final static int[] SUM_COUNT = { 0, 0, 1, 2, 2, 2, 2, 0, 2, 2, 2,
 			2, 1 };
 
 	private Board board;
@@ -240,11 +226,14 @@ public class Hexagon {
 	 *            the dice sum
 	 */
 	public void distributeResources(int roll) {
-		if (roll != this.roll || hasRobber())
+		if (roll != this.roll || hasRobber()) {
 			return;
+		}
 
 		for (int i = 0; i < 6; i++)
+		{
 			vertices[i].distributeResources(type);
+		}
 	}
 
 	/**
@@ -317,129 +306,6 @@ public class Hexagon {
 	 */
 	public int getId() {
 		return id;
-	}
-
-	/**
-	 * Initialize the hexagons randomly
-	 * 
-	 * @param board
-	 *            the board
-	 * @return a hexagon array
-	 */
-	public static Hexagon[] initialize(Board board) {
-		Hexagon[] hexagon = new Hexagon[NUM_HEXAGONS];
-
-		// generate random board layout
-		for (int type = 0; type < RESOURCE_COUNT.length; type++) {
-			for (int count = 0; count < RESOURCE_COUNT[type]; count++) {
-
-				// pick hexagon index (location)
-				while (true) {
-					int index = (int) (NUM_HEXAGONS * Math.random());
-					if (hexagon[index] == null) {
-						Type hexType = Type.values()[type];
-						hexagon[index] = new Hexagon(board, hexType, index);
-
-						if (hexType == Type.DESERT) {
-							hexagon[index].setRoll(7);
-							board.setRobber(index);
-						}
-
-						break;
-					}
-				}
-			}
-		}
-
-		return hexagon;
-	}
-
-	/**
-	 * Initialize the hexagons based on a predefined board layout
-	 * 
-	 * @param board
-	 *            the board
-	 * @param types
-	 *            an array of NUM_HEXAGONS hexagon types
-	 * @return a hexagon array
-	 */
-	public static Hexagon[] initialize(Board board, Hexagon.Type[] types) {
-		Hexagon[] hexagon = new Hexagon[NUM_HEXAGONS];
-		for (int i = 0; i < hexagon.length; i++)
-			hexagon[i] = new Hexagon(board, types[i], i);
-
-		return hexagon;
-	}
-
-	/**
-	 * Assign roll numbers to the hexagons randomly
-	 * 
-	 * @param hexagon
-	 *            the hexagon array
-	 */
-	public static void assignRoles(Hexagon[] hexagon, int numHighRollers) {
-
-		// initialize count of dice sums used to allocate roll numbers
-		int[] rollCount = new int[SUM_COUNT.length];
-		for (int i = 0; i < rollCount.length; i++) {
-			rollCount[i] = 0;
-		}
-
-		// place 6s and 8s (high probability rolls)
-		Hexagon[] highRollers = new Hexagon[numHighRollers];
-		for (int i = 0; i < numHighRollers; i++) {
-			// pick a random hexagon
-			int pick = -1;
-			while (pick < 0) {
-				pick = (int) (Hexagon.NUM_HEXAGONS * Math.random());
-
-				// make sure it isn't adjacent to another high roller
-				for (int j = 0; j < i; j++) {
-					if (hexagon[pick].isAdjacent(highRollers[j])) {
-						pick = -1;
-						break;
-					}
-				}
-
-				// make sure it wasn't already picked
-				if (pick >= 0 && hexagon[pick].getRoll() > 0 || pick >= 0
-						&& hexagon[pick].getType() == Type.DESERT)
-					pick = -1;
-			}
-
-			// assign the roll value
-			int roll = (i < 2 ? 6 : 8);
-			highRollers[i] = hexagon[pick];
-			highRollers[i].setRoll(roll);
-			rollCount[roll] += 1;
-		}
-
-		// generate random placement of roll numbers
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++) {
-			// skip hexagons that already have a roll number
-			if (hexagon[i].getRoll() > 0 || hexagon[i].getType() == Type.DESERT)
-				continue;
-
-			// pick roll
-			int roll = 0;
-			while (true) {
-				roll = (int) (SUM_COUNT.length * Math.random());
-				if (rollCount[roll] < SUM_COUNT[roll])
-					break;
-			}
-
-			hexagon[i].setRoll(roll);
-			rollCount[roll] += 1;
-		}
-	}
-
-	public static Type getType(String string) {
-		for (int i = 0; i < Hexagon.TYPES.length; i++) {
-			if (string == Hexagon.TYPES[i].toString().toLowerCase())
-				return Hexagon.TYPES[i];
-		}
-
-		return null;
 	}
 
 	public static int getTypeStringResource(Type type) {

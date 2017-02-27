@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 import com.catandroid.app.CatAndroidApp;
+import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.common.logistics.multiplayer.SkeletonTurn;
 import com.catandroid.app.R;
 import com.catandroid.app.common.components.Board;
@@ -710,7 +711,9 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 		boolean autoDiscard = discardCheck.isChecked();
 
 		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
-		app.setBoardInstance(new Board(names, types, maxPoints,
+		//TODO: set board size via UI
+		BoardGeometry boardGeometry = new BoardGeometry(1);
+		app.setBoardInstance(new Board(names, types, maxPoints, boardGeometry,
 				autoDiscard));
 
 		//@TODO
@@ -740,7 +743,7 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 		FragmentManager fragmentManager = getSupportFragmentManager();
 
 		//Start the fragment
-		Fragment gameManager = new GameManager();
+		Fragment gameManager = new GameManager(app.getBoardInstance());
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_container,gameManager)
 				.addToBackStack(null)

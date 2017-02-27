@@ -72,8 +72,8 @@ public class GameManager extends Fragment {
 
 	private static final String[] ROLLS = { "", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅" };
 
-	public GameManager(){
-
+	public GameManager(Board b){
+		this.board = b;
 	}
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -940,7 +940,7 @@ public class GameManager extends Fragment {
 
 		//changed constructor
 		view = new GameView(this,getActivity());
-		renderer = new GameRenderer(view);
+		renderer = new GameRenderer(view, board.getBoardGeometry());
 		view.setRenderer(renderer);
 		view.requestFocus();
 		view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

@@ -4,8 +4,6 @@ import com.catandroid.app.common.players.Player;
 
 public class Edge {
 
-	public static final int NUM_EDGES = 72;
-
 	private int index;
 	private Vertex[] vertex;
 	private Player owner;
@@ -295,18 +293,5 @@ public class Edge {
 		int length1 = vertex[0].getRoadLength(owner, this, countId);
 		int length2 = vertex[1].getRoadLength(owner, this, countId);
 		return length1 + length2 + 1;
-	}
-
-	/**
-	 * Initialize the edges
-	 * 
-	 * @return the array of edges
-	 */
-	public static Edge[] initialize() {
-		Edge[] edge = new Edge[NUM_EDGES];
-		for (int i = 0; i < NUM_EDGES; i++)
-			edge[i] = new Edge(i);
-
-		return edge;
 	}
 }

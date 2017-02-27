@@ -16,6 +16,9 @@ public class Board {
 		SOLDIER, PROGRESS, HARVEST, MONOPOLY, VICTORY
 	}
 
+	public final static int[] COUNT_PER_DICE_SUM = { 0, 0, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2 };
+	public final static int[] COUNT_PER_TERRAIN = { 4, 4, 4, 3, 5, 2, 37, 2 };
+
 	private static final int NUM_SOLDIER = 14;
 	private static final int NUM_PROGRESS = 2;
 	private static final int NUM_HARVEST = 2;
@@ -28,6 +31,7 @@ public class Board {
 
 	private Phase phase, returnPhase;
 
+	private BoardGeometry myBoardGeometry;
 	private Hexagon[] hexagons;
 	private Vertex[] vertex;
 	private Edge[] edge;
@@ -35,6 +39,7 @@ public class Board {
 	private Harbor[] harbor;
 	private int[] cards;
 	private Stack<Player> discardQueue;
+	private BoardGeometry boardGeometry;
 	private HashMap<Long, Hexagon> hexMap;
 
 	private int robber, turn, turnNumber, roadCountId, longestRoad,
@@ -51,9 +56,10 @@ public class Board {
 	 * @param human
 	 *            whether each player is human
 	 */
-	public Board(String[] names, boolean[] human, int maxPoints,
+	public Board(String[] names, boolean[] human, int maxPoints, BoardGeometry boardGeometry,
 			boolean autoDiscard) {
 		this.maxPoints = maxPoints;
+		this.boardGeometry = boardGeometry;
 		commonInit();
 
 		this.autoDiscard = autoDiscard;
@@ -109,21 +115,30 @@ public class Board {
 		cards[Cards.MONOPOLY.ordinal()] = NUM_MONOPOLY;
 
 		// randomly initialize hexagons
-		hexagons = Hexagon.initialize(this);
-		harbor = Harbor.initialize();
-		vertex = Vertex.initialize();
-		edge = Edge.initialize();
-
+		hexagons = ComponentUtils.initRandomHexes(this);
+		harbor = ComponentUtils.initRandomHarbors(boardGeometry.getHarborCount());
+		vertex = ComponentUtils.generateVertices(boardGeometry.getVertexCount());
+		edge = ComponentUtils.generateEdges(boardGeometry.getEdgeCount());
 
 		// populate board map with starting parameters
-		BoardGeometry.populateBoard(hexagons, vertex, edge, harbor, hexMap);
-
-		// TODO: replace this with populateBoard
-//		BoardGeometry.setAssociations(hexagons, vertex, edge, harbor);
+		boardGeometry.populateBoard(hexagons, vertex, edge, harbor, hexMap);
 
 		// TODO: remove hard-coding / replace this function
 		// assign roll numbers randomly
-		Hexagon.assignRoles(hexagons, 4);
+//		Hexagon.assignRoles(hexagons, 4);
+	}
+
+	/**
+	 * Get a reference to the board's geometry
+	 *
+	 * @return the board's geometry
+	 */
+	public BoardGeometry getBoardGeometry() {
+		if (boardGeometry == null) {
+			return null;
+		}
+
+		return boardGeometry;
 	}
 
 	/**
@@ -438,8 +453,8 @@ public class Board {
 	 * @note this is intended only to be used to stream out the board layout
 	 */
 	public int[] getMapping() {
-		int hexMapping[] = new int[Hexagon.NUM_HEXAGONS];
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
+		int hexMapping[] = new int[hexagons.length];
+		for (int i = 0; i < hexagons.length; i++)
 			hexMapping[i] = hexagons[i].getType().ordinal();
 
 		return hexMapping;
@@ -453,7 +468,7 @@ public class Board {
 	 * @return the hexagons
 	 */
 	public Hexagon getHexagon(int index) {
-		if (index < 0 || index >= Hexagon.NUM_HEXAGONS)
+		if (index < 0 || index >= boardGeometry.getHexCount())
 			return null;
 
 		return hexagons[index];
@@ -471,7 +486,7 @@ public class Board {
 	 * @return the harbor
 	 */
 	public Harbor getTrader(int index) {
-		if (index < 0 || index >= Harbor.NUM_HARBORS)
+		if (index < 0 || index >= boardGeometry.getHarborCount())
 			return null;
 
 		return harbor[index];
@@ -485,7 +500,7 @@ public class Board {
 	 * @return the edge
 	 */
 	public Edge getEdge(int index) {
-		if (index < 0 || index >= Edge.NUM_EDGES)
+		if (index < 0 || index >= boardGeometry.getEdgeCount())
 			return null;
 
 		return edge[index];
@@ -503,7 +518,7 @@ public class Board {
 	 * @return the vertex
 	 */
 	public Vertex getVertex(int index) {
-		if (index < 0 || index >= Vertex.NUM_VERTICES)
+		if (index < 0 || index >= boardGeometry.getEdgeCount())
 			return null;
 
 		return vertex[index];
@@ -771,9 +786,10 @@ public class Board {
 	 * @return the last location of the robber
 	 */
 	public Hexagon getRobberLast() {
-		if (robber < 0 && robberLast >= 0 && robberLast < Hexagon.NUM_HEXAGONS)
+		int hexCount = boardGeometry.getHexCount();
+		if (robber < 0 && robberLast >= 0 && robberLast < hexCount)
 			return hexagons[robberLast];
-		else if (robber >= 0 && robber < Hexagon.NUM_HEXAGONS)
+		else if (robber >= 0 && robber < hexCount)
 			return hexagons[robber];
 		else
 			return null;

@@ -32,6 +32,10 @@ public class GameRenderer implements Renderer {
 	private int width, height;
 
 	private static BoardGeometry boardGeometry = null;
+	private int HEX_COUNT;
+	private int EDGE_COUNT;
+	private int VERTEX_COUNT;
+	private int HARBOR_COUNT;
 
 	private static final float[] backgroundColors = { 0, 0.227f, 0.521f, 1,
 			0.262f, 0.698f, 0.878f, 1, 0, 0.384f, 0.600f, 1, 0.471f, 0.875f,
@@ -43,8 +47,27 @@ public class GameRenderer implements Renderer {
 	public GameRenderer(GameView gameView) {
 		view = gameView;
 		
-		if (boardGeometry == null)
+		if (boardGeometry == null) {
 			boardGeometry = new BoardGeometry();
+			this.HEX_COUNT = boardGeometry.getHexCount();
+			this.VERTEX_COUNT = boardGeometry.getVertexCount();
+			this.EDGE_COUNT = boardGeometry.getEdgeCount();
+			this.HARBOR_COUNT = boardGeometry.getHarborCount();
+		}
+
+		action = Action.NONE;
+	}
+
+	public GameRenderer(GameView gameView, BoardGeometry boardGeometry) {
+		view = gameView;
+
+		if (boardGeometry != null) {
+			this.boardGeometry = boardGeometry;
+			this.HEX_COUNT = boardGeometry.getHexCount();
+			this.VERTEX_COUNT = boardGeometry.getVertexCount();
+			this.EDGE_COUNT = boardGeometry.getEdgeCount();
+			this.HARBOR_COUNT = boardGeometry.getHarborCount();
+		}
 
 		action = Action.NONE;
 	}
@@ -57,7 +80,7 @@ public class GameRenderer implements Renderer {
 	}
 
 	public void setSize(DisplayMetrics screen, int width, int height) {
-		boardGeometry.setSize(width, height);
+		boardGeometry.setCurFocus(width, height);
 		this.width = width;
 		this.height = height;
 	}
@@ -85,7 +108,7 @@ public class GameRenderer implements Renderer {
 		this.width = width;
 		this.height = height;
 		
-		boardGeometry.setSize(width, height);
+		boardGeometry.setCurFocus(width, height);
 
 		float aspect = (float) width / (float) height;
 		if (width > height)
@@ -139,23 +162,23 @@ public class GameRenderer implements Renderer {
 		gl.glScalef(boardGeometry.getZoom(), boardGeometry.getZoom(), 1);
 
 		// draw the hexangons with backdrop
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
+		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw1(board.getHexagon(i), gl, boardGeometry);
 
 		// draw the roll numbers, robber, and highlighting
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
+		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw2(board.getHexagon(i), gl, boardGeometry);
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
+		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw3(board.getHexagon(i), gl, boardGeometry, lastRoll);
-		for (int i = 0; i < Hexagon.NUM_HEXAGONS; i++)
+		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw4(board.getHexagon(i), gl, boardGeometry);
 
 		// draw traders
-		for (int i = 0; i < Harbor.NUM_HARBORS; i++)
+		for (int i = 0; i < HARBOR_COUNT; i++)
 			texture.draw(board.getTrader(i), gl, boardGeometry);
 
 		// draw edges
-		for (int i = 0; i < Edge.NUM_EDGES; i++) {
+		for (int i = 0; i < EDGE_COUNT; i++) {
 			Edge edge = board.getEdge(i);
 			boolean build = action == Action.ROAD && player != null
 					&& player.canBuild(edge);
@@ -165,7 +188,7 @@ public class GameRenderer implements Renderer {
 		}
 
 		// draw vertices
-		for (int i = 0; i < Vertex.NUM_VERTICES; i++) {
+		for (int i = 0; i < VERTEX_COUNT; i++) {
 			Vertex vertex = board.getVertex(i);
 			boolean town = player != null && action == Action.TOWN
 					&& player.canBuild(vertex, Vertex.TOWN);

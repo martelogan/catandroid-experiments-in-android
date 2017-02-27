@@ -74,6 +74,8 @@ public class TextureManager {
 				res);
 		add(Type.TILE, Hexagon.Type.BRICK.ordinal(), R.drawable.tile_brick, res);
 		add(Type.TILE, Hexagon.Type.ORE.ordinal(), R.drawable.tile_ore, res);
+		add(Type.TILE, Hexagon.Type.SEA.ordinal(), R.drawable.tile_sea, res);
+		add(Type.TILE, Hexagon.Type.GOLD.ordinal(), R.drawable.tile_gold, res);
 		add(Type.TILE, Hexagon.Type.DIM.ordinal(), R.drawable.tile_dim, res);
 		add(Type.LIGHT, 0, R.drawable.tile_light, res);
 

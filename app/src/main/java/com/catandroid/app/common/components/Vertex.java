@@ -4,8 +4,6 @@ import com.catandroid.app.common.players.Player;
 
 public class Vertex {
 
-	public static final int NUM_VERTICES = 54;
-
 	public static final int NONE = 0;
 	public static final int TOWN = 1;
 	public static final int CITY = 2;
@@ -299,18 +297,5 @@ public class Vertex {
 		}
 
 		return longest;
-	}
-
-	/**
-	 * Initialize vertices
-	 * 
-	 * @return list of vertices
-	 */
-	public static Vertex[] initialize() {
-		Vertex[] vertex = new Vertex[NUM_VERTICES];
-		for (int i = 0; i < NUM_VERTICES; i++)
-			vertex[i] = new Vertex(i);
-
-		return vertex;
 	}
 }
