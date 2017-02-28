@@ -1,4 +1,4 @@
-package com.catandroid.app.common.ui;
+package com.catandroid.app.common.ui.graphics_controllers;
 
 import java.util.Hashtable;
 
@@ -16,6 +16,7 @@ import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Harbor;
 import com.catandroid.app.common.components.Hexagon;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.ui.resources.Square;
 import com.catandroid.app.common.ui.resources.UIButton;
 import com.catandroid.app.R;
@@ -66,20 +67,20 @@ public class TextureManager {
 
 		// load large tile textures
 		add(Type.SHORE, 0, R.drawable.tile_shore, res);
-		add(Type.TILE, Hexagon.Type.DESERT.ordinal(), R.drawable.tile_desert,
+		add(Type.TILE, Hexagon.TerrainType.DESERT.ordinal(), R.drawable.tile_desert,
 				res);
-		add(Type.TILE, Hexagon.Type.WOOL.ordinal(), R.drawable.tile_wool, res);
-		add(Type.TILE, Hexagon.Type.GRAIN.ordinal(), R.drawable.tile_grain, res);
-		add(Type.TILE, Hexagon.Type.LUMBER.ordinal(), R.drawable.tile_lumber,
+		add(Type.TILE, Hexagon.TerrainType.PASTURE.ordinal(), R.drawable.tile_wool, res);
+		add(Type.TILE, Hexagon.TerrainType.FIELDS.ordinal(), R.drawable.tile_grain, res);
+		add(Type.TILE, Hexagon.TerrainType.FOREST.ordinal(), R.drawable.tile_lumber,
 				res);
-		add(Type.TILE, Hexagon.Type.BRICK.ordinal(), R.drawable.tile_brick, res);
-		add(Type.TILE, Hexagon.Type.ORE.ordinal(), R.drawable.tile_ore, res);
-		add(Type.TILE, Hexagon.Type.SEA.ordinal(), R.drawable.tile_sea, res);
-		add(Type.TILE, Hexagon.Type.GOLD.ordinal(), R.drawable.tile_gold, res);
-		add(Type.TILE, Hexagon.Type.DIM.ordinal(), R.drawable.tile_dim, res);
+		add(Type.TILE, Hexagon.TerrainType.HILLS.ordinal(), R.drawable.tile_brick, res);
+		add(Type.TILE, Hexagon.TerrainType.MOUNTAINS.ordinal(), R.drawable.tile_ore, res);
+		add(Type.TILE, Hexagon.TerrainType.SEA.ordinal(), R.drawable.tile_sea, res);
+		add(Type.TILE, Hexagon.TerrainType.GOLD_FIELD.ordinal(), R.drawable.tile_gold, res);
+		add(Type.TILE, Hexagon.TerrainType.DIM.ordinal(), R.drawable.tile_dim, res);
 		add(Type.LIGHT, 0, R.drawable.tile_light, res);
 
-		// load roll number textures
+		// load executeDiceRoll number textures
 		add(Type.ROLL, 2, R.drawable.roll_2, res);
 		add(Type.ROLL, 3, R.drawable.roll_3, res);
 		add(Type.ROLL, 4, R.drawable.roll_4, res);
@@ -142,16 +143,16 @@ public class TextureManager {
 				res);
 
 		// load large resource icons
-		add(Type.RESOURCE, Hexagon.Type.LUMBER.ordinal(),
+		add(Type.RESOURCE, Resource.ResourceType.LUMBER.ordinal(),
 				R.drawable.res_lumber, res);
-		add(Type.RESOURCE, Hexagon.Type.WOOL.ordinal(), R.drawable.res_wool,
+		add(Type.RESOURCE, Resource.ResourceType.WOOL.ordinal(), R.drawable.res_wool,
 				res);
-		add(Type.RESOURCE, Hexagon.Type.GRAIN.ordinal(), R.drawable.res_grain,
+		add(Type.RESOURCE, Resource.ResourceType.GRAIN.ordinal(), R.drawable.res_grain,
 				res);
-		add(Type.RESOURCE, Hexagon.Type.BRICK.ordinal(), R.drawable.res_brick,
+		add(Type.RESOURCE, Resource.ResourceType.BRICK.ordinal(), R.drawable.res_brick,
 				res);
-		add(Type.RESOURCE, Hexagon.Type.ORE.ordinal(), R.drawable.res_ore, res);
-		add(Type.RESOURCE, Hexagon.Type.ANY.ordinal(), R.drawable.trader_any,
+		add(Type.RESOURCE, Resource.ResourceType.ORE.ordinal(), R.drawable.res_ore, res);
+		add(Type.RESOURCE, Resource.ResourceType.ANY.ordinal(), R.drawable.trader_any,
 				res);
 
 		// load large trader textures
@@ -227,7 +228,7 @@ public class TextureManager {
 		square.get(hash(Type.BUTTON, button.getType().ordinal())).render(gl);
 
 //		if (!button.isEnabled())
-//			square.get(hash(Type.BUTTONBG, UIButton.Background.ACTIVATED.ordinal())).render(gl);
+//			square.get(hash(ResourceType.BUTTONBG, UIButton.Background.ACTIVATED.ordinal())).render(gl);
 		
 		gl.glPopMatrix();
 	}
@@ -258,7 +259,7 @@ public class TextureManager {
 		gl.glTranslatef(boardGeometry.getHexagonX(id), boardGeometry.getHexagonY(id), 0);
 
 		square.get(hash(Type.SHORE, 0)).render(gl);
-		square.get(hash(Type.TILE, hexagon.getType().ordinal())).render(gl);
+		square.get(hash(Type.TILE, hexagon.getTerrainType().ordinal())).render(gl);
 
 		gl.glPopMatrix();
 	}
@@ -281,7 +282,7 @@ public class TextureManager {
 		int id = hexagon.getId();
 		gl.glTranslatef(boardGeometry.getHexagonX(id), boardGeometry.getHexagonY(id), 0);
 
-		int roll = hexagon.getRoll();
+		int roll = hexagon.getNumberTokenAsInt();
 		
 		if (!hexagon.hasRobber() && lastRoll != 0 && roll == lastRoll)
 			square.get(hash(Type.LIGHT, 0)).render(gl);
@@ -295,7 +296,7 @@ public class TextureManager {
 		int id = hexagon.getId();
 		gl.glTranslatef(boardGeometry.getHexagonX(id), boardGeometry.getHexagonY(id), 0);
 
-		int roll = hexagon.getRoll();
+		int roll = hexagon.getNumberTokenAsInt();
 
 		if (roll != 0 && roll != 7) {
 			gl.glScalef(1.5f, 1.5f, 1);
@@ -319,7 +320,7 @@ public class TextureManager {
 		gl.glPushMatrix();
 		gl.glTranslatef(boardGeometry.getHarborIconX(id, harbor.getMyEdge()),
 				boardGeometry.getHarborIconY(id, harbor.getMyEdge()), 0);
-		square.get(hash(Type.RESOURCE, harbor.getType().ordinal())).render(gl);
+		square.get(hash(Type.RESOURCE, harbor.getResourceType().ordinal())).render(gl);
 		gl.glPopMatrix();
 	}
 
@@ -387,8 +388,8 @@ public class TextureManager {
 		return get(Type.BUTTON, type.ordinal());
 	}
 
-	public Bitmap get(Hexagon.Type type) {
-		return get(Type.RESOURCE, type.ordinal());
+	public Bitmap get(Resource.ResourceType resourceType) {
+		return get(Type.RESOURCE, resourceType.ordinal());
 	}
 
 	public void initGL(GL10 gl) {

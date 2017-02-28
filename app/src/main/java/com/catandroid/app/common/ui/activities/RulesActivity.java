@@ -1,4 +1,4 @@
-package com.catandroid.app.common.logistics;
+package com.catandroid.app.common.ui.activities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import android.webkit.WebView;
 
 import com.catandroid.app.R;
 
-public class Rules extends Activity {
+public class RulesActivity extends Activity {
 	@Override
 	public void onCreate(Bundle state) {
 		super.onCreate(state);

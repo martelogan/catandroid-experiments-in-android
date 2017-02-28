@@ -3,7 +3,7 @@
 
 	<!-- Dutch translation by Rik -->
 
-	<!-- Main menu -->
+	<!-- StartScreenActivity menu -->
 	<string name="new_button">Nieuw spel</string>
 	<string name="rules_button">Instructies</string>
 	<string name="rules_failed">Kon de spelregels niet laden</string>
@@ -14,7 +14,7 @@
 	<string name="donate_button">Doneer</string>
 	<string name="site_button">Bezoek website</string>
 
-	<!-- Card types -->
+	<!-- Card resourceTypes -->
 	<string name="soldier">soldaat</string>
 	<string name="progress">voortgang</string>
 	<string name="victory">overwinning</string>
@@ -25,7 +25,7 @@
 	<string name="green">groen</string>
 	<string name="orange">oranje</string>
 
-	<!-- Resource types -->
+	<!-- Resource resourceTypes -->
 	<string name="desert">woestijn</string>
 	<string name="lumber">hout</string>
 	<string name="wool">wol</string>
@@ -60,7 +60,7 @@
 	<string name="player_name3">Bert</string>
 	<string name="player_name4">Piet</string>
 	<string name="points_to_win">punten om te winnen</string>
-	<string name="option_mixed_trade">Sta gemixte types toe in 4:1 ruilen</string>
+	<string name="option_mixed_trade">Sta gemixte resourceTypes toe in 4:1 ruilen</string>
 	<string name="length_quick">(snel)</string>
 	<string name="length_standard">(standaard)</string>
 	<string name="length_long">(lang)</string>

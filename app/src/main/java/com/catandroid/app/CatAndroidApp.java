@@ -4,12 +4,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.logistics.Settings;
-import com.catandroid.app.common.ui.TextureManager;
+import com.catandroid.app.common.logistics.AppSettings;
+import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 
 public class CatAndroidApp extends Application {
 
-	private Settings settingsInstance;
+	private AppSettings appSettingsInstance;
 	private TextureManager textureManagerInstance;
 	private Board boardInstance;
 	
@@ -25,7 +25,7 @@ public class CatAndroidApp extends Application {
 		context = getBaseContext();
 
 		// load settings
-		settingsInstance = new Settings(getBaseContext());
+		appSettingsInstance = new AppSettings(getBaseContext());
 
 		setTextureManagerInstance(null);
 		setBoardInstance(null);
@@ -55,7 +55,7 @@ public class CatAndroidApp extends Application {
 		return textureManagerInstance;
 	}
 
-	public Settings getSettingsInstance() {
-		return settingsInstance;
+	public AppSettings getAppSettingsInstance() {
+		return appSettingsInstance;
 	}
 }

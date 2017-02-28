@@ -4,9 +4,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.CatAndroidApp;
-import com.catandroid.app.common.controllers.GameManager;
-import com.catandroid.app.common.controllers.GameRenderer;
-import com.catandroid.app.common.ui.TextureManager;
+import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
+import com.catandroid.app.common.ui.graphics_controllers.GameRenderer;
+import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 import com.catandroid.app.common.ui.resources.UIButton;
 import com.catandroid.app.common.ui.resources.UIButton.Type;
 import com.catandroid.app.common.players.Player;
@@ -33,9 +33,9 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 
 	private UIButton[] buttons;
 	private boolean buttonsPlaced = false;
-	private GameManager game;
+	private ActiveGameFragment game;
 
-	public GameView(GameManager manager, Context context) {
+	public GameView(ActiveGameFragment manager, Context context) {
 		super(context);
 		
 		game = manager;

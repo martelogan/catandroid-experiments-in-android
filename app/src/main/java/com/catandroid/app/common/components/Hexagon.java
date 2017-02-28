@@ -1,75 +1,41 @@
 package com.catandroid.app.common.components;
 
 import com.catandroid.app.common.components.hexGridUtils.AxialHexLocation;
-import com.catandroid.app.R;
 import com.catandroid.app.common.players.Player;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 public class Hexagon {
 
-	public enum Type {
-		LUMBER, WOOL, GRAIN, BRICK, ORE, DESERT, SEA, GOLD, ANY, LIGHT, DIM, SHORE
-	}
-
-	public static final Type[] TYPES = { Type.LUMBER, Type.WOOL, Type.GRAIN,
-			Type.BRICK, Type.ORE };
-
-	private final static int[] PROBABILITY = { 0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3,
-			2, 1 };
-
-	private Board board;
-	private int roll;
-	private Type type;
+	private NumberToken numberToken;
+    private Resource resourceProduced;
+    private TerrainType terrainType;
 	private Vertex[] vertices;
 	private Edge[] edges;
 	private AxialHexLocation coord;
+    private boolean hasRobber = false;
 	private int id;
 
+    public enum TerrainType {
+        FOREST, PASTURE, FIELDS, HILLS, MOUNTAINS, DESERT, SEA, GOLD_FIELD, LIGHT, DIM, SHORE
+    }
+
 	/**
-	 * Initialize the hexagon with a resource type and roll number
+	 * Initialize the hexagon with a resource resourceType and numberToken number
 	 * 
-	 * @param type
-	 *            resource type
+	 * @param terrainType
+	 *            terrainType of hexagon
 	 * @param index
 	 *            id number for the hexagon
 	 */
-	public Hexagon(Board board, Type type, int index) {
-		this.board = board;
-		this.type = type;
-		this.roll = 0;
+	public Hexagon(TerrainType terrainType, int index) {
+        this.terrainType = terrainType;
+		this.resourceProduced = getResource(terrainType);
+		this.numberToken = new NumberToken(0);
 		vertices = new Vertex[6];
 		edges = new Edge[6];
 		id = index;
-	}
-
-	/**
-	 * Set the connected vertices for hexagon
-	 * 
-	 * @param v1
-	 *            first vertices
-	 * @param v2
-	 *            second vertices
-	 * @param v3
-	 *            third vertices
-	 * @param v4
-	 *            fourth vertices
-	 * @param v5
-	 *            fifth vertices
-	 * @param v6
-	 *            sixth vertices
-	 */
-	public void setVertices(Vertex v1, Vertex v2, Vertex v3, Vertex v4,
-			Vertex v5, Vertex v6) {
-		vertices[0] = v1;
-		vertices[1] = v2;
-		vertices[2] = v3;
-		vertices[3] = v4;
-		vertices[4] = v5;
-		vertices[5] = v6;
-
-		for (int i = 0; i < 6; i++)
-			vertices[i].addHexagon(this);
 	}
 
 	/**
@@ -127,25 +93,34 @@ public class Hexagon {
 		return -1;
 	}
 
-	/**
-	 * Get the resource type
-	 * 
-	 * @return the resource type
-	 */
-	public Type getType() {
-		return type;
-	}
+    /**
+     * Get the hexagon's produced resource
+     *
+     * @return the hexagon's produced resource
+     */
+    public Resource getResource() {
+        return resourceProduced;
+    }
 
 	/**
-	 * Set the hexagon type retrospectively
+	 * Get the hexagon's produced resourceType
 	 * 
-	 * @param type
-	 *            the hexagon type
+	 * @return the hexagon's produced resourceType
 	 */
-	public void setType(Type type) {
-		this.type = type;
+	public Resource.ResourceType getResourceType()
+    {
+		if (resourceProduced == null) {
+            return null;
+        }
+        return resourceProduced.getResourceType();
 	}
 
+    /**
+     * Get the hexagon's terrainType
+     *
+     * @return the hexagon's terrainType
+     */
+    public TerrainType getTerrainType() { return terrainType; }
 
 	/**
 	 * Get an edge of the hexagon
@@ -171,32 +146,43 @@ public class Hexagon {
 	}
 
 	/**
-	 * Get the roll number for this resource
-	 * 
-	 * @return the roll sum corresponding to this resource
+	 * Get integer representation of the number token
+	 * currently placed on this hexagon
+	 *
+	 * @return integer representation of number token
 	 */
-	public int getRoll() {
-		return roll;
+	public int getNumberTokenAsInt() {
+		return this.numberToken.getTokenNum();
 	}
 
-	/**
-	 * Set the roll number for this resource
-	 * 
-	 * @param roll
-	 *            the dice sum for this resource
-	 */
-	public void setRoll(int roll) {
-		this.roll = roll;
-	}
+    /**
+     * Get the number token object placed on this hexagon
+     *
+     * @return number token currently placed on this hexagon
+     */
+    public NumberToken getNumberTokenAsObject() {
+        return this.numberToken;
+    }
 
 	/**
-	 * Get the probability of rolling this number
+	 * Place number token on this hexagon (pass by int)
 	 * 
-	 * @return the number of possible rolls which give this number
+	 * @param tokenNum
+	 *            integer rep of number token to place
 	 */
-	public int getProbability() {
-		return PROBABILITY[roll];
+	public void placeNumberToken(int tokenNum) {
+		this.numberToken = new NumberToken(tokenNum);
 	}
+
+    /**
+     * Place number token on this hexagon (pass by obect)
+     *
+     * @param token
+     *            object rep of number token to place
+     */
+    public void placeNumberToken(NumberToken token) {
+        this.numberToken = token;
+    }
 
 	/**
 	 * Set hexagon's axial coordinate
@@ -210,10 +196,10 @@ public class Hexagon {
 	}
 
 	/**
-	 * Get hexagon's axial coordinate
+	 * Get a hexagon's axial coordinate
 	 *
 	 * @param
-	 * @return the vertices
+	 * @return the axial coordinate of the hexagon
 	 */
 	public AxialHexLocation getCoord() {
 		return coord;
@@ -222,47 +208,48 @@ public class Hexagon {
 	/**
 	 * Distribute resources from this hexagon
 	 * 
-	 * @param roll
-	 *            the dice sum
+	 * @param diceRoll
+	 *            the current dice sum
 	 */
-	public void distributeResources(int roll) {
-		if (roll != this.roll || hasRobber()) {
+	public void distributeResources(int diceRoll) {
+		if (diceRoll != this.numberToken.getTokenNum() || hasRobber()) {
 			return;
 		}
 
 		for (int i = 0; i < 6; i++)
 		{
-			vertices[i].distributeResources(type);
+			vertices[i].distributeResources(resourceProduced.getResourceType());
 		}
 	}
 
 	/**
-	 * Check if a player has a town or city adjacent to the hexagon
+	 * Check if a given player owns land adjacent to the hexagon
 	 * 
 	 * @param player
-	 *            the player to check for
-	 * @return true if player has a town or city adjacent to the hexagon
+	 *            the player to check
+	 * @return true iff player has a settlement adjacent to the hexagon
 	 */
-	public boolean hasPlayer(Player player) {
+	public boolean adjacentToPlayer(Player player) {
 		for (int i = 0; i < 6; i++) {
-			if (vertices[i].getOwner() == player)
-				return true;
+			if (vertices[i].getOwner() == player) {
+                return true;
+            }
 		}
-
 		return false;
 	}
 
 	/**
-	 * Get the players the own a settlement adjacent to the hexagon
+	 * Get all players owning a settlement adjacent to the hexagon
 	 * 
-	 * @return a Vector of players
+	 * @return a vector of players
 	 */
 	public Vector<Player> getPlayers() {
 		Vector<Player> players = new Vector<Player>();
 		for (int i = 0; i < 6; i++) {
 			Player owner = vertices[i].getOwner();
-			if (owner != null && !players.contains(owner))
-				players.add(owner);
+			if (owner != null && !players.contains(owner)) {
+                players.add(owner);
+            }
 		}
 
 		return players;
@@ -279,24 +266,48 @@ public class Hexagon {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				Hexagon adjacent = vertices[i].getHexagon(j);
-				if (adjacent == null || adjacent == this)
-					continue;
-
-				if (hexagon == adjacent)
-					return true;
+				if (adjacent == null || adjacent == this) {
+                    continue;
+                }
+				else if (hexagon == adjacent) {
+                    return true;
+                }
 			}
 		}
+		return false;
+	}
 
+	/**
+	 * Set the robber on this hexagon
+	 *
+	 * @return true if the hexagon now has the robber
+	 */
+	public boolean setRobber() {
+		this.hasRobber = true;
+		return true;
+	}
+
+	/**
+	 * Remove the robber from this hexagon
+	 *
+	 * @return true iff robber was indeed removed
+	 */
+	public boolean removeRobber() {
+		if (this.hasRobber) {
+			this.hasRobber = false;
+			return true;
+		}
+		// robber is not on this hex
 		return false;
 	}
 
 	/**
 	 * Check if the hexagon has the robber
 	 * 
-	 * @return true if the hexagon has the robber
+	 * @return true iff the hexagon has the robber
 	 */
 	public boolean hasRobber() {
-		return (board.getRobber() == this);
+		return (this.hasRobber);
 	}
 
 	/**
@@ -308,20 +319,28 @@ public class Hexagon {
 		return id;
 	}
 
-	public static int getTypeStringResource(Type type) {
-		switch (type) {
-		case LUMBER:
-			return R.string.lumber;
-		case WOOL:
-			return R.string.wool;
-		case GRAIN:
-			return R.string.grain;
-		case BRICK:
-			return R.string.brick;
-		case ORE:
-			return R.string.ore;
-		default:
-			return R.string.nostring;
-		}
-	}
+    private static final HashMap<TerrainType, Resource> terrainTypeToResourceMap =
+            initTerrainTypeToResourceMap();
+    private static HashMap<TerrainType, Resource> initTerrainTypeToResourceMap()
+    {
+        HashMap<TerrainType, Resource> terrainToResourceMap =
+                new HashMap<TerrainType, Resource>();
+        Resource lumber, wool, grain, brick, ore;
+        lumber = new Resource(Resource.ResourceType.LUMBER);
+        wool = new Resource(Resource.ResourceType.WOOL);
+        grain = new Resource(Resource.ResourceType.GRAIN);
+        brick = new Resource(Resource.ResourceType.BRICK);
+        ore = new Resource(Resource.ResourceType.ORE);
+        terrainToResourceMap.put(TerrainType.FOREST, lumber);
+        terrainToResourceMap.put(TerrainType.PASTURE, wool);
+        terrainToResourceMap.put(TerrainType.FIELDS, grain);
+        terrainToResourceMap.put(TerrainType.HILLS, brick);
+        terrainToResourceMap.put(TerrainType.MOUNTAINS, ore);
+        return terrainToResourceMap;
+    }
+
+    public static Resource getResource(TerrainType terrainType) {
+        return terrainTypeToResourceMap.get(terrainType);
+    }
+
 }

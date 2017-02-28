@@ -1,4 +1,4 @@
-package com.catandroid.app.common.controllers;
+package com.catandroid.app.common.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,29 +20,19 @@ import android.support.v4.app.Fragment;
 
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.BoardGeometry;
+import com.catandroid.app.common.logistics.AppSettings;
+import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 import com.catandroid.app.common.logistics.multiplayer.SkeletonTurn;
 import com.catandroid.app.R;
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.logistics.Settings;
 import com.catandroid.app.common.players.Player;
 
 //***************
 //SkeletonActivity
 //***************
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.catandroid.app.R;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,7 +51,7 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
 
-public class GameSetup extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+public class GameManagerActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
 		OnInvitationReceivedListener, OnTurnBasedMatchUpdateReceivedListener,
 		View.OnClickListener {
 
@@ -130,9 +120,9 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 	// taken an action on the match, such as takeTurn()
 	public SkeletonTurn mTurnData;
 
-	public static void setup(Settings settings) {
+	public static void setup(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++)
-			settings.set(HUMAN_KEYS[i], DEFAULT_HUMANS[i]);
+			appSettings.set(HUMAN_KEYS[i], DEFAULT_HUMANS[i]);
 	}
 
 	private void reset() {
@@ -158,32 +148,32 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 		discardCheck.setChecked(auto_discard);
 	}
 
-	private void load(Settings settings) {
+	private void load(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++) {
-			names[i] = settings.get(NAME_KEYS[i]);
+			names[i] = appSettings.get(NAME_KEYS[i]);
 			if (names[i] == null || names[i] == "")
 				names[i] = getString(DEFAULT_NAMES[i]);
 
-			types[i] = settings.getBool(HUMAN_KEYS[i]);
+			types[i] = appSettings.getBool(HUMAN_KEYS[i]);
 		}
 
-		mixed = settings.getBool(MIXED_KEY);
-		auto_discard = settings.getBool(AUTO_KEY);
+		mixed = appSettings.getBool(MIXED_KEY);
+		auto_discard = appSettings.getBool(AUTO_KEY);
 	}
 
-	private void save(Settings settings) {
+	private void save(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++) {
-			settings.set(NAME_KEYS[i], names[i]);
-			settings.set(HUMAN_KEYS[i], types[i]);
+			appSettings.set(NAME_KEYS[i], names[i]);
+			appSettings.set(HUMAN_KEYS[i], types[i]);
 		}
 
-		settings.set(MIXED_KEY, mixed);
-		settings.set(AUTO_KEY, auto_discard);
+		appSettings.set(MIXED_KEY, mixed);
+		appSettings.set(AUTO_KEY, auto_discard);
 	}
 
 	@Override
 	public void onCreate(Bundle state) {
-		//when GameSetup launches, make login mandatory.
+		//when GameManagerActivity launches, make login mandatory.
 		//we create the mGoogleApiClient that is used to intereact with playservices
 		//at this time.
 
@@ -332,7 +322,7 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 
 		names = new String[4];
 		types = new boolean[4];
-		load(((CatAndroidApp) getApplicationContext()).getSettingsInstance());
+		load(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
 		//Set the checkboxes, spinners to default values
 		populate();
@@ -702,7 +692,7 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 			return;
 		}
 
-		save(((CatAndroidApp) getApplicationContext()).getSettingsInstance());
+		save(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
 		Spinner pointSpinner = (Spinner) findViewById(R.id.option_max_points);
 		int maxPoints = pointSpinner.getSelectedItemPosition() + 5;
@@ -743,7 +733,7 @@ public class GameSetup extends FragmentActivity implements GoogleApiClient.Conne
 		FragmentManager fragmentManager = getSupportFragmentManager();
 
 		//Start the fragment
-		Fragment gameManager = new GameManager(app.getBoardInstance());
+		Fragment gameManager = new ActiveGameFragment(app.getBoardInstance());
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_container,gameManager)
 				.addToBackStack(null)

@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.controllers.actions.trade.PlayerTrade;
+import com.catandroid.app.common.components.Resource;
+import com.catandroid.app.common.ui.fragments.interaction_fragments.trade.TradeRequestFragment;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
@@ -59,8 +59,8 @@ public class ResourceView extends LinearLayout {
 				@Override
 				public void onClick(View view) {
 					if (CatAndroidApp.getInstance().getBoardInstance().isBuild()) {
-						Intent intent = new Intent(ResourceView.this.context, PlayerTrade.class);
-						intent.putExtra(PlayerTrade.TYPE_KEY, resource);
+						Intent intent = new Intent(ResourceView.this.context, TradeRequestFragment.class);
+						intent.putExtra(TradeRequestFragment.TYPE_KEY, resource);
 						ResourceView.this.context.startActivity(intent);
 					}
 				}
@@ -80,7 +80,7 @@ public class ResourceView extends LinearLayout {
 		setBackgroundColor(Color.argb(200, 0, 0, 0));
 
 		int[] resources = player.getResources();
-		for (int i = 0; i < Hexagon.TYPES.length; i++)
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++)
 			views[i].setText(String.valueOf(resources[i]));
 	}
 }

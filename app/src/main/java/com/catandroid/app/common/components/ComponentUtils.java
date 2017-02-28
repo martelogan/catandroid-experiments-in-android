@@ -20,21 +20,21 @@ public class ComponentUtils
     public static Hexagon[] initRandomHexes(Board board) {
         int hexCount = board.getBoardGeometry().getHexCount();
         Hexagon[] hexagons = new Hexagon[hexCount];
-        int [] countPerResource = Board.COUNT_PER_TERRAIN;
+        int [] countPerTerrainType = Board.COUNT_PER_TERRAIN;
         // generate random board layout
-        for (int type = 0; type < countPerResource.length; type++) {
-            for (int count = 0; count < countPerResource[type]; count++) {
+        for (int type = 0; type < countPerTerrainType.length; type++) {
+            for (int count = 0; count < countPerTerrainType[type]; count++) {
 
                 // pick hexagon index (location)
                 while (true) {
                     int index = (int) (hexCount * Math.random());
                     if (hexagons[index] == null) {
-                        Hexagon.Type hexType = Hexagon.Type.values()[type];
-                        hexagons[index] = new Hexagon(board, hexType, index);
+                        Hexagon.TerrainType terrainType = Hexagon.TerrainType.values()[type];
+                        hexagons[index] = new Hexagon(terrainType, index);
 
-                        if (hexType == Hexagon.Type.DESERT) {
-                            hexagons[index].setRoll(7);
-                            board.setRobber(index);
+                        if (terrainType == Hexagon.TerrainType.DESERT) {
+                            hexagons[index].placeNumberToken(7);
+                            board.setCurRobberHex(hexagons[index]);
                         }
 
                         break;
@@ -48,56 +48,56 @@ public class ComponentUtils
 
     public static Harbor[] initRandomHarbors(int harborCount) {
 
-        // mark all traders as unassigned
-        Harbor[] harbor = new Harbor[harborCount];
-        boolean[] usedTrader = new boolean[harborCount];
+        // mark all harbors as unassigned
+        Harbor[] harbors = new Harbor[harborCount];
+        boolean[] usedHarbor = new boolean[harborCount];
         for (int i = 0; i < harborCount; i++)
-            usedTrader[i] = false;
+            usedHarbor[i] = false;
 
         // for each harbor type (one of each resource, 4 any 3:1 harbors)
         for (int i = 0; i < harborCount; i++) {
             while (true) {
                 // pick a random unassigned harbor
                 int pick = (int) (Math.random() * harborCount);
-                if (!usedTrader[pick]) {
-                    Hexagon.Type type;
-                    if (i >= Hexagon.TYPES.length)
-                        type = Hexagon.Type.ANY;
+                if (!usedHarbor[pick]) {
+                    Resource.ResourceType resourceType;
+                    if (i >= Resource.RESOURCE_TYPES.length)
+                        resourceType = Resource.ResourceType.ANY;
                     else
-                        type = Hexagon.Type.values()[i];
+                        resourceType = Resource.ResourceType.values()[i];
 
-                    harbor[pick] = new Harbor(type, pick);
-                    usedTrader[pick] = true;
+                    harbors[pick] = new Harbor(resourceType, pick);
+                    usedHarbor[pick] = true;
                     break;
                 }
             }
         }
 
-        return harbor;
+        return harbors;
     }
 
-    public static Harbor[] generateHarbors(Hexagon.Type[] types) {
-        Harbor[] harbor = new Harbor[types.length];
-        for (int i = 0; i < harbor.length; i++) {
-            harbor[i] = new Harbor(types[i], i);
+    public static Harbor[] generateHarbors(Resource.ResourceType[] resourceTypes) {
+        Harbor[] harbors = new Harbor[resourceTypes.length];
+        for (int i = 0; i < harbors.length; i++) {
+            harbors[i] = new Harbor(resourceTypes[i], i);
         }
 
-        return harbor;
+        return harbors;
     }
 
     /**
      * Initialize the hexagons based on a predefined board layout
      *
-     * @param board
-     *            the board
-     * @param types
-     *            an array of hexagon types
+     * @param hexCount
+     *            the number of hexagons to generate
+     * @param terrainTypes
+     *            an array of hexagon resourceTypes
      * @return a hexagon array
      */
-    public static Hexagon[] generateHexes(Board board, Hexagon.Type[] types) {
-        Hexagon[] hexagons = new Hexagon[board.getBoardGeometry().getHexCount()];
+    public static Hexagon[] generateHexes(int hexCount, Hexagon.TerrainType[] terrainTypes) {
+        Hexagon[] hexagons = new Hexagon[hexCount];
         for (int i = 0; i < hexagons.length; i++)
-            hexagons[i] = new Hexagon(board, types[i], i);
+            hexagons[i] = new Hexagon(terrainTypes[i], i);
 
         return hexagons;
     }
@@ -110,11 +110,12 @@ public class ComponentUtils
      * @return array of vertices
      */
     public static Vertex[] generateVertices(int vertexCount) {
-        Vertex[] vertex = new Vertex[vertexCount];
-        for (int i = 0; i < vertexCount; i++)
-            vertex[i] = new Vertex(i);
+        Vertex[] vertices = new Vertex[vertexCount];
+        for (int i = 0; i < vertexCount; i++) {
+            vertices[i] = new Vertex(i);
+        }
 
-        return vertex;
+        return vertices;
     }
 
     /**
@@ -124,82 +125,97 @@ public class ComponentUtils
      * @return array of edges
      */
     public static Edge[] generateEdges(int edgeCount) {
-        Edge[] edge = new Edge[edgeCount];
-        for (int i = 0; i < edgeCount; i++)
-            edge[i] = new Edge(i);
+        Edge[] edges = new Edge[edgeCount];
+        for (int i = 0; i < edgeCount; i++) {
+            edges[i] = new Edge(i);
+        }
 
-        return edge;
+        return edges;
     }
 
     /**
-     * Assign roll numbers to the hexagons randomly
+     * Assign executeDiceRoll numbers to the hexagons randomly
      *
      * @param hexagons
      *            the hexagon array
      */
-    public static void assignRoles(Hexagon[] hexagons, int numHighRollers) {
+    public static void assignRoles(Hexagon[] hexagons) {
 
         int [] countPerDiceSum = Board.COUNT_PER_DICE_SUM;
         int hexCount = hexagons.length;
 
-        // initialize count of dice sums used to allocate roll numbers
-        int[] rollCount = new int[countPerDiceSum.length];
-        for (int i = 0; i < rollCount.length; i++) {
-            rollCount[i] = 0;
+        // initialize counts used to allocate number tokens
+        int[] curTokenCount = new int[countPerDiceSum.length];
+        for (int i = 0; i < curTokenCount.length; i++) {
+            curTokenCount[i] = 0;
         }
 
+        Hexagon curHex;
+        Hexagon.TerrainType terrainType;
+
         // place 6s and 8s (high probability rolls)
+        int numHighRollers = countPerDiceSum[6] + countPerDiceSum[8];
         Hexagon[] highRollers = new Hexagon[numHighRollers];
         for (int i = 0; i < numHighRollers; i++) {
             // pick a random hexagon
             int pick = -1;
             while (pick < 0) {
                 pick = (int) (hexCount * Math.random());
-
+                curHex = hexagons[pick];
                 // make sure it isn't adjacent to another high roller
                 for (int j = 0; j < i; j++) {
-                    if (hexagons[pick].isAdjacent(highRollers[j])) {
+                    if (curHex.isAdjacent(highRollers[j])) {
                         pick = -1;
                         break;
                     }
                 }
 
                 // make sure it wasn't already picked
-                if (pick >= 0 && hexagons[pick].getRoll() > 0 || pick >= 0
-                        && hexagons[pick].getType() == Hexagon.Type.DESERT)
+                terrainType = curHex.getTerrainType();
+                if (pick >= 0 && curHex.getNumberTokenAsInt() > 0 || pick >= 0
+                        && (terrainType == Hexagon.TerrainType.DESERT ||
+                        terrainType == Hexagon.TerrainType.SEA)) {
                     pick = -1;
+                }
             }
 
-            // assign the roll value
-            int roll = (i < 2 ? 6 : 8);
+            // assign the tokenNum value
+            int tokenNum = (i < countPerDiceSum[6] ? 6 : 8);
             highRollers[i] = hexagons[pick];
-            highRollers[i].setRoll(roll);
-            rollCount[roll] += 1;
+            highRollers[i].placeNumberToken(tokenNum);
+            curTokenCount[tokenNum] += 1;
         }
 
-        // generate random placement of roll numbers
+        // generate random placement of executeDiceRoll numbers
         for (int i = 0; i < hexCount; i++) {
-            // skip hexagons that already have a roll number
-            if (hexagons[i].getRoll() > 0 || hexagons[i].getType() == Hexagon.Type.DESERT)
+            curHex = hexagons[i];
+            terrainType = curHex.getTerrainType();
+            // skip hexagons that already have a tokenNum number
+            if (curHex.getNumberTokenAsInt() > 0 ||
+                    (terrainType == Hexagon.TerrainType.DESERT ||
+                            terrainType == Hexagon.TerrainType.SEA)) {
                 continue;
-
-            // pick roll
-            int roll = 0;
-            while (true) {
-                roll = (int) (countPerDiceSum.length * Math.random());
-                if (rollCount[roll] < countPerDiceSum[roll])
-                    break;
             }
 
-            hexagons[i].setRoll(roll);
-            rollCount[roll] += 1;
+            // pick tokenNum
+            int tokenNum = 0;
+            while (true) {
+                tokenNum = (int) (countPerDiceSum.length * Math.random());
+                if (curTokenCount[tokenNum] < countPerDiceSum[tokenNum]) {
+                    break;
+                }
+            }
+
+            hexagons[i].placeNumberToken(tokenNum);
+            curTokenCount[tokenNum] += 1;
         }
     }
 
-    public static Hexagon.Type getType(String string) {
-        for (int i = 0; i < Hexagon.TYPES.length; i++) {
-            if (string == Hexagon.TYPES[i].toString().toLowerCase())
-                return Hexagon.TYPES[i];
+    public static Resource.ResourceType getType(String string) {
+        for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
+            if (string == Resource.RESOURCE_TYPES[i].toString().toLowerCase()) {
+                return Resource.RESOURCE_TYPES[i];
+            }
         }
 
         return null;

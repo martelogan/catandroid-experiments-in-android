@@ -3,7 +3,7 @@
 
 	<!-- Korean translation by Ubinuri -->
 
-	<!-- Main menu -->
+	<!-- StartScreenActivity menu -->
 	<string name="new_button">새게임</string>
 	<string name="rules_button">설명</string>
 	<string name="rules_failed">규칙 파일을 찾을 수 없습니다</string>
@@ -16,7 +16,7 @@
 	<string name="donate_button">기부</string>
 	<string name="site_button">웹사이트 방문</string>
 
-	<!-- Card types -->
+	<!-- Card resourceTypes -->
 	<string name="soldier">병사</string>
 	<string name="progress">진행</string>
 	<string name="victory">승리</string>
@@ -27,7 +27,7 @@
 	<string name="green">녹색</string>
 	<string name="orange">주황</string>
 
-	<!-- Resource types -->
+	<!-- Resource resourceTypes -->
 	<string name="desert">사막</string>
 	<string name="lumber">통나무</string>
 	<string name="wool">양모</string>

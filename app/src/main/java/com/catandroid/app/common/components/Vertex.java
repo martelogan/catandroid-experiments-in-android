@@ -13,9 +13,9 @@ public class Vertex {
 
 	private Player owner;
 
-	private Edge[] edge;
-	private Hexagon[] hexagon;
-	private Harbor harbor;
+	private Edge[] edges;
+	private Hexagon[] hexagons;
+	private Harbor harbors;
 
 	/**
 	 * Initialize a vertex with edges set to null
@@ -28,61 +28,61 @@ public class Vertex {
 		owner = null;
 		building = NONE;
 
-		edge = new Edge[3];
-		edge[0] = edge[1] = edge[2] = null;
+		edges = new Edge[3];
+		edges[0] = edges[1] = edges[2] = null;
 
-		hexagon = new Hexagon[3];
-		hexagon[0] = hexagon[1] = hexagon[2] = null;
+		hexagons = new Hexagon[3];
+		hexagons[0] = hexagons[1] = hexagons[2] = null;
 		setHarbor(null);
 	}
 
 	/**
-	 * Associate an edge with vertex
+	 * Associate an edges with vertex
 	 * 
 	 * @param e
-	 *            the edge to addCubic (ignored if already associated)
+	 *            the edges to addCubic (ignored if already associated)
 	 */
 	public void addEdge(Edge e) {
 		for (int i = 0; i < 3; i++) {
-			if (edge[i] == null) {
-				edge[i] = e;
+			if (edges[i] == null) {
+				edges[i] = e;
 				return;
-			} else if (edge[i] == e) {
+			} else if (edges[i] == e) {
 				return;
 			}
 		}
 	}
 
 	/**
-	 * Associate an hexagon with vertex
+	 * Associate an hexagons with vertex
 	 * 
 	 * @param h
-	 *            the hexagon to addCubic (ignored if already associated)
+	 *            the hexagons to addCubic (ignored if already associated)
 	 */
 	public void addHexagon(Hexagon h) {
 		for (int i = 0; i < 3; i++) {
-			if (hexagon[i] == null) {
-				hexagon[i] = h;
+			if (hexagons[i] == null) {
+				hexagons[i] = h;
 				return;
-			} else if (hexagon[i] == h) {
+			} else if (hexagons[i] == h) {
 				return;
 			}
 		}
 	}
 
 	/**
-	 * Get the hexagon at the given index
+	 * Get the hexagons at the given index
 	 * 
 	 * @param index
-	 *            the hexagon index (0, 1, or 2)
-	 * @return the hexagon or null
+	 *            the hexagons index (0, 1, or 2)
+	 * @return the hexagons or null
 	 */
 	public Hexagon getHexagon(int index) {
-		return hexagon[index];
+		return hexagons[index];
 	}
 
 	/**
-	 * Get the hexagon's index for drawing
+	 * Get the hexagons's index for drawing
 	 * 
 	 * @return the index
 	 */
@@ -91,25 +91,25 @@ public class Vertex {
 	}
 
 	/**
-	 * Determine if an edge is connected to vertex
+	 * Determine if an edges is connected to vertex
 	 * 
 	 * @param e
-	 *            the edge to check for
+	 *            the edges to check for
 	 * @return true if e is connected to the vertex
 	 */
 	public boolean hasEdge(Edge e) {
-		return (edge[0] == e || edge[1] == e || edge[2] == e);
+		return (edges[0] == e || edges[1] == e || edges[2] == e);
 	}
 
 	/**
-	 * Get an edge
+	 * Get an edges
 	 * 
 	 * @param index
-	 *            the edge index [0, 2]
-	 * @return the edge or null
+	 *            the edges index [0, 2]
+	 * @return the edges or null
 	 */
 	public Edge getEdge(int index) {
-		return edge[index];
+		return edges[index];
 	}
 
 	/**
@@ -160,18 +160,22 @@ public class Vertex {
 	 */
 	public boolean hasRoad(Player player) {
 		for (int i = 0; i < 3; i++) {
-			if (edge[i] != null && edge[i].getOwner() == player)
+			if (edges[i] != null && edges[i].getOwner() == player)
 				return true;
 		}
 
 		return false;
 	}
 
-	public void distributeResources(Hexagon.Type type) {
+	public void distributeResources(Resource.ResourceType resourceType) {
 		if (owner == null)
+		{
 			return;
+		}
 
-		owner.addResources(type, building);
+		if (resourceType != null) {
+			owner.addResources(resourceType, building);
+		}
 	}
 
 	/**
@@ -182,7 +186,7 @@ public class Vertex {
 	public boolean couldBuild() {
 		// check for adjacent buildings
 		for (int i = 0; i < 3; i++) {
-			if (edge[i] != null && edge[i].getAdjacent(this).hasBuilding())
+			if (edges[i] != null && edges[i].getAdjacent(this).hasBuilding())
 				return false;
 		}
 
@@ -199,23 +203,28 @@ public class Vertex {
 	 * @return true if player can build at vertex
 	 */
 	public boolean canBuild(Player player, int type, boolean setup) {
-		if (!couldBuild())
+		if (!couldBuild()) {
 			return false;
+		}
 
 		// only allow building towns
-		if (setup)
+		if (setup) {
 			return (owner == null);
+		}
 
 		// check if owner has road to vertex
-		if (!this.hasRoad(player))
+		if (!this.hasRoad(player)) {
 			return false;
+		}
 
 		// can build town
-		if (owner == null && type == TOWN)
+		if (owner == null && type == TOWN) {
 			return true;
-
+		}
 		// can build city
-		else return owner == player && type == CITY && building == TOWN;
+		else {
+			return owner == player && type == CITY && building == TOWN;
+		}
 	}
 
 	/**
@@ -242,29 +251,31 @@ public class Vertex {
 			return false;
 
 		switch (building) {
-		case NONE:
-			owner = player;
-			building = TOWN;
-			break;
-		case TOWN:
-			building = CITY;
-			break;
-		case CITY:
-			return false;
+			case NONE:
+				owner = player;
+				building = TOWN;
+				break;
+			case TOWN:
+				building = CITY;
+				break;
+			case CITY:
+				return false;
 		}
 
-		if (harbor != null)
-			player.setTradeValue(harbor.getType());
+		if (harbors != null)
+		{
+			player.setTradeValue(harbors.getResourceType());
+		}
 
 		return true;
 	}
 
 	public void setHarbor(Harbor harbor) {
-		this.harbor = harbor;
+		this.harbors = harbor;
 	}
 
 	public Harbor getHarbor() {
-		return harbor;
+		return harbors;
 	}
 
 	/**
@@ -273,7 +284,7 @@ public class Vertex {
 	 * @param player
 	 *            the player
 	 * @param omit
-	 *            omit an edge already considered
+	 *            omit an edges already considered
 	 * @return the road length
 	 */
 	public int getRoadLength(Player player, Edge omit, int countId) {
@@ -284,16 +295,22 @@ public class Vertex {
 
 		// another player's road breaks the road chain
 		if (owner != null && owner != player)
+		{
 			return 0;
+		}
 
-		// find the longest road aside from one passing through the given edge
+		// find the longest road aside from one passing through the given edges
 		for (int i = 0; i < 3; i++) {
-			if (edge[i] == null || edge[i] == omit)
+			if (edges[i] == null || edges[i] == omit)
+			{
 				continue;
+			}
 
-			int length = edge[i].getRoadLength(player, this, countId);
+			int length = edges[i].getRoadLength(player, this, countId);
 			if (length > longest)
+			{
 				longest = length;
+			}
 		}
 
 		return longest;

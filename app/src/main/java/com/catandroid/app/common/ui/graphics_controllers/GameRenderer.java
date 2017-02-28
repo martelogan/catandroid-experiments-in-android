@@ -1,4 +1,4 @@
-package com.catandroid.app.common.controllers;
+package com.catandroid.app.common.ui.graphics_controllers;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -9,13 +9,10 @@ import android.util.DisplayMetrics;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.common.components.Edge;
-import com.catandroid.app.common.components.Harbor;
-import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.components.Vertex;
 import com.catandroid.app.common.players.Player;
 import com.catandroid.app.common.ui.views.GameView;
 import com.catandroid.app.common.ui.resources.Square;
-import com.catandroid.app.common.ui.TextureManager;
 
 public class GameRenderer implements Renderer {
 
@@ -165,7 +162,7 @@ public class GameRenderer implements Renderer {
 		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw1(board.getHexagon(i), gl, boardGeometry);
 
-		// draw the roll numbers, robber, and highlighting
+		// draw the executeDiceRoll numbers, robber, and highlighting
 		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw2(board.getHexagon(i), gl, boardGeometry);
 		for (int i = 0; i < HEX_COUNT; i++)
@@ -173,9 +170,9 @@ public class GameRenderer implements Renderer {
 		for (int i = 0; i < HEX_COUNT; i++)
 			texture.draw4(board.getHexagon(i), gl, boardGeometry);
 
-		// draw traders
+		// draw harbors
 		for (int i = 0; i < HARBOR_COUNT; i++)
-			texture.draw(board.getTrader(i), gl, boardGeometry);
+			texture.draw(board.getHarbor(i), gl, boardGeometry);
 
 		// draw edges
 		for (int i = 0; i < EDGE_COUNT; i++) {

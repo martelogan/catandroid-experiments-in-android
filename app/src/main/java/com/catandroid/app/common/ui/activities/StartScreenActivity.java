@@ -1,4 +1,4 @@
-package com.catandroid.app;
+package com.catandroid.app.common.ui.activities;
 
 import java.util.Vector;
 
@@ -6,22 +6,19 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.controllers.GameSetup;
-import com.catandroid.app.common.controllers.GameManager;
-import com.catandroid.app.common.logistics.Rules;
-import com.catandroid.app.common.logistics.Settings;
-import com.catandroid.app.common.logistics.Stats;
+import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.R;
+import com.catandroid.app.common.components.Board;
+import com.catandroid.app.common.logistics.AppSettings;
+import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 
-public class Main extends Activity {
+public class StartScreenActivity extends Activity {
 
 	private static final String DONATE_URL = "https://www.paypal.com/cgi-bin/"
 			+ "webscr?cmd=_donations&business=isaac.neil@gmail.com&"
@@ -34,17 +31,17 @@ public class Main extends Activity {
 		super.onResume();
 
 		Board board = ((CatAndroidApp) getApplicationContext()).getBoardInstance();
-		Settings settings = ((CatAndroidApp) getApplicationContext()).getSettingsInstance();
+		AppSettings appSettings = ((CatAndroidApp) getApplicationContext()).getAppSettingsInstance();
 
 		Vector<String> labels = new Vector<String>();
 		actions = new Vector<Runnable>();
 
-		if (board != null && board.getWinner(settings) == null) {
+		if (board != null && board.getWinner(appSettings) == null) {
 			labels.add(getString(R.string.resume_button));
 			actions.add(new Runnable() {
 				@Override
 				public void run() {
-					Main.this.startActivity(new Intent(Main.this, GameManager.class));
+					StartScreenActivity.this.startActivity(new Intent(StartScreenActivity.this, ActiveGameFragment.class));
 				}
 			});
 		}
@@ -53,7 +50,7 @@ public class Main extends Activity {
 		actions.add(new Runnable() {
 			@Override
 			public void run() {
-				Main.this.startActivity(new Intent(Main.this, GameSetup.class));
+				StartScreenActivity.this.startActivity(new Intent(StartScreenActivity.this, GameManagerActivity.class));
 			}
 		});
 
@@ -61,7 +58,7 @@ public class Main extends Activity {
 //		actions.add(new Runnable() {
 //			@Override
 //			public void run() {
-//				Main.this.startActivity(new Intent(Main.this, Stats.class));
+//				StartScreenActivity.this.startActivity(new Intent(StartScreenActivity.this, PlayerStatsActivity.class));
 //			}
 //		});
 
@@ -69,7 +66,7 @@ public class Main extends Activity {
 		actions.add(new Runnable() {
 			@Override
 			public void run() {
-				Main.this.startActivity(new Intent(Main.this, Rules.class));
+				StartScreenActivity.this.startActivity(new Intent(StartScreenActivity.this, RulesActivity.class));
 			}
 		});
 
@@ -77,7 +74,7 @@ public class Main extends Activity {
 		actions.add(new Runnable() {
 			@Override
 			public void run() {
-				final Builder aboutDialog = new AlertDialog.Builder(Main.this);
+				final Builder aboutDialog = new AlertDialog.Builder(StartScreenActivity.this);
 				aboutDialog.setTitle(R.string.app_name);
 				aboutDialog.setIcon(R.drawable.icon);
 				aboutDialog.setMessage(getString(R.string.about_text) + "\n\n" + getString(R.string.acknowledgements)

@@ -2,8 +2,8 @@ package com.catandroid.app.common.players;
 
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.components.Vertex;
-import com.catandroid.app.common.players.Player;
 
 public interface AutomatedPlayer {
 
@@ -70,17 +70,17 @@ public interface AutomatedPlayer {
 	int steal(Player[] players);
 
 	/**
-	 * Consider trading "type" to "player" for "offer"
+	 * Consider trading "resourceType" to "player" for "offer"
 	 * 
 	 * @param player
 	 *            the player proposing the trade
-	 * @param type
-	 *            the type that the player wants
+	 * @param resourceType
+	 *            the resourceType that the player wants
 	 * @param offer
 	 *            how many of each resource the player is offering
 	 * @return the offer (to accept), a counter-offer, or null (to reject)
 	 */
-	int[] offerTrade(Player player, Hexagon.Type type, int[] offer);
+	int[] offerTrade(Player player, Resource.ResourceType resourceType, int[] offer);
 
 	/**
 	 * Instruct the player to discard resources

@@ -338,7 +338,6 @@ public class BoardGeometry {
 		HashSet<Hexagon> successfullyHashed = new HashSet<Hexagon>();
 
         // variables for hexagon population logic
-		int map_radius = MAP_RADIUS;
 		int hexagonIndex = 0, edgeIndex = 0, vertexIndex = 0;
         Long hexLocationHash;
 		Hexagon curHex = null, curNeighborHex = null;
@@ -347,9 +346,9 @@ public class BoardGeometry {
 		Edge clockwiseEdge = null, neighborEdge = null;
 
         // iteration to generate perfectly-centered hex shape
-        for (int q = -map_radius; q <= map_radius; q++) {
-            int r1 = max(-map_radius, -q - map_radius);
-            int r2 = min(map_radius, -q + map_radius);
+        for (int q = -MAP_RADIUS; q <= MAP_RADIUS; q++) {
+            int r1 = max(-MAP_RADIUS, -q - MAP_RADIUS);
+            int r2 = min(MAP_RADIUS, -q + MAP_RADIUS);
             for (int r = r1; r <= r2; r++) { // for each (q, r) axial coordinate
 
                 // for each hexagon we seek to place
@@ -504,12 +503,12 @@ public class BoardGeometry {
 			HARBOR_HEXES[i] = clockwiseEdge.getOriginHex().getId();
         }
 
-		initCoordinates(hexagons, vertices, edges, harbors, hexMap);
+		initCoordinates(hexagons, vertices, edges);
 
 	}
 
 	public void initCoordinates(Hexagon[] hexagons, Vertex[] vertices,
-									 Edge[] edges, Harbor[] harbors, HashMap<Long, Hexagon> hexMap) {
+									 Edge[] edges) {
 		HexGridLayout layout = new HexGridLayout(HexGridLayout.flat, HexGridLayout.size_default, HexGridLayout.origin_default);
 		AxialHexLocation axialCoord;
 		float center_X, center_Y;

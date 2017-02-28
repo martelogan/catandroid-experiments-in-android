@@ -13,10 +13,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
-import com.catandroid.app.common.controllers.GameSetup;
+import com.catandroid.app.common.ui.activities.GameManagerActivity;
 import com.catandroid.app.R;;
 
-public class Settings extends SQLiteOpenHelper {
+public class AppSettings extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 2;
 	
@@ -38,7 +38,7 @@ public class Settings extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	private SQLiteStatement settingInsert, scoreInsert;
 
-	public Settings(Context context) {
+	public AppSettings(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
 		settingInsert = null;
@@ -188,7 +188,7 @@ public class Settings extends SQLiteOpenHelper {
 				+ "TURNS integer)");
 
 		// addCubic default options and players
-		GameSetup.setup(this);
+		GameManagerActivity.setup(this);
 	}
 
 	@Override

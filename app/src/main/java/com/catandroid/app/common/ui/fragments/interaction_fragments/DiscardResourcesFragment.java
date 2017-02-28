@@ -1,6 +1,5 @@
-package com.catandroid.app.common.controllers.actions;
+package com.catandroid.app.common.ui.fragments.interaction_fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,10 +12,10 @@ import android.widget.TextView;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Hexagon;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.players.Player;
 
-public class Discard extends Fragment {
+public class DiscardResourcesFragment extends Fragment {
 
 	public static final String QUANTITY_KEY = "com.settlers.hd.DiscardQuantity";
 	public static final String PLAYER_KEY = "com.settlers.hd.DiscardPlayer";
@@ -74,7 +73,7 @@ public class Discard extends Fragment {
 				+ String.format(instructionText, quantity));
 
 		for (int i = 0; i < RESOURCES.length; i++) {
-			int count = player.getResources(Hexagon.TYPES[i]);
+			int count = player.getResources(Resource.RESOURCE_TYPES[i]);
 
 			TextView text = (TextView) discardView.findViewById(RESOURCES[i]);
 			text.setText(Integer.toString(count));
@@ -98,7 +97,7 @@ public class Discard extends Fragment {
 
 							discardView.findViewById(MINUS[i]).setEnabled(true);
 
-							if (value >= player.getResources(Hexagon.Type
+							if (value >= player.getResources(Resource.ResourceType
 									.values()[i]))
 								v.setEnabled(false);
 						}
@@ -131,7 +130,7 @@ public class Discard extends Fragment {
 								v.setEnabled(false);
 						}
 
-						int count = player.getResources(Hexagon.TYPES[i]);
+						int count = player.getResources(Resource.RESOURCE_TYPES[i]);
 						if (value < count)
 							discardView.findViewById(PLUS[i]).setEnabled(true);
 					}
@@ -152,7 +151,7 @@ public class Discard extends Fragment {
 					int count = Integer.parseInt((String) number.getText(), 10);
 
 					for (int j = 0; j < count; j++)
-						player.discard(Hexagon.TYPES[i]);
+						player.discard(Resource.RESOURCE_TYPES[i]);
 				}
 
 				//finish();

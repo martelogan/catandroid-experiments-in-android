@@ -1,15 +1,13 @@
-package com.catandroid.app.common.ui.activities;
+package com.catandroid.app.common.ui.fragments.static_fragments;
 
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
-import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.ui.TextureManager;
+import com.catandroid.app.common.components.Resource;
+import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -51,7 +49,7 @@ public class PlayerStatus extends Fragment {
 			boolean showAll = player == board.getCurrentPlayer()
 					&& player.isHuman()
 					|| board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
-							.getSettingsInstance()) != null;
+							.getAppSettingsInstance()) != null;
 
 			int points;
 			if (showAll)
@@ -100,22 +98,22 @@ public class PlayerStatus extends Fragment {
 						+ player.getVictoryCards() + "\n\n";
 			}
 
-			boolean hasTrader = false;
-			if (player.hasTrader(null)) {
+			boolean hasHarbor = false;
+			if (player.hasHarbor(null)) {
 				message += "3:1 " + getString(R.string.status_trader) + "\n";
-				hasTrader = true;
+				hasHarbor = true;
 			}
 
-			for (int j = 0; j < Hexagon.TYPES.length; j++) {
-				if (player.hasTrader(Hexagon.TYPES[j])) {
-					message += getString(Hexagon
-							.getTypeStringResource(Hexagon.TYPES[j]))
+			for (int j = 0; j < Resource.RESOURCE_TYPES.length; j++) {
+				if (player.hasHarbor(Resource.RESOURCE_TYPES[j])) {
+					message += getString(Resource
+							.toRString(Resource.RESOURCE_TYPES[j]))
 							+ " " + getString(R.string.status_trader) + "\n";
-					hasTrader = true;
+					hasHarbor = true;
 				}
 			}
 
-			if (hasTrader)
+			if (hasHarbor)
 				message += "\n";
 
 			String turn = player.getActionLog();

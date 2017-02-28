@@ -6,7 +6,8 @@ import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.components.Hexagon.Type;
+import com.catandroid.app.common.components.Resource.ResourceType;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.components.Vertex;
 
 public class BalancedAI extends Player implements AutomatedPlayer {
@@ -14,7 +15,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 	protected static final int[] preference = { 9, 8, 8, 10, 7 };
 
 	public BalancedAI(Board board, int index, Color color, String name) {
-		super(board, index, color, name, Player.PLAYER_BOT);
+		super(board, index, "", color, name, Player.PLAYER_BOT);
 	}
 
 	@Override
@@ -129,14 +130,14 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 			if (done) {
 				// harvest card
 				if (canUseCard() && useCard(Cards.HARVEST)) {
-					Type pick = pickResourceType();
+					Resource.ResourceType pick = pickResourceType();
 					harvest(pick, pick);
 					done = false;
 				}
 
 				// monopoly card
 				else if (canUseCard() && useCard(Cards.MONOPOLY)) {
-					Type pick = pickResourceType();
+					Resource.ResourceType pick = pickResourceType();
 					monopoly(pick);
 					done = false;
 				}
@@ -175,18 +176,18 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		}
 	}
 
-	private Type pickResourceType() {
-		Type pick = Type.BRICK;
+	private Resource.ResourceType pickResourceType() {
+		ResourceType pick = Resource.ResourceType.BRICK;
 		int min = 100;
 
 		// pick the resource that the player has the least of
-		for (int i = 0; i < Hexagon.TYPES.length; i++) {
-			Type type = Hexagon.TYPES[i];
-			int number = getResources(type);
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
+			Resource.ResourceType resourceType = Resource.RESOURCE_TYPES[i];
+			int number = getResources(resourceType);
 
 			if (number < min) {
 				min = number;
-				pick = type;
+				pick = resourceType;
 			}
 		}
 
@@ -196,7 +197,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 	@Override
 	public void productionPhase() {
 		// use soldier card before rolling if the robber is on useful resource
-		if (board.getRobber().hasPlayer(this) && hasCard(Cards.SOLDIER))
+		if (board.getCurRobberHex().adjacentToPlayer(this) && hasCard(Cards.SOLDIER))
 			useCard(Cards.SOLDIER);
 	}
 
@@ -350,11 +351,12 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 	}
 
 	protected int hexagonValue(Hexagon hexagon, int[] factors) {
-		Type type = hexagon.getType();
-		if (factors != null && type != Type.DESERT)
-			return factors[type.ordinal()] * hexagon.getProbability();
-		else
-			return hexagon.getProbability();
+		if (factors != null && hexagon.getTerrainType() != Hexagon.TerrainType.DESERT) {
+			return factors[hexagon.getResourceType().ordinal()] * hexagon.getNumberTokenAsObject().getTotalWaysToSum();
+		}
+		else {
+			return hexagon.getNumberTokenAsObject().getTotalWaysToSum();
+		}
 	}
 
 	protected int vertexValue(Vertex vertex, int[] factors) {
@@ -370,23 +372,23 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
 	private boolean tradeFor(int[] want) {
 		// copy list of resource we have
-		int[] have = new int[Hexagon.TYPES.length];
+		int[] have = new int[Resource.RESOURCE_TYPES.length];
 		for (int i = 0; i < have.length; i++)
-			have[i] = getResources(Hexagon.TYPES[i]);
+			have[i] = getResources(Resource.RESOURCE_TYPES[i]);
 
 		// create list of resources we need
-		int[] need = new int[Hexagon.TYPES.length];
+		int[] need = new int[Resource.RESOURCE_TYPES.length];
 		for (int i = 0; i < need.length; i++)
 			need[i] = want[i] - have[i];
 
-		Vector<Type> types = new Vector<Type>();
+		Vector<Resource.ResourceType> resourceTypes = new Vector<Resource.ResourceType>();
 		Vector<int[]> trades = new Vector<int[]>();
 
-		// for each resource types we need
+		// for each resource resourceTypes we need
 		for (int i = 0; i < need.length; i++) {
 			// for the number of that resource we need
 			for (int j = 0; j < need[i]; j++) {
-				Vector<int[]> offers = findTrades(Hexagon.TYPES[i]);
+				Vector<int[]> offers = findTrades(Resource.RESOURCE_TYPES[i]);
 				for (int k = 0; k < offers.size(); k++) {
 					int[] offer = offers.get(k);
 
@@ -406,7 +408,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 							have[l] -= offer[l];
 
 						// addCubic to list of trades
-						types.add(Hexagon.TYPES[i]);
+						resourceTypes.add(Resource.RESOURCE_TYPES[i]);
 						trades.add(offer);
 						break;
 					}
@@ -422,7 +424,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		// run the trades
 		for (int i = 0; i < trades.size(); i++) {
 			// abort on first failing trade
-			if (!trade(types.get(i), trades.get(i)))
+			if (!trade(resourceTypes.get(i), trades.get(i)))
 				return false;
 		}
 
@@ -456,9 +458,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 	}
 
 	@Override
-	public int[] offerTrade(Player player, Type type, int[] offer) {
+	public int[] offerTrade(Player player, Resource.ResourceType resourceType, int[] offer) {
 		// don't try to trade for a resource we don't have
-		if (getResources(type) <= 0)
+		if (getResources(resourceType) <= 0)
 			return null;
 
 		// don't trade with players who may be about to win
@@ -488,7 +490,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 		} while (false);
 
 		// don't trade if that resource is needed for something we can build
-		if (extra[type.ordinal()] <= 0)
+		if (extra[resourceType.ordinal()] <= 0)
 			return null;
 
 		// addCubic in the offer
@@ -536,11 +538,11 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
 			// try to pick the most common resource
 			int max = 0;
-			Type mostCommon = null;
+			Resource.ResourceType mostCommon = null;
 			for (int i = 0; i < extra.length; i++) {
 				if (extra[i] > max) {
 					max = extra[i];
-					mostCommon = Hexagon.TYPES[i];
+					mostCommon = Resource.RESOURCE_TYPES[i];
 				}
 			}
 

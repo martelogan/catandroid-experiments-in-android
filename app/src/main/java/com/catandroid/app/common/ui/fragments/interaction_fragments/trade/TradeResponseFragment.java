@@ -1,4 +1,4 @@
-package com.catandroid.app.common.controllers.actions.trade;
+package com.catandroid.app.common.ui.fragments.interaction_fragments.trade;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,13 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.Player;
 
-public class AcceptTrade extends Activity {
+public class TradeResponseFragment extends Activity {
 
 	public static final int REQUEST_TRADE_ACCEPTED = 0;
 
@@ -33,7 +33,7 @@ public class AcceptTrade extends Activity {
 	private Board board;
 	private Player current;
 	private int[] trade;
-	private Hexagon.Type type;
+	private Resource.ResourceType resourceType;
 	private boolean[] accepted;
 
 	@Override
@@ -46,8 +46,8 @@ public class AcceptTrade extends Activity {
 			return;
 		}
 
-		type = Hexagon.TYPES[extras.getInt(PlayerTrade.TYPE_KEY)];
-		trade = extras.getIntArray(PlayerTrade.OFFER_KEY);
+		resourceType = Resource.RESOURCE_TYPES[extras.getInt(TradeRequestFragment.TYPE_KEY)];
+		trade = extras.getIntArray(TradeRequestFragment.OFFER_KEY);
 
 		setContentView(R.layout.accepttrade);
 		setTitle(R.string.trade);
@@ -76,7 +76,7 @@ public class AcceptTrade extends Activity {
 
 		TextView wants = (TextView) findViewById(R.id.trade_player_wants);
 		wants.setText(String.format(getString(R.string.trade_player_wants),
-				getString(Hexagon.getTypeStringResource(type))));
+				getString(Resource.toRString(resourceType))));
 
 		TextView playerOffer = (TextView) findViewById(R.id.trade_player_offer);
 		playerOffer.setText(String.format(
@@ -94,7 +94,7 @@ public class AcceptTrade extends Activity {
 			if (player.isBot()) {
 				// offer to AI player automatically
 				AutomatedPlayer bot = (AutomatedPlayer) player;
-				int[] offer = bot.offerTrade(current, type, trade);
+				int[] offer = bot.offerTrade(current, resourceType, trade);
 				if (offer == trade)
 					accepted = true;
 				else if (offer != null)
@@ -120,16 +120,16 @@ public class AcceptTrade extends Activity {
 							index++;
 						}
 
-						Intent intent = new Intent(AcceptTrade.this,
-								CounterOffer.class);
+						Intent intent = new Intent(TradeResponseFragment.this,
+								CounterOfferFragment.class);
 						intent.setClassName("com.settlers.hd",
-								"com.settlers.hd.activities.trade.CounterOffer");
-						intent.putExtra(PlayerTrade.TYPE_KEY, type.ordinal());
-						intent.putExtra(PlayerTrade.OFFER_KEY, trade);
-						intent.putExtra(PlayerTrade.PLAYER_KEY, player
+								"com.settlers.hd.activities.trade.CounterOfferFragment");
+						intent.putExtra(TradeRequestFragment.TYPE_KEY, resourceType.ordinal());
+						intent.putExtra(TradeRequestFragment.OFFER_KEY, trade);
+						intent.putExtra(TradeRequestFragment.PLAYER_KEY, player
 								.getIndex());
-						intent.putExtra(PlayerTrade.INDEX_KEY, index);
-						AcceptTrade.this.startActivityForResult(intent,
+						intent.putExtra(TradeRequestFragment.INDEX_KEY, index);
+						TradeResponseFragment.this.startActivityForResult(intent,
 								REQUEST_TRADE_ACCEPTED);
 					}
 				});
@@ -166,7 +166,7 @@ public class AcceptTrade extends Activity {
 					}
 
 					// swap resources
-					current.trade(player, type, trade);
+					current.trade(player, resourceType, trade);
 
 					setResult(Activity.RESULT_OK);
 					finish();
@@ -182,7 +182,7 @@ public class AcceptTrade extends Activity {
 			Intent intent) {
 		if (requestCode == REQUEST_TRADE_ACCEPTED
 				&& resultCode == Activity.RESULT_OK && intent != null) {
-			int acceptedIndex = intent.getIntExtra(PlayerTrade.INDEX_KEY, -1);
+			int acceptedIndex = intent.getIntExtra(TradeRequestFragment.INDEX_KEY, -1);
 
 			Log.d(getClass().getName(), "offer accepted by player with index "
 					+ acceptedIndex);

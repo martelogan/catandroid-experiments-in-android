@@ -24,7 +24,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.catandroid.app.Main"
+            android:name="com.catandroid.app.common.ui.activities.StartScreenActivity"
             android:configChanges="locale"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo" >
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.catandroid.app.common.controllers.GameSetup"
+            android:name="com.catandroid.app.common.ui.activities.GameManagerActivity"
             android:label="@string/app_name"
             android:launchMode="standard">
         </activity>
@@ -55,43 +55,43 @@
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.controllers.actions.Discard"-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.DiscardResourcesFragment"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.logistics.Stats"-->
+            <!--android:name="com.catandroid.app.common.logistics.StatsActivityActivity"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.controllers.GameManager"-->
+            <!--android:name="com.catandroid.app.common.controllers.ActiveGameManageranager"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo" >-->
         <!--</activity>-->
         <activity
-            android:name="com.catandroid.app.common.logistics.Rules"
+            android:name="com.catandroid.app.common.ui.activities.RulesActivity"
             android:label="@string/app_name"
             android:launchMode="standard"
             android:theme="@android:style/Theme.Holo" >
         </activity>
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.controllers.actions.trade.PlayerTrade"-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.TradeRequestFragment"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.controllers.actions.trade.AcceptTrade"-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.TradeResponseFragment"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->
         <!--</activity>-->
         <!--<activity-->
-            <!--android:name="com.catandroid.app.common.controllers.actions.trade.CounterOffer"-->
+            <!--android:name="com.catandroid.app.common.controllers.actions.trade.CounterOfferFragment"-->
             <!--android:label="@string/app_name"-->
             <!--android:launchMode="standard"-->
             <!--android:theme="@android:style/Theme.Holo.Dialog" >-->

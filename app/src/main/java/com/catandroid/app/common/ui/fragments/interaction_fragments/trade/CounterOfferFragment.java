@@ -1,4 +1,4 @@
-package com.catandroid.app.common.controllers.actions.trade;
+package com.catandroid.app.common.ui.fragments.interaction_fragments.trade;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,14 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.players.Player;
 
-public class CounterOffer extends Activity {
+public class CounterOfferFragment extends Activity {
 
-	private Hexagon.Type type;
+	private Resource.ResourceType resourceType;
 	private int[] trade;
 	private Player current, player;
 	private int index;
@@ -40,11 +40,11 @@ public class CounterOffer extends Activity {
 			return;
 		}
 
-		type = Hexagon.TYPES[extras.getInt(PlayerTrade.TYPE_KEY)];
-		trade = extras.getIntArray(PlayerTrade.OFFER_KEY);
-		player = board.getPlayer(extras.getInt(PlayerTrade.PLAYER_KEY));
+		resourceType = Resource.RESOURCE_TYPES[extras.getInt(TradeRequestFragment.TYPE_KEY)];
+		trade = extras.getIntArray(TradeRequestFragment.OFFER_KEY);
+		player = board.getPlayer(extras.getInt(TradeRequestFragment.PLAYER_KEY));
 		current = board.getCurrentPlayer();
-		index = extras.getInt(PlayerTrade.INDEX_KEY);
+		index = extras.getInt(TradeRequestFragment.INDEX_KEY);
 
 		Log.d(getClass().getName(), player.getName() + " (index " + index
 				+ ") considering trade");
@@ -54,14 +54,14 @@ public class CounterOffer extends Activity {
 
 		TextView wants = (TextView) findViewById(R.id.trade_player_wants);
 		wants.setText(String.format(getString(R.string.trade_player_wants),
-				getString(Hexagon.getTypeStringResource(type))));
+				getString(Resource.toRString(resourceType))));
 
 		TextView playerOffer = (TextView) findViewById(R.id.trade_player_offer);
 		playerOffer.setText(String.format(
 				getString(R.string.trade_player_offer), current.getName()));
 
 		for (int i = 0; i < RESOURCES.length; i++) {
-			int count = player.getResources(Hexagon.TYPES[i]);
+			int count = player.getResources(Resource.RESOURCE_TYPES[i]);
 
 			TextView res = (TextView) findViewById(RESOURCES[i]);
 			res.setText(Integer.toString(count));
@@ -71,12 +71,12 @@ public class CounterOffer extends Activity {
 		}
 
 		Button accept = (Button) findViewById(R.id.trade_accept);
-		accept.setEnabled(player.getResources(type) > 0);
+		accept.setEnabled(player.getResources(resourceType) > 0);
 		accept.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.putExtra(PlayerTrade.INDEX_KEY, index);
+				intent.putExtra(TradeRequestFragment.INDEX_KEY, index);
 				setResult(Activity.RESULT_OK, intent);
 				finish();
 			}

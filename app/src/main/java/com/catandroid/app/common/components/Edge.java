@@ -5,7 +5,7 @@ import com.catandroid.app.common.players.Player;
 public class Edge {
 
 	private int index;
-	private Vertex[] vertex;
+	private Vertex[] vertices;
 	private Player owner;
 	private int lastRoadCountId;
 	private Hexagon originHex;
@@ -17,8 +17,8 @@ public class Edge {
 	 */
 	public Edge(int index) {
 		this.index = index;
-		vertex = new Vertex[2];
-		vertex[0] = vertex[1] = null;
+		vertices = new Vertex[2];
+		vertices[0] = vertices[1] = null;
 		owner = null;
 		lastRoadCountId = 0;
 	}
@@ -27,40 +27,42 @@ public class Edge {
 	 * Set vertices for the edge
 	 * 
 	 * @param v1
-	 *            the first vertex
+	 *            the first vertices
 	 * @param v2
-	 *            the second vertex
+	 *            the second vertices
 	 */
 	public void setVertices(Vertex v1, Vertex v2) {
-		vertex[0] = v1;
-		vertex[1] = v2;
+		vertices[0] = v1;
+		vertices[1] = v2;
 		v1.addEdge(this);
 		v2.addEdge(this);
 	}
 
 	/**
-	 * Check if the edge has a given vertex
+	 * Check if the edge has a given vertices
 	 * 
 	 * @param v
-	 *            the vertex to check for
+	 *            the vertices to check for
 	 * @return true if v is associated with the edge
 	 */
 	public boolean hasVertex(Vertex v) {
-		return (vertex[0] == v || vertex[1] == v);
+		return (vertices[0] == v || vertices[1] == v);
 	}
 
 	/**
-	 * Get the other vertex associated with edge
+	 * Get the other vertices associated with edge
 	 * 
 	 * @param v
-	 *            one vertex
-	 * @return the other associated vertex or null if not completed
+	 *            one vertices
+	 * @return the other associated vertices or null if not completed
 	 */
 	public Vertex getAdjacent(Vertex v) {
-		if (vertex[0] == v)
-			return vertex[1];
-		else if (vertex[1] == v)
-			return vertex[0];
+		if (vertices[0] == v) {
+			return vertices[1];
+		}
+		else if (vertices[1] == v) {
+			return vertices[0];
+		}
 
 		return null;
 	}
@@ -91,16 +93,18 @@ public class Edge {
 	 * @return true if player can build a road on edge
 	 */
 	public boolean canBuild(Player player) {
-		if (owner != null)
+		if (owner != null) {
 			return false;
+		}
 
-		// check for roads to each vertex
+		// check for roads to each vertices
 		for (int i = 0; i < 2; i++) {
-			// the player has a road to an unoccupied vertex,
+			// the player has a road to an unoccupied vertices,
 			// or the player has an adjacent building
-			if (vertex[i].hasRoad(player) && !vertex[i].hasBuilding()
-					|| vertex[i].hasBuilding(player))
+			if (vertices[i].hasRoad(player) && !vertices[i].hasBuilding()
+					|| vertices[i].hasBuilding(player)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -210,21 +214,21 @@ public class Edge {
     }
 
 	/**
-	 * Get the first vertex
+	 * Get the first vertices
 	 * 
-	 * @return the first vertex
+	 * @return the first vertices
 	 */
 	public Vertex getV0Clockwise() {
-		return vertex[0];
+		return vertices[0];
 	}
 
 	/**
-	 * Get the second vertex
+	 * Get the second vertices
 	 * 
-	 * @return the second vertex
+	 * @return the second vertices
 	 */
 	public Vertex getV1Clockwise() {
-		return vertex[1];
+		return vertices[1];
 	}
 
 	/**
@@ -244,8 +248,9 @@ public class Edge {
 	 * @return true if player can build a road on edge
 	 */
 	public boolean build(Player player) {
-		if (!canBuild(player))
+		if (!canBuild(player)) {
 			return false;
+		}
 
 		owner = player;
 		return true;
@@ -263,14 +268,15 @@ public class Edge {
 	 * @return the road length
 	 */
 	public int getRoadLength(Player player, Vertex from, int countId) {
-		if (owner != player || lastRoadCountId == countId)
+		if (owner != player || lastRoadCountId == countId) {
 			return 0;
+		}
 
 		// this ensures that that road isn't counted multiple times (cycles)
 		lastRoadCountId = countId;
 
-		// find other vertex
-		Vertex to = (from == vertex[0] ? vertex[1] : vertex[0]);
+		// find other vertices
+		Vertex to = (from == vertices[0] ? vertices[1] : vertices[0]);
 
 		// return road length
 		return to.getRoadLength(player, this, countId) + 1;
@@ -284,14 +290,15 @@ public class Edge {
 	 * @return the road length
 	 */
 	public int getRoadLength(int countId) {
-		if (owner == null)
+		if (owner == null) {
 			return 0;
+		}
 
 		// this ensures that that road isn't counted multiple times (cycles)
 		lastRoadCountId = countId;
 
-		int length1 = vertex[0].getRoadLength(owner, this, countId);
-		int length2 = vertex[1].getRoadLength(owner, this, countId);
+		int length1 = vertices[0].getRoadLength(owner, this, countId);
+		int length2 = vertices[1].getRoadLength(owner, this, countId);
 		return length1 + length2 + 1;
 	}
 }

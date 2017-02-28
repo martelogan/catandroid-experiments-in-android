@@ -14,7 +14,7 @@
 		\n→ Yingying
 		\n→ Ubinuri</string>
 
-	<!-- Main menu -->
+	<!-- StartScreenActivity menu -->
 	<string name="new_button">Login</string>
 	<string name="rules_button">Instructions</string>
 	<string name="rules_failed">Couldn\'t load the rules file</string>
@@ -25,7 +25,7 @@
 	<string name="donate_button">Donate</string>
 	<string name="site_button">Code on GitHub</string>
 
-	<!-- Card types -->
+	<!-- Card resourceTypes -->
 	<string name="soldier">soldier</string>
 	<string name="progress">progress</string>
 	<string name="victory">victory</string>
@@ -38,7 +38,7 @@
 	<string name="green">green</string>
 	<string name="orange">orange</string>
 
-	<!-- Resource types -->
+	<!-- Resource resourceTypes -->
 	<string name="desert">desert</string>
 	<string name="lumber">lumber</string>
 	<string name="wool">wool</string>
@@ -48,8 +48,8 @@
 
 	<!-- Options screen -->
 	<string name="options">Options</string>
-	<string name="option_set">Save settings</string>
-	<string name="option_reset">Reset settings</string>
+	<string name="option_set">Save appSettings</string>
+	<string name="option_reset">Reset appSettings</string>
 	<string name="option_force_locale">Override language</string>
 	<string name="option_language_auto">Use system locale</string>
 	<string name="option_show_status">Show Android status bar in game</string>
@@ -83,7 +83,7 @@
 	<string name="player_name3">Boyd</string>
 	<string name="player_name4">Saffron</string>
 	<string name="points_to_win">points to win</string>
-	<string name="option_mixed_trade">Allow trading mixed types in 4:1 trades</string>
+	<string name="option_mixed_trade">Allow trading mixed resourceTypes in 4:1 trades</string>
 	<string name="option_auto_discard">Discard automatically when 7 is rolled</string>
 	<string name="length_quick">(quick)</string>
 	<string name="length_standard">(standard)</string>
@@ -132,7 +132,7 @@
 	<string name="trade_counter_make">Make counter-offer</string>
 	<string name="trade_rejected">%s has not accepted the offer</string>
 
-	<!-- Discard screen -->
+	<!-- DiscardResourcesFragment screen -->
 	<string name="discard_reason">%s rolled a 7</string>
 	<string name="discard_instruction">discard %d resources</string>
 	<string name="discard_select">Select resources to discard</string>
@@ -228,8 +228,8 @@
 		\nHarvest cards:
 		\n- get 2 free resources\n
 		\nMonopoly cards:
-		\n- pick a resource type
-		\n- steal all of this type from the other players\n
+		\n- pick a resource resourceType
+		\n- steal all of this resourceType from the other players\n
 		\nVictory cards:
 		\n- worth 1
 		points
@@ -287,7 +287,7 @@
 	<string name="game_bought">Bought a</string>
 	<string name="game_use_soldier">Use soldier card: move the robber</string>
 	<string name="game_use_progress">Use progress card: build 2 roads</string>
-	<string name="game_use_monopoly">Use monopoly card: steal all of one type of resource</string>
+	<string name="game_use_monopoly">Use monopoly card: steal all of one resourceType of resource</string>
 	<string name="game_use_harvest">Use harvest card: get 2 free resources</string>
 	<string name="game_monopoly_prompt">Pick resource to steal from everyone</string>
 	<string name="game_harvest_prompt">Select a resource</string>

@@ -8,9 +8,10 @@ import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.components.Hexagon.Type;
+import com.catandroid.app.common.components.Resource.ResourceType;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.components.Vertex;
 
 public class Player {
@@ -27,13 +28,14 @@ public class Player {
 	public static final int[] CITY_COST = { 0, 0, 2, 0, 3 };
 	public static final int[] CARD_COST = { 0, 1, 1, 0, 1 };
 
+	private String participantId;
 	private Color color;
 	private String name;
 	protected int towns;
 	protected int cities;
 	private int soldiers, victory, tradeValue, roadLength;
 	private int[] resources, cards;
-	private boolean[] traders;
+	private boolean[] harbors;
 	private Vector<Cards> newCards;
 	private boolean usedCard;
 	private int index, type;
@@ -58,15 +60,14 @@ public class Player {
 	 * 
 	 * @param board
 	 *            board reference
-	 * @param number
-	 *            the player number
 	 * @param name
 	 *            player name
 	 * @param type
 	 *            PLAYER_HUMAN, PLAYER_BOT, or PLAYER_ONLINE
 	 */
-	public Player(Board board, int index, Color color, String name, int type) {
+	public Player(Board board, int index, String participantId, Color color, String name, int type) {
 		this.board = board;
+		this.participantId = participantId;
 		this.color = color;
 		this.name = name;
 		this.type = type;
@@ -93,18 +94,18 @@ public class Player {
 		for (int i = 0; i < cards.length; i++)
 			cards[i] = 0;
 
-		resources = new int[Hexagon.TYPES.length];
-		traders = new boolean[Type.values().length];
+		resources = new int[Resource.RESOURCE_TYPES.length];
+		harbors = new boolean[Resource.ResourceType.values().length];
 		for (int i = 0; i < resources.length; i++) {
 			resources[i] = 0;
-			traders[i] = false;
+			harbors[i] = false;
 		}
 	}
 
 	/**
 	 * Roll the dice
 	 * 
-	 * @return the result of the roll
+	 * @return the result of the executeDiceRoll
 	 */
 	public int roll() {
 		return roll((int) (Math.random() * 6) + (int) (Math.random() * 6) + 2);
@@ -114,12 +115,12 @@ public class Player {
 	 * Roll the dice with a predefined result
 	 * 
 	 * @param roll
-	 *            the desired roll
-	 * @return the result of the roll
+	 *            the desired executeDiceRoll
+	 * @return the result of the executeDiceRoll
 	 */
 	public int roll(int roll) {
 		appendAction(R.string.player_roll, Integer.toString(roll));
-		board.roll(roll);
+		board.executeDiceRoll(roll);
 
 		return roll;
 	}
@@ -151,8 +152,6 @@ public class Player {
 	 * 
 	 * @param edge
 	 *            edge to build on
-	 * @param setup
-	 *            setup phase (Y/N?)
 	 * @return
 	 */
 	public boolean build(Edge edge) {
@@ -168,8 +167,8 @@ public class Player {
 			return false;
 
 		if (!free) {
-			useResources(Type.BRICK, 1);
-			useResources(Type.LUMBER, 1);
+			useResources(Resource.ResourceType.BRICK, 1);
+			useResources(Resource.ResourceType.LUMBER, 1);
 		}
 
 		appendAction(R.string.player_road);
@@ -198,8 +197,6 @@ public class Player {
 	 * 
 	 * @param vertex
 	 *            vertex to build on
-	 * @param setup
-	 *            setup phase (Y/N?)
 	 * @return
 	 */
 	public boolean build(Vertex vertex, int type) {
@@ -226,18 +223,18 @@ public class Player {
 		// deduct resources based on type
 		if (vertex.getBuilding() == Vertex.TOWN) {
 			if (!setup) {
-				useResources(Type.BRICK, 1);
-				useResources(Type.LUMBER, 1);
-				useResources(Type.GRAIN, 1);
-				useResources(Type.WOOL, 1);
+				useResources(Resource.ResourceType.BRICK, 1);
+				useResources(Resource.ResourceType.LUMBER, 1);
+				useResources(Resource.ResourceType.GRAIN, 1);
+				useResources(Resource.ResourceType.WOOL, 1);
 			}
 			towns += 1;
 			settlements.add(vertex);
 			board.checkLongestRoad();
 		} else {
 			if (!setup) {
-				useResources(Type.GRAIN, 2);
-				useResources(Type.ORE, 3);
+				useResources(Resource.ResourceType.GRAIN, 2);
+				useResources(Resource.ResourceType.ORE, 3);
 			}
 			towns -= 1;
 			cities += 1;
@@ -247,8 +244,8 @@ public class Player {
 		if (board.isSetupPhase2()) {
 			for (int i = 0; i < 3; i++) {
 				Hexagon hexagon = vertex.getHexagon(i);
-				if (hexagon != null && hexagon.getType() != Type.DESERT)
-					addResources(hexagon.getType(), 1);
+				if (hexagon != null && hexagon.getTerrainType() != Hexagon.TerrainType.DESERT)
+					addResources(hexagon.getResourceType(), 1);
 			}
 		}
 
@@ -283,7 +280,6 @@ public class Player {
 	 * Can you build on this vertex? We'll see
 	 * 
 	 * @param vertex
-	 * @param setup
 	 * @return
 	 */
 	public boolean canBuild(Vertex vertex, int type) {
@@ -296,9 +292,18 @@ public class Player {
 	}
 
 	/**
+	 * Returns the player's particpant id
+	 *
+	 * @return participantId
+	 */
+	public String getParticipantId() {
+		return participantId;
+	}
+
+	/**
 	 * Returns the number of cards in the players hand
 	 * 
-	 * @return
+	 * @return sum of player's resources
 	 */
 	public int getResourceCount() {
 		int sum = 0;
@@ -310,24 +315,24 @@ public class Player {
 	/**
 	 * Add resources to the player
 	 * 
-	 * @param type
-	 *            type of resources to addCubic
+	 * @param resourceType
+	 *            resourceType of resources to add
 	 * @param count
-	 *            number of that resource to addCubic
+	 *            number of that resource to add
 	 */
-	public void addResources(Type type, int count) {
-		resources[type.ordinal()] += count;
+	public void addResources(Resource.ResourceType resourceType, int count) {
+		resources[resourceType.ordinal()] += count;
 	}
 
 	/**
-	 * Get the number of resources a player has of a given type
+	 * Get the number of resources a player has of a given resourceType
 	 * 
-	 * @param type
-	 *            the type
+	 * @param resourceType
+	 *            the resourceType
 	 * @return the number of resources
 	 */
-	public int getResources(Type type) {
-		return resources[type.ordinal()];
+	public int getResources(Resource.ResourceType resourceType) {
+		return resources[resourceType.ordinal()];
 	}
 
 	/**
@@ -337,22 +342,23 @@ public class Player {
 	 */
 	public int[] getResources() {
 		int[] list = new int[resources.length];
-		for (int i = 0; i < resources.length; i++)
+		for (int i = 0; i < resources.length; i++) {
 			list[i] = resources[i];
+		}
 
 		return list;
 	}
 
 	/**
-	 * Consume resources of a given type
+	 * Consume resources of a given resourceType
 	 * 
-	 * @param type
-	 *            the type to use
+	 * @param resourceType
+	 *            the resourceType to use
 	 * @param count
 	 *            the number to use
 	 */
-	public void useResources(Type type, int count) {
-		resources[type.ordinal()] -= count;
+	public void useResources(Resource.ResourceType resourceType, int count) {
+		resources[resourceType.ordinal()] -= count;
 	}
 
 	/**
@@ -360,7 +366,7 @@ public class Player {
 	 * 
 	 * @return the type stolen
 	 */
-	private Type stealResource() {
+	private Resource.ResourceType stealResource() {
 		int count = getResourceCount();
 		if (count <= 0)
 			return null;
@@ -369,8 +375,8 @@ public class Player {
 		int select = (int) (Math.random() * count);
 		for (int i = 0; i < resources.length; i++) {
 			if (select < resources[i]) {
-				useResources(Type.values()[i], 1);
-				return Type.values()[i];
+				useResources(Resource.ResourceType.values()[i], 1);
+				return Resource.ResourceType.values()[i];
 			}
 
 			select -= resources[i];
@@ -386,9 +392,9 @@ public class Player {
 	 *            the player to steal from
 	 * @return the type of resource stolen
 	 */
-	public Type steal(Player from) {
-		Type type = from.stealResource();
-		return steal(from, type);
+	public Resource.ResourceType steal(Player from) {
+		Resource.ResourceType resourceType = from.stealResource();
+		return steal(from, resourceType);
 	}
 
 	/**
@@ -396,34 +402,34 @@ public class Player {
 	 * 
 	 * @param from
 	 *            the player to steal from
-	 * @param type
-	 *            the type of card to be stolen
-	 * @return the type of resource stolen
+	 * @param resourceType
+	 *            the resourceType of card to be stolen
+	 * @return the resourceType of resource stolen
 	 */
-	public Type steal(Player from, Type type) {
-		if (type != null) {
-			addResources(type, 1);
+	public Resource.ResourceType steal(Player from, Resource.ResourceType resourceType) {
+		if (resourceType != null) {
+			addResources(resourceType, 1);
 			appendAction(R.string.player_stole_from, from.getName());
 		}
 		
-		return type;
+		return resourceType;
 	}
 
 	/**
-	 * Discard one resource of a given type
+	 * DiscardResourcesFragment one resource of a given resourceType
 	 * 
-	 * @param type
+	 * @param resourceType
 	 *            or null for random
 	 */
-	public void discard(Type type) {
-		Type choice = type;
+	public void discard(Resource.ResourceType resourceType) {
+		Resource.ResourceType choice = resourceType;
 
-		// pick random type if none is specified
+		// pick random resourceType if none is specified
 		if (choice == null) {
 			while (true) {
-				int pick = (int) (Math.random() * Hexagon.TYPES.length);
+				int pick = (int) (Math.random() * Resource.RESOURCE_TYPES.length);
 				if (resources[pick] > 0) {
-					choice = Hexagon.TYPES[pick];
+					choice = Resource.RESOURCE_TYPES[pick];
 					break;
 				}
 			}
@@ -431,7 +437,7 @@ public class Player {
 
 		useResources(choice, 1);
 
-		int res = Hexagon.getTypeStringResource(choice);
+		int res = Resource.toRString(choice);
 		appendAction(R.string.player_discarded, res);
 	}
 
@@ -440,31 +446,31 @@ public class Player {
 	 * 
 	 * @param player
 	 *            the player to trade with
-	 * @param type
-	 *            type of resource to trade for
+	 * @param resourceType
+	 *            resourceType of resource to trade for
 	 * @param trade
-	 *            the resoruces to give the player
+	 *            the resources to give the player
 	 */
-	public void trade(Player player, Type type, int[] trade) {
-		addResources(type, 1);
-		player.useResources(type, 1);
+	public void trade(Player player, Resource.ResourceType resourceType, int[] trade) {
+		addResources(resourceType, 1);
+		player.useResources(resourceType, 1);
 
-		for (int i = 0; i < Hexagon.TYPES.length; i++) {
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
 			if (trade[i] <= 0)
 				continue;
 
-			useResources(Hexagon.TYPES[i], trade[i]);
-			player.addResources(Hexagon.TYPES[i], trade[i]);
+			useResources(Resource.RESOURCE_TYPES[i], trade[i]);
+			player.addResources(Resource.RESOURCE_TYPES[i], trade[i]);
 
 			for (int j = 0; j < trade[i]; j++) {
-				appendAction(R.string.player_traded_away, Hexagon
-						.getTypeStringResource(Hexagon.TYPES[i]));
+				appendAction(R.string.player_traded_away, Resource
+						.toRString(Resource.RESOURCE_TYPES[i]));
 			}
 		}
 
 		appendAction(R.string.player_traded_with, player.getName());
-		appendAction(R.string.player_got_resource, Hexagon
-				.getTypeStringResource(type));
+		appendAction(R.string.player_got_resource, Resource
+				.toRString(resourceType));
 	}
 
 	/**
@@ -492,8 +498,8 @@ public class Player {
 	 */
 	public boolean affordRoad() {
 		return (FREE_BUILD || roads.size() < MAX_ROADS
-				&& getResources(Type.BRICK) >= 1
-				&& getResources(Type.LUMBER) >= 1);
+				&& getResources(Resource.ResourceType.BRICK) >= 1
+				&& getResources(Resource.ResourceType.LUMBER) >= 1);
 	}
 
 	/**
@@ -503,10 +509,10 @@ public class Player {
 	 */
 	public boolean affordTown() {
 		return (FREE_BUILD || towns < MAX_TOWNS
-				&& getResources(Type.BRICK) >= 1
-				&& getResources(Type.LUMBER) >= 1
-				&& getResources(Type.GRAIN) >= 1
-				&& getResources(Type.WOOL) >= 1);
+				&& getResources(Resource.ResourceType.BRICK) >= 1
+				&& getResources(Resource.ResourceType.LUMBER) >= 1
+				&& getResources(Resource.ResourceType.GRAIN) >= 1
+				&& getResources(Resource.ResourceType.WOOL) >= 1);
 	}
 
 	/**
@@ -516,7 +522,7 @@ public class Player {
 	 */
 	public boolean affordCity() {
 		return (FREE_BUILD || cities < MAX_CITIES
-				&& getResources(Type.GRAIN) >= 2 && getResources(Type.ORE) >= 3);
+				&& getResources(Resource.ResourceType.GRAIN) >= 2 && getResources(Resource.ResourceType.ORE) >= 3);
 	}
 
 	/**
@@ -525,8 +531,8 @@ public class Player {
 	 * @return true if the player can buy a card
 	 */
 	public boolean affordCard() {
-		return (FREE_BUILD || getResources(Type.WOOL) >= 1
-				&& getResources(Type.GRAIN) >= 1 && getResources(Type.ORE) >= 1);
+		return (FREE_BUILD || getResources(Resource.ResourceType.WOOL) >= 1
+				&& getResources(Resource.ResourceType.GRAIN) >= 1 && getResources(Resource.ResourceType.ORE) >= 1);
 	}
 
 	/**
@@ -580,9 +586,9 @@ public class Player {
 			return null;
 
 		// deduct resources
-		useResources(Type.WOOL, 1);
-		useResources(Type.GRAIN, 1);
-		useResources(Type.ORE, 1);
+		useResources(Resource.ResourceType.WOOL, 1);
+		useResources(Resource.ResourceType.GRAIN, 1);
+		useResources(Resource.ResourceType.ORE, 1);
 
 		if (card == Cards.VICTORY)
 			victory += 1;
@@ -690,10 +696,10 @@ public class Player {
 			board.checkLargestArmy(this, soldiers);
 			if (!hadLargest && board.getLargestArmyOwner() == this)
 				appendAction(R.string.player_largest_army);
-			board.robberPhase();
+			board.startRobberPhase();
 			break;
 		case PROGRESS:
-			board.progressPhase();
+			board.startProgressPhase1();
 			break;
 		case VICTORY:
 			return false;
@@ -711,25 +717,25 @@ public class Player {
 	}
 
 	/**
-	 * Steal all resources of a given type from the other players
+	 * Steal all resources of a given resourceType from the other players
 	 * 
-	 * @param type
+	 * @param resourceType
 	 */
-	public int monopoly(Type type) {
-		appendAction(R.string.player_monopoly, Hexagon
-				.getTypeStringResource(type));
+	public int monopoly(Resource.ResourceType resourceType) {
+		appendAction(R.string.player_monopoly, Resource
+				.toRString(resourceType));
 
 		int total = 0;
 
 		for (int i = 0; i < 4; i++) {
 			Player player = board.getPlayer(i);
-			int count = player.getResources(type);
+			int count = player.getResources(resourceType);
 
 			if (player == this || count <= 0)
 				continue;
 
-			player.useResources(type, count);
-			addResources(type, count);
+			player.useResources(resourceType, count);
+			addResources(resourceType, count);
 			total += count;
 
 			appendAction(R.string.player_stole_from, player.getName());
@@ -741,19 +747,19 @@ public class Player {
 	/**
 	 * Get 2 free resources
 	 * 
-	 * @param type1
-	 *            first resoruce type
-	 * @param type2
+	 * @param resourceType1
+	 *            first resource type
+	 * @param resourceType2
 	 *            second resource type
 	 */
-	public void harvest(Type type1, Type type2) {
-		addResources(type1, 1);
-		addResources(type2, 1);
+	public void harvest(Resource.ResourceType resourceType1, ResourceType resourceType2) {
+		addResources(resourceType1, 1);
+		addResources(resourceType2, 1);
 
-		appendAction(R.string.player_got_resource, Hexagon
-				.getTypeStringResource(type1));
-		appendAction(R.string.player_got_resource, Hexagon
-				.getTypeStringResource(type2));
+		appendAction(R.string.player_got_resource, Resource
+				.toRString(resourceType1));
+		appendAction(R.string.player_got_resource, Resource
+				.toRString(resourceType2));
 	}
 
 	/**
@@ -766,59 +772,58 @@ public class Player {
 	}
 
 	/**
-	 * Determine if the player has a particular trader type
+	 * Determine if the player has a particular harbor resourceType
 	 * 
-	 * @param type
-	 *            the resource type, or null for 3:1 trader
+	 * @param resourceType
+	 *            the resource resourceType, or null for 3:1 harbor
 	 * @return
 	 */
-	public boolean hasTrader(Type type) {
-		if (type == null)
-			return (tradeValue == 3);
+	public boolean hasHarbor(Resource.ResourceType resourceType) {
+		if (resourceType == null) {
+            return (tradeValue == 3);
+        }
 
-		return traders[type.ordinal()];
+		return harbors[resourceType.ordinal()];
 	}
 
 	/**
-	 * Add a trader
+	 * Add a harbor
 	 * 
-	 * @param type
-	 *            the trader type
+	 * @param resourceType
+	 *            the harbor resourceType
 	 */
-	public void setTradeValue(Type type) {
-		// 3:1 trader
-		if (type == Type.ANY) {
+	public void setTradeValue(Resource.ResourceType resourceType) {
+		// 3:1 harbor
+		if (resourceType == ResourceType.ANY) {
 			tradeValue = 3;
 			return;
 		}
 
-		// specific trader
-		if (type != null)
-			traders[type.ordinal()] = true;
+		// specific harbor
+		if (resourceType != null)
+			harbors[resourceType.ordinal()] = true;
 	}
 
 	/**
 	 * Determine if a trade is valid
 	 * 
-	 * @param type
-	 *            the type to trade for
+	 * @param resourceType
+	 *            the resourceType to trade for
 	 * @param trade
-	 *            an array of the number of each card type offered
+	 *            an array of the number of each card resourceType offered
 	 * @return true if the trade is valid
 	 */
-	public boolean canTrade(Type type, int[] trade) {
+	public boolean canTrade(Resource.ResourceType resourceType, int[] trade) {
 		int value = 0;
-		for (int i = 0; i < Hexagon.TYPES.length; i++) {
-			if (Hexagon.TYPES[i] == Type.DESERT)
-				continue;
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
 
-			// check for specific 2:1 trader
-			if (hasTrader(Hexagon.TYPES[i])
-					&& getResources(Hexagon.TYPES[i]) >= 2 && trade[i] >= 2)
+			// check for specific 2:1 harbor
+			if (hasHarbor(Resource.RESOURCE_TYPES[i])
+					&& getResources(Resource.RESOURCE_TYPES[i]) >= 2 && trade[i] >= 2)
 				return true;
 
 			// deduct from number of resource cards needed
-			int number = getResources(Hexagon.TYPES[i]);
+			int number = getResources(Resource.RESOURCE_TYPES[i]);
 			if (number >= trade[i])
 				value += trade[i];
 		}
@@ -829,27 +834,25 @@ public class Player {
 	/**
 	 * Trade for a resource
 	 * 
-	 * @param type
-	 *            the type to trade for
+	 * @param resourceType
+	 *            the resourceType to trade for
 	 * @param trade
-	 *            an array of the number of each card type offered
+	 *            an array of the number of each card resourceType offered
 	 * @return true if the trade was performed successfully
 	 */
-	public boolean trade(Type type, int[] trade) {
+	public boolean trade(Resource.ResourceType resourceType, int[] trade) {
 		// validate trade
-		if (!canTrade(type, trade))
+		if (!canTrade(resourceType, trade))
 			return false;
 
-		// check for 2:1 trader
+		// check for 2:1 harbor
 		for (int i = 0; i < trade.length; i++) {
-			if (Hexagon.TYPES[i] == Type.DESERT)
-				continue;
 
-			// check for specific 2:1 trader
-			if (hasTrader(Hexagon.TYPES[i])
-					&& getResources(Hexagon.TYPES[i]) >= 2 && trade[i] >= 2) {
-				addResources(type, 1);
-				useResources(Hexagon.TYPES[i], 2);
+			// check for specific 2:1 harbor
+			if (hasHarbor(Resource.RESOURCE_TYPES[i])
+					&& getResources(Resource.RESOURCE_TYPES[i]) >= 2 && trade[i] >= 2) {
+				addResources(resourceType, 1);
+				useResources(Resource.RESOURCE_TYPES[i], 2);
 				return true;
 			}
 		}
@@ -857,27 +860,25 @@ public class Player {
 		// normal 4:1 or 3:1 trade
 		int value = tradeValue;
 		for (int i = 0; i < trade.length; i++) {
-			if (Hexagon.TYPES[i] == Type.DESERT)
-				continue;
 
-			int number = getResources(Hexagon.TYPES[i]);
+			int number = getResources(Resource.RESOURCE_TYPES[i]);
 
 			// deduct from number of resource cards needed
 			if (trade[i] >= value && number >= value) {
-				useResources(Hexagon.TYPES[i], value);
-				addResources(type, 1);
+				useResources(Resource.RESOURCE_TYPES[i], value);
+				addResources(resourceType, 1);
 
-				appendAction(R.string.player_traded_for, Hexagon
-						.getTypeStringResource(type));
+				appendAction(R.string.player_traded_for, Resource
+						.toRString(resourceType));
 
 				for (int j = 0; j < value; j++) {
-					appendAction(R.string.player_traded_away, Hexagon
-							.getTypeStringResource(Hexagon.TYPES[i]));
+					appendAction(R.string.player_traded_away, Resource
+							.toRString(Resource.RESOURCE_TYPES[i]));
 				}
 
 				return true;
 			} else if (trade[i] > 0 && number >= trade[i]) {
-				useResources(Hexagon.TYPES[i], trade[i]);
+				useResources(Resource.RESOURCE_TYPES[i], trade[i]);
 				value -= trade[i];
 			}
 		}
@@ -893,16 +894,16 @@ public class Player {
 	 *            the type of resource to trade for
 	 * @return a Vector of arrays of the number of each card type to offer
 	 */
-	public Vector<int[]> findTrades(Type want) {
+	public Vector<int[]> findTrades(Resource.ResourceType want) {
 		Vector<int[]> offers = new Vector<int[]>();
 
-		// generate trades for 2:1 traders
-		for (int i = 0; i < Hexagon.TYPES.length; i++) {
-			if (Hexagon.TYPES[i] == Type.DESERT || Hexagon.TYPES[i] == want
-					|| !hasTrader(Hexagon.TYPES[i]))
+		// generate trades for 2:1 harbors
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
+			if (Resource.RESOURCE_TYPES[i] == want
+					|| !hasHarbor(Resource.RESOURCE_TYPES[i]))
 				continue;
 
-			int[] trade = new int[Hexagon.TYPES.length];
+			int[] trade = new int[Resource.RESOURCE_TYPES.length];
 			trade[i] = 2;
 
 			if (canTrade(want, trade))
@@ -911,12 +912,12 @@ public class Player {
 
 		// generate 3:1 or 4:1 trades
 		if (!mixedTrade) {
-			for (int i = 0; i < Hexagon.TYPES.length; i++) {
-				if (Hexagon.TYPES[i] == Type.DESERT || Hexagon.TYPES[i] == want
-						|| hasTrader(Hexagon.TYPES[i]))
+			for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
+				if (Resource.RESOURCE_TYPES[i] == want
+						|| hasHarbor(Resource.RESOURCE_TYPES[i]))
 					continue;
 
-				int[] trade = new int[Hexagon.TYPES.length];
+				int[] trade = new int[Resource.RESOURCE_TYPES.length];
 				trade[i] = tradeValue;
 
 				if (canTrade(want, trade))
@@ -932,7 +933,7 @@ public class Player {
 			for (int j = 0; j <= max - i; j++) {
 				for (int k = 0; k <= max - i - j; k++) {
 					for (int l = 0; l <= max - i - j - k; l++) {
-						int[] trade = new int[Hexagon.TYPES.length];
+						int[] trade = new int[Resource.RESOURCE_TYPES.length];
 						trade[4] = i;
 						trade[3] = j;
 						trade[2] = k;
@@ -944,8 +945,8 @@ public class Player {
 							continue;
 
 						boolean good = true;
-						for (int m = 0; m < Hexagon.TYPES.length; m++) {
-							if (hasTrader(Hexagon.TYPES[m]) && trade[m] >= 2)
+						for (int m = 0; m < Resource.RESOURCE_TYPES.length; m++) {
+							if (hasHarbor(Resource.RESOURCE_TYPES[m]) && trade[m] >= 2)
 								good = false;
 						}
 

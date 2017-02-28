@@ -1,7 +1,7 @@
 package com.catandroid.app.common.components;
 
 import com.catandroid.app.R;
-import com.catandroid.app.common.logistics.Settings;
+import com.catandroid.app.common.logistics.AppSettings;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.BalancedAI;
 import com.catandroid.app.common.players.Player;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class Board {
+
 
 	public enum Cards {
 		SOLDIER, PROGRESS, HARVEST, MONOPOLY, VICTORY
@@ -26,24 +27,25 @@ public class Board {
 	private static final int NUM_VICTORY = 5;
 
 	private enum Phase {
-		SETUP1S, SETUP1R, SETUP2S, SETUP2R, PRODUCTION, BUILD, PROGRESS1, PROGRESS2, ROBBER, DONE
+		SETUP_SETTLEMENT, SETUP_FIRST_R, SETUP_CITY, SETUP_SECOND_R,
+		PRODUCTION, BUILD, PROGRESS_1, PROGRESS_2, ROBBER, DONE
 	}
 
 	private Phase phase, returnPhase;
 
-	private BoardGeometry myBoardGeometry;
 	private Hexagon[] hexagons;
-	private Vertex[] vertex;
-	private Edge[] edge;
-	private Player[] player;
-	private Harbor[] harbor;
+	private Vertex[] vertices;
+	private Edge[] edges;
+	private Player[] players;
+	private Harbor[] harbors;
 	private int[] cards;
-	private Stack<Player> discardQueue;
+	private Stack<Player> playersYetToDiscard;
 	private BoardGeometry boardGeometry;
 	private HashMap<Long, Hexagon> hexMap;
 
-	private int robber, turn, turnNumber, roadCountId, longestRoad,
-			largestArmy, maxPoints, humans, robberLast, lastRoll;
+	private Hexagon curRobberHex, prevRobberHex;
+	private int turn, turnNumber, roadCountId, longestRoad,
+			largestArmy, maxPoints, humans, lastDiceRollNumber;
 	private Player longestRoadOwner, largestArmyOwner, winner;
 
 	private boolean autoDiscard;
@@ -52,9 +54,9 @@ public class Board {
 	 * Create new board layout
 	 * 
 	 * @param names
-	 *            array of player names
+	 *            array of players names
 	 * @param human
-	 *            whether each player is human
+	 *            whether each players is human
 	 */
 	public Board(String[] names, boolean[] human, int maxPoints, BoardGeometry boardGeometry,
 			boolean autoDiscard) {
@@ -65,25 +67,26 @@ public class Board {
 		this.autoDiscard = autoDiscard;
 
 		// initialise players
-		player = new Player[4];
+		players = new Player[4];
 		for (int i = 0; i < 4; i++)
-			player[i] = null;
+			players[i] = null;
 
 		humans = 0;
 		for (int i = 0; i < 4; i++) {
 			while (true) {
 				int pick = (int) (Math.random() * 4);
-				if (player[pick] != null)
+				if (players[pick] != null)
 					continue;
 
 				Player.Color color = Player.Color.values()[i];
 
 				if (human[i]) {
 					humans += 1;
-					player[pick] = new Player(this, pick, color, names[i],
+					String participantId = "";
+					players[pick] = new Player(this, pick, participantId, color, names[i],
 							Player.PLAYER_HUMAN);
 				} else {
-					player[pick] = new BalancedAI(this, pick, color, names[i]);
+					players[pick] = new BalancedAI(this, pick, color, names[i]);
 				}
 
 				break;
@@ -94,7 +97,7 @@ public class Board {
 	private void commonInit() {
 		turn = 0;
 		turnNumber = 1;
-		phase = Phase.SETUP1S;
+		phase = Phase.SETUP_SETTLEMENT;
 		roadCountId = 0;
 		longestRoad = 4;
 		largestArmy = 2;
@@ -103,7 +106,7 @@ public class Board {
 		hexagons = null;
 		winner = null;
 
-		discardQueue = new Stack<Player>();
+		playersYetToDiscard = new Stack<Player>();
 		hexMap = new HashMap<Long, Hexagon>();
 
 		// initialize development cards
@@ -116,16 +119,16 @@ public class Board {
 
 		// randomly initialize hexagons
 		hexagons = ComponentUtils.initRandomHexes(this);
-		harbor = ComponentUtils.initRandomHarbors(boardGeometry.getHarborCount());
-		vertex = ComponentUtils.generateVertices(boardGeometry.getVertexCount());
-		edge = ComponentUtils.generateEdges(boardGeometry.getEdgeCount());
+		harbors = ComponentUtils.initRandomHarbors(boardGeometry.getHarborCount());
+		vertices = ComponentUtils.generateVertices(boardGeometry.getVertexCount());
+		edges = ComponentUtils.generateEdges(boardGeometry.getEdgeCount());
 
 		// populate board map with starting parameters
-		boardGeometry.populateBoard(hexagons, vertex, edge, harbor, hexMap);
+		boardGeometry.populateBoard(hexagons, vertices, edges, harbors, hexMap);
 
 		// TODO: remove hard-coding / replace this function
-		// assign roll numbers randomly
-//		Hexagon.assignRoles(hexagons, 4);
+		// assign executeDiceRoll numbers randomly
+		ComponentUtils.assignRoles(hexagons);
 	}
 
 	/**
@@ -142,39 +145,39 @@ public class Board {
 	}
 
 	/**
-	 * Get a reference to the current player
+	 * Get a reference to the current players
 	 * 
-	 * @return the current player
+	 * @return the current players
 	 */
 	public Player getCurrentPlayer() {
-		if (player == null)
+		if (players == null)
 			return null;
 
-		return player[turn];
+		return players[turn];
 	}
 
 	/**
-	 * Get a player by index
+	 * Get a players by index
 	 * 
 	 * @param index
-	 *            player index [0, 3]
-	 * @return the player
+	 *            players index [0, 3]
+	 * @return the players
 	 */
 	public Player getPlayer(int index) {
-		return player[index];
+		return players[index];
 	}
 
 	/**
-	 * Distribute resources for a given roll number
+	 * Distribute resources for a given dice roll number
 	 * 
-	 * @param roll
-	 *            the roll number
+	 * @param diceRollNumber
+	 *            the dice roll number to execute
 	 */
-	public void roll(int roll) {
-		if (roll == 7) {
-			// reduce each player to 7 cards
+	public void executeDiceRoll(int diceRollNumber) {
+		if (diceRollNumber == 7) {
+			// reduce each players to 7 cards
 			for (int i = 0; i < 4; i++) {
-				int cards = player[i].getResourceCount();
+				int cards = players[i].getResourceCount();
 				int extra = cards > 7 ? cards / 2 : 0;
 
 				if (extra == 0)
@@ -183,107 +186,117 @@ public class Board {
 				if (autoDiscard) {
 					// discard randomly
 					for (int j = 0; j < extra; j++)
-						player[i].discard(null);
+						players[i].discard(null);
 				}
-				if (player[i].isBot()) {
+				if (players[i].isBot()) {
 					// instruct the ai to discard
-					AutomatedPlayer bot = (AutomatedPlayer) player[i];
+					AutomatedPlayer bot = (AutomatedPlayer) players[i];
 					bot.discard(extra);
-				} else if (player[i].isHuman()) {
-					// queue human player to discard
-					discardQueue.add(player[i]);
+				} else if (players[i].isHuman()) {
+					// queue human players to discard
+					playersYetToDiscard.add(players[i]);
 				}
 			}
 
-			// enter robber phase
-			robberPhase();
+			// enter robberIndex phase
+			startRobberPhase();
 		} else {
 			// distribute resources
 			for (int i = 0; i < hexagons.length; i++)
-				hexagons[i].distributeResources(roll);
+			{
+				hexagons[i].distributeResources(diceRollNumber);
+			}
 		}
 
-		lastRoll = roll;
+		lastDiceRollNumber = diceRollNumber;
 	}
 
 	/**
-	 * Get the last roll
+	 * Get the last executeDiceRoll
 	 * 
-	 * @return the last roll, or 0
+	 * @return the last executeDiceRoll, or 0
 	 */
-	public int getRoll() {
+	public int getLastDiceRollNumber() {
 		if (isSetupPhase() || isProgressPhase())
+		{
 			return 0;
+		}
 
-		return lastRoll;
+		return lastDiceRollNumber;
 	}
 
 	/**
-	 * Run the AI's robber methods
+	 * Run the AI's robberIndex methods
 	 * 
 	 * @param current
-	 *            current ai player
+	 *            current ai players
 	 */
-	private void aiRobberPhase(AutomatedPlayer current) {
-		int hex = current.placeRobber(hexagons, hexagons[robberLast]);
+	private void startAIRobberPhase(AutomatedPlayer current) {
+		int hex = current.placeRobber(hexagons, prevRobberHex);
 		setRobber(hex);
 
 		int count = 0;
 		for (int i = 0; i < 4; i++)
-			if (player[i] != player[turn] && hexagons[hex].hasPlayer(player[i]))
+		{
+			if (players[i] != players[turn] && hexagons[hex].adjacentToPlayer(players[i]))
+			{
 				count++;
+			}
+		}
 
 		if (count > 0) {
 			Player[] stealList = new Player[count];
 			for (int i = 0; i < 4; i++)
-				if (player[i] != player[turn]
-						&& hexagons[hex].hasPlayer(player[i]))
-					stealList[--count] = player[i];
+				if (players[i] != players[turn]
+						&& hexagons[hex].adjacentToPlayer(players[i]))
+				{
+					stealList[--count] = players[i];
+				}
 
 			int who = current.steal(stealList);
-			player[turn].steal(stealList[who]);
+			players[turn].steal(stealList[who]);
 		}
 
 		phase = returnPhase;
 	}
 
 	/**
-	 * Start a player's turn
+	 * Start a players's turn
 	 */
 	public void runTurn() {
 		// process ai turn
-		if (player[turn].isBot()) {
-			AutomatedPlayer current = (AutomatedPlayer) player[turn];
+		if (players[turn].isBot()) {
+			AutomatedPlayer current = (AutomatedPlayer) players[turn];
 			switch (phase) {
 
-			case SETUP1S:
-			case SETUP2S:
-				current.setupTown(vertex);
+			case SETUP_SETTLEMENT:
+			case SETUP_CITY:
+				current.setupTown(vertices);
 				break;
 
-			case SETUP1R:
-			case SETUP2R:
-				current.setupRoad(edge);
+			case SETUP_FIRST_R:
+			case SETUP_SECOND_R:
+				current.setupRoad(edges);
 				break;
 
 			case PRODUCTION:
 				current.productionPhase();
-				player[turn].roll();
+				players[turn].roll();
 				break;
 
 			case BUILD:
 				current.buildPhase();
 				break;
 
-			case PROGRESS1:
-				current.progressRoad(edge);
-			case PROGRESS2:
-				current.progressRoad(edge);
+			case PROGRESS_1:
+				current.progressRoad(edges);
+			case PROGRESS_2:
+				current.progressRoad(edges);
 				phase = returnPhase;
 				return;
 
 			case ROBBER:
-				aiRobberPhase(current);
+				startAIRobberPhase(current);
 				return;
 
 			case DONE:
@@ -304,26 +317,26 @@ public class Board {
 		boolean turnChanged = false;
 
 		switch (phase) {
-		case SETUP1S:
-			phase = Phase.SETUP1R;
+		case SETUP_SETTLEMENT:
+			phase = Phase.SETUP_FIRST_R;
 			break;
-		case SETUP1R:
+		case SETUP_FIRST_R:
 			if (turn < 3) {
 				turn++;
 				turnChanged = true;
-				phase = Phase.SETUP1S;
+				phase = Phase.SETUP_SETTLEMENT;
 			} else {
-				phase = Phase.SETUP2S;
+				phase = Phase.SETUP_CITY;
 			}
 			break;
-		case SETUP2S:
-			phase = Phase.SETUP2R;
+		case SETUP_CITY:
+			phase = Phase.SETUP_SECOND_R;
 			break;
-		case SETUP2R:
+		case SETUP_SECOND_R:
 			if (turn > 0) {
 				turn--;
 				turnChanged = true;
-				phase = Phase.SETUP2S;
+				phase = Phase.SETUP_CITY;
 			} else {
 				phase = Phase.PRODUCTION;
 			}
@@ -334,18 +347,18 @@ public class Board {
 		case BUILD:
 			if (turn == 3)
 				turnNumber += 1;
-			player[turn].endTurn();
+			players[turn].endTurn();
 			phase = Phase.PRODUCTION;
 			turn++;
 			turn %= 4;
 			turnChanged = true;
-			player[turn].beginTurn();
-			lastRoll = 0;
+			players[turn].beginTurn();
+			lastDiceRollNumber = 0;
 			break;
-		case PROGRESS1:
-			phase = Phase.PROGRESS2;
+		case PROGRESS_1:
+			phase = Phase.PROGRESS_2;
 			break;
-		case PROGRESS2:
+		case PROGRESS_2:
 			phase = returnPhase;
 			break;
 		case ROBBER:
@@ -361,19 +374,19 @@ public class Board {
 	/**
 	 * Enter progress phase 1 (road building)
 	 */
-	public void progressPhase() {
+	public void startProgressPhase1() {
 		returnPhase = phase;
-		phase = Phase.PROGRESS1;
+		phase = Phase.PROGRESS_1;
 		runTurn();
 	}
 
 	/**
 	 * Enter the robber placement phase
 	 */
-	public void robberPhase() {
-		robberLast = robber;
-		robber = -1;
-		returnPhase = phase;
+	public void startRobberPhase() {
+		this.prevRobberHex= this.curRobberHex;
+		this.returnPhase = phase;
+		this.curRobberHex = null;
 		phase = Phase.ROBBER;
 		runTurn();
 	}
@@ -384,20 +397,20 @@ public class Board {
 	 * @return true if the game is in setup phase
 	 */
 	public boolean isSetupPhase() {
-		return (phase == Phase.SETUP1S || phase == Phase.SETUP1R
-				|| phase == Phase.SETUP2S || phase == Phase.SETUP2R);
+		return (phase == Phase.SETUP_SETTLEMENT || phase == Phase.SETUP_FIRST_R
+				|| phase == Phase.SETUP_CITY || phase == Phase.SETUP_SECOND_R);
 	}
 
 	public boolean isSetupTown() {
-		return (phase == Phase.SETUP1S || phase == Phase.SETUP2S);
+		return (phase == Phase.SETUP_SETTLEMENT || phase == Phase.SETUP_CITY);
 	}
 
 	public boolean isSetupRoad() {
-		return (phase == Phase.SETUP1R || phase == Phase.SETUP2R);
+		return (phase == Phase.SETUP_FIRST_R || phase == Phase.SETUP_SECOND_R);
 	}
 
 	public boolean isSetupPhase2() {
-		return (phase == Phase.SETUP2S || phase == Phase.SETUP2R);
+		return (phase == Phase.SETUP_CITY || phase == Phase.SETUP_SECOND_R);
 	}
 
 	public boolean isRobberPhase() {
@@ -413,49 +426,50 @@ public class Board {
 	}
 
 	public boolean isProgressPhase() {
-		return (phase == Phase.PROGRESS1 || phase == Phase.PROGRESS2);
+		return (phase == Phase.PROGRESS_1 || phase == Phase.PROGRESS_2);
 	}
 
 	public boolean isProgressPhase1() {
-		return (phase == Phase.PROGRESS1);
+		return (phase == Phase.PROGRESS_1);
 	}
 
 	public boolean isProgressPhase2() {
-		return (phase == Phase.PROGRESS2);
+		return (phase == Phase.PROGRESS_2);
 	}
 
 	/**
-	 * Get the dice roll value for a hexagons
+	 * Get the dice executeDiceRoll value for a hexagons
 	 * 
 	 * @param index
 	 *            the index of the hexagons
-	 * @return the roll value
+	 * @return the executeDiceRoll value
 	 */
-	public int getRoll(int index) {
-		return hexagons[index].getRoll();
+	public int getLastRoll(int index) {
+		return hexagons[index].getNumberTokenAsInt();
 	}
 
 	/**
-	 * Get the resource type for one hexagons
+	 * Get the resource produced by a particular hexagon
 	 * 
 	 * @param index
-	 *            the index of the hexagons
-	 * @return the resource type
+	 *            the index of the hexagon
+	 * @return the resource produced by that hexagon
 	 */
-	public Hexagon.Type getResource(int index) {
-		return hexagons[index].getType();
+	public Resource getResource(int index) {
+		return hexagons[index].getResource();
 	}
 
 	/**
-	 * Get indexed hexagons type mapping
+	 * Get indexed hexToTerrainTypes mapping
 	 * 
-	 * @return array of resource types
+	 * @return array of terrain type ordinals
 	 * @note this is intended only to be used to stream out the board layout
 	 */
-	public int[] getMapping() {
+	public int[] getHexToTerrainTypesMapping() {
 		int hexMapping[] = new int[hexagons.length];
-		for (int i = 0; i < hexagons.length; i++)
-			hexMapping[i] = hexagons[i].getType().ordinal();
+		for (int i = 0; i < hexagons.length; i++) {
+			hexMapping[i] = hexagons[i].getResourceType().ordinal();
+		}
 
 		return hexMapping;
 	}
@@ -479,53 +493,53 @@ public class Board {
 	}
 
 	/**
-	 * Get a given harbor
+	 * Get a given harbors
 	 * 
 	 * @param index
-	 *            the index of the harbor
-	 * @return the harbor
+	 *            the index of the harbors
+	 * @return the harbors
 	 */
-	public Harbor getTrader(int index) {
+	public Harbor getHarbor(int index) {
 		if (index < 0 || index >= boardGeometry.getHarborCount())
 			return null;
 
-		return harbor[index];
+		return harbors[index];
 	}
 
 	/**
-	 * Get the given edge
+	 * Get the given edges
 	 * 
 	 * @param index
-	 *            the index of the edge
-	 * @return the edge
+	 *            the index of the edges
+	 * @return the edges
 	 */
 	public Edge getEdge(int index) {
 		if (index < 0 || index >= boardGeometry.getEdgeCount())
 			return null;
 
-		return edge[index];
+		return edges[index];
 	}
 	
 	public Edge[] getEdges() {
-		return edge;
+		return edges;
 	}
 
 	/**
-	 * Get the given vertex
+	 * Get the given vertices
 	 * 
 	 * @param index
-	 *            the index of the vertex
-	 * @return the vertex
+	 *            the index of the vertices
+	 * @return the vertices
 	 */
 	public Vertex getVertex(int index) {
 		if (index < 0 || index >= boardGeometry.getEdgeCount())
 			return null;
 
-		return vertex[index];
+		return vertices[index];
 	}
 	
 	public Vertex[] getVertices() {
-		return vertex;
+		return vertices;
 	}
 
 	/**
@@ -583,14 +597,16 @@ public class Board {
 
 		// reset players' road lengths to 0
 		for (int i = 0; i < 4; i++)
-			player[i].cancelRoadLength();
+		{
+			players[i].cancelRoadLength();
+		}
 
 		// find longest road
-		for (int i = 0; i < edge.length; i++) {
-			if (edge[i].hasRoad()) {
-				int length = edge[i].getRoadLength(++roadCountId);
+		for (int i = 0; i < edges.length; i++) {
+			if (edges[i].hasRoad()) {
+				int length = edges[i].getRoadLength(++roadCountId);
 
-				Player owner = edge[i].getOwner();
+				Player owner = edges[i].getOwner();
 				owner.setRoadLength(length);
 				if (length > longestRoad) {
 					longestRoad = length;
@@ -599,18 +615,20 @@ public class Board {
 			}
 		}
 
-		// the same player keeps the longest road if length doesn't change
+		// the same players keeps the longest road if length doesn't change
 		if (previousOwner != null
 				&& previousOwner.getRoadLength() == longestRoad)
+		{
 			longestRoadOwner = previousOwner;
+		}
 	}
 
 	/**
-	 * Determine if player has the longest road
+	 * Determine if players has the longest road
 	 * 
 	 * @param player
-	 *            the player
-	 * @return true if player had the longest road
+	 *            the players
+	 * @return true if players had the longest road
 	 */
 	public boolean hasLongestRoad(Player player) {
 		return (longestRoadOwner != null && player == longestRoadOwner);
@@ -628,7 +646,7 @@ public class Board {
 	/**
 	 * Get the owner of the longest road
 	 * 
-	 * @return the player with the longest road
+	 * @return the players with the longest road
 	 */
 	public Player getLongestRoadOwner() {
 		return longestRoadOwner;
@@ -638,7 +656,7 @@ public class Board {
 	 * Update the largest army if the given size is larger than the current size
 	 * 
 	 * @param player
-	 *            the player owning the army
+	 *            the players owning the army
 	 * @param size
 	 *            the number of soldiers
 	 */
@@ -650,11 +668,11 @@ public class Board {
 	}
 
 	/**
-	 * Determine if player has the largest army
+	 * Determine if players has the largest army
 	 * 
 	 * @param player
-	 *            the player
-	 * @return true if player has the largest army
+	 *            the players
+	 * @return true if players has the largest army
 	 */
 	public boolean hasLargestArmy(Player player) {
 		return (largestArmyOwner != null && player == largestArmyOwner);
@@ -672,7 +690,7 @@ public class Board {
 	/**
 	 * Get the owner of the largest army
 	 * 
-	 * @return the player with the largest army
+	 * @return the players with the largest army
 	 */
 	public Player getLargestArmyOwner() {
 		return largestArmyOwner;
@@ -684,17 +702,17 @@ public class Board {
 	 * @return true if one or more players need to discard
 	 */
 	public boolean checkPlayerToDiscard() {
-		return !discardQueue.empty();
+		return !playersYetToDiscard.empty();
 	}
 
 	/**
-	 * Get the next player queued for discarding
+	 * Get the next players queued for discarding
 	 * 
-	 * @return a player or null
+	 * @return a players or null
 	 */
 	public Player getPlayerToDiscard() {
 		try {
-			return discardQueue.pop();
+			return playersYetToDiscard.pop();
 		} catch (EmptyStackException e) {
 			return null;
 		}
@@ -707,21 +725,21 @@ public class Board {
 	 */
 	public int getPhaseResource() {
 		switch (phase) {
-		case SETUP1S:
+		case SETUP_SETTLEMENT:
 			return R.string.phase_first_town;
-		case SETUP1R:
+		case SETUP_FIRST_R:
 			return R.string.phase_first_road;
-		case SETUP2S:
+		case SETUP_CITY:
 			return R.string.phase_second_town;
-		case SETUP2R:
+		case SETUP_SECOND_R:
 			return R.string.phase_second_road;
 		case PRODUCTION:
 			return R.string.phase_roll_production;
 		case BUILD:
 			return R.string.phase_build;
-		case PROGRESS1:
+		case PROGRESS_1:
 			return R.string.phase_progress1;
-		case PROGRESS2:
+		case PROGRESS_2:
 			return R.string.phase_progress2;
 		case ROBBER:
 			return R.string.phase_move_robber;
@@ -744,39 +762,40 @@ public class Board {
 	/**
 	 * Get the winner
 	 * 
-	 * @return the winning player or null
+	 * @return the winning players or null
 	 */
-	public Player getWinner(Settings settings) {
+	public Player getWinner(AppSettings appSettings) {
 		// winner already found or we just want to check what was already found
-		if (winner != null || settings == null)
+		if (winner != null || appSettings == null)
+		{
 			return winner;
+		}
 
 		// check for winner
 		for (int i = 0; i < 4; i++) {
-			if (player[i].getVictoryPoints() >= maxPoints) {
+			if (players[i].getVictoryPoints() >= maxPoints) {
 				phase = Phase.DONE;
-				winner = player[i];
+				winner = players[i];
 				break;
 			}
 		}
 
 		// save game stats
 		if (winner != null)
-			settings.addScore(humans, maxPoints, winner.getName(), turnNumber);
+		{
+			appSettings.addScore(humans, maxPoints, winner.getName(), turnNumber);
+		}
 
 		return winner;
 	}
 
 	/**
-	 * Get the hexagons with the robber
+	 * Get the hexagons with the robberIndex
 	 * 
-	 * @return the hexagons with the robber
+	 * @return the hexagons with the robberIndex
 	 */
-	public Hexagon getRobber() {
-		if (robber < 0)
-			return null;
-
-		return hexagons[robber];
+	public Hexagon getCurRobberHex() {
+		return curRobberHex;
 	}
 
 	/**
@@ -785,25 +804,49 @@ public class Board {
 	 * 
 	 * @return the last location of the robber
 	 */
-	public Hexagon getRobberLast() {
-		int hexCount = boardGeometry.getHexCount();
-		if (robber < 0 && robberLast >= 0 && robberLast < hexCount)
-			return hexagons[robberLast];
-		else if (robber >= 0 && robber < hexCount)
-			return hexagons[robber];
-		else
+	public Hexagon getPrevRobberHex() {
+		int hexCount = this.boardGeometry.getHexCount();
+		int curRobberId = this.curRobberHex.getId();
+		int prevRobberId = this.prevRobberHex.getId();
+		if (this.phase == Phase.ROBBER && prevRobberId >= 0 && prevRobberId < hexCount)
+			return this.prevRobberHex;
+		else if (curRobberId >= 0 && curRobberId < hexCount) {
+			return this.curRobberHex;
+		}
+		else {
 			return null;
+		}
+	}
+
+	/**
+	 * Set the current robber hexagon
+	 *
+	 * @param curRobberHex
+	 *            current robber hexagon
+	 * @return true iff the currebt robber hex was set
+	 */
+	public boolean setCurRobberHex(Hexagon curRobberHex) {
+		if (this.curRobberHex != null) {
+			this.curRobberHex.removeRobber();
+		}
+		this.curRobberHex = curRobberHex;
+		this.curRobberHex.setRobber();
+		return true;
 	}
 
 	/**
 	 * Set the index for the robber
 	 * 
-	 * @param robber
-	 *            id of the hexagons with the robber
+	 * @param robberIndex
+	 *            id of the hexagon with the robber
 	 * @return true if the robber was placed
 	 */
-	public boolean setRobber(int robber) {
-		this.robber = robber;
+	public boolean setRobber(int robberIndex) {
+		if (this.curRobberHex != null) {
+			this.curRobberHex.removeRobber();
+		}
+		this.curRobberHex = this.hexagons[robberIndex];
+		this.curRobberHex.setRobber();
 		return true;
 	}
 
@@ -830,4 +873,5 @@ public class Board {
 			return R.string.nostring;
 		}
 	}
+
 }

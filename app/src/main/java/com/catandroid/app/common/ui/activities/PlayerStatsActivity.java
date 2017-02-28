@@ -1,4 +1,4 @@
-package com.catandroid.app.common.logistics;
+package com.catandroid.app.common.ui.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
 
-public class Stats extends Activity {
+public class PlayerStatsActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle state) {
@@ -23,7 +23,7 @@ public class Stats extends Activity {
 		view.setPadding(padding, padding, padding, padding);
 
 		String[] items;
-		String[] games = CatAndroidApp.getInstance().getSettingsInstance().getStatList(getResources());
+		String[] games = CatAndroidApp.getInstance().getAppSettingsInstance().getStatList(getResources());
 
 		if (games == null || games.length == 0) {
 			items = new String[1];
@@ -38,7 +38,7 @@ public class Stats extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					if (position == 0) {
-						CatAndroidApp.getInstance().getSettingsInstance().resetScores();
+						CatAndroidApp.getInstance().getAppSettingsInstance().resetScores();
 						finish();
 					}
 				}

@@ -3,7 +3,7 @@
 
 	<!-- German translation by Gerhard -->
 
-	<!-- Main menu -->
+	<!-- StartScreenActivity menu -->
 	<string name="new_button">Neues Spiel</string>
 	<string name="rules_button">Anleitung</string>
 	<string name="rules_failed">Kann die Regeldatei nicht laden</string>
@@ -15,7 +15,7 @@
 	<string name="donate_button">Spenden</string>
 	<string name="site_button">Website aufrufen</string>
 
-	<!-- Card types -->
+	<!-- Card resourceTypes -->
 	<string name="soldier">Ritter</string>
 	<string name="progress">Entwicklung</string>
 	<string name="victory">Siegpunkt</string>
@@ -26,7 +26,7 @@
 	<string name="green">Grün</string>
 	<string name="orange">Orange</string>
 
-	<!-- Resource types -->
+	<!-- Resource resourceTypes -->
 	<string name="desert">Wüste</string>
 	<string name="lumber">Holz</string>
 	<string name="wool">Wolle</string>

@@ -1,35 +1,33 @@
-package com.catandroid.app.common.controllers;
+package com.catandroid.app.common.ui.fragments;
 
 import com.catandroid.app.CatAndroidApp;
-import com.catandroid.app.common.controllers.actions.Discard;
+import com.catandroid.app.common.components.Resource;
+import com.catandroid.app.common.logistics.AppSettings;
+import com.catandroid.app.common.ui.fragments.interaction_fragments.DiscardResourcesFragment;
 import com.catandroid.app.R;;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Board.Cards;
-import com.catandroid.app.common.controllers.GameRenderer.Action;
+import com.catandroid.app.common.ui.fragments.interaction_fragments.trade.TradeRequestFragment;
+import com.catandroid.app.common.ui.graphics_controllers.GameRenderer;
+import com.catandroid.app.common.ui.graphics_controllers.GameRenderer.Action;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.components.Vertex;
-import com.catandroid.app.common.logistics.Settings;
-import com.catandroid.app.common.controllers.actions.trade.PlayerTrade;
 import com.catandroid.app.common.ui.views.GameView;
-import com.catandroid.app.common.ui.activities.CostsReference;
+import com.catandroid.app.common.ui.fragments.static_fragments.CostsReference;
 import com.catandroid.app.common.ui.views.ResourceView;
-import com.catandroid.app.common.ui.activities.PlayerStatus;
+import com.catandroid.app.common.ui.fragments.static_fragments.PlayerStatus;
 import com.catandroid.app.common.ui.resources.UIButton.Type;
 import com.catandroid.app.common.players.Player;
-import com.catandroid.app.common.ui.TextureManager;
+import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,7 +48,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
-public class GameManager extends Fragment {
+public class ActiveGameFragment extends Fragment {
 
 	private static final int MIN_BOT_DELAY = 1000;
 
@@ -72,7 +70,10 @@ public class GameManager extends Fragment {
 
 	private static final String[] ROLLS = { "", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅" };
 
-	public GameManager(Board b){
+	public ActiveGameFragment() {}
+
+	@SuppressLint("ValidFragment")
+	public ActiveGameFragment(Board b){
 		this.board = b;
 	}
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,7 @@ public class GameManager extends Fragment {
 						turnHandler.sendMessage(turn);
 					}
 
-					int delay = Settings.getTurnDelay();
+					int delay = AppSettings.getTurnDelay();
 					if (delay > 0) {
 						try {
 							Thread.sleep(delay);
@@ -157,20 +158,20 @@ public class GameManager extends Fragment {
 				if (extra == 0)
 					break;
 
-//				//Intent intent = new Intent(GameManager.this, Discard.class);
-//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.Discard");
-//				intent.putExtra(Discard.PLAYER_KEY, toDiscard.getIndex());
-//				intent.putExtra(Discard.QUANTITY_KEY, extra);
-//				GameManager.this.startActivity(intent);
+//				//Intent intent = new Intent(ActiveGameFragment.this, DiscardResourcesFragment.class);
+//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.DiscardResourcesFragment");
+//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getIndex());
+//				intent.putExtra(DiscardResourcesFragment.QUANTITY_KEY, extra);
+//				ActiveGameFragment.this.startActivity(intent);
 
 				Bundle bundle = new Bundle();
-				bundle.putInt(Discard.PLAYER_KEY, toDiscard.getIndex());
-				bundle.putInt(Discard.QUANTITY_KEY, extra);
-				Discard discardFragment = new Discard();
-				discardFragment.setArguments(bundle);
+				bundle.putInt(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getIndex());
+				bundle.putInt(DiscardResourcesFragment.QUANTITY_KEY, extra);
+				DiscardResourcesFragment discardResourcesFragment = new DiscardResourcesFragment();
+				discardResourcesFragment.setArguments(bundle);
 
 				FragmentTransaction discardFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
-				discardFragmentTransaction.replace(R.id.fragment_container, discardFragment,"DISCARD");
+				discardFragmentTransaction.replace(R.id.fragment_container, discardResourcesFragment,"DISCARD");
 				discardFragmentTransaction.addToBackStack("DISCARD");
 				discardFragmentTransaction.commit();
 
@@ -206,7 +207,7 @@ public class GameManager extends Fragment {
 
 	private void select(Action action, Hexagon hexagon) {
 		if (action == Action.ROBBER) {
-			if (hexagon != board.getRobberLast()) {
+			if (hexagon != board.getPrevRobberHex()) {
 				board.setRobber(hexagon.getId());
 				setup(false);
 			} else {
@@ -376,10 +377,10 @@ public class GameManager extends Fragment {
 			break;
 
 		case TRADE:
-//			getActivity().startActivity(new Intent(this, PlayerTrade.class));
+//			getActivity().startActivity(new Intent(this, TradeRequestFragment.class));
 
 			FragmentManager tradeFragmentManager = getActivity().getSupportFragmentManager();
-			PlayerTrade tradeFragment = new PlayerTrade();
+			TradeRequestFragment tradeFragment = new TradeRequestFragment();
 			FragmentTransaction tradeFragmentTransaction =  tradeFragmentManager.beginTransaction();
 			tradeFragmentTransaction.replace(R.id.fragment_container, tradeFragment,tradeFragment.getClass().getSimpleName());
 			tradeFragmentTransaction.addToBackStack(tradeFragment.getClass().getSimpleName());
@@ -409,14 +410,14 @@ public class GameManager extends Fragment {
 		if (!board.getCurrentPlayer().isHuman() || !board.isBuild())
 			return false;
 
-//		Intent intent = new Intent(this, PlayerTrade.class);
-//		intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.PlayerTrade");
-//		intent.putExtra(PlayerTrade.TYPE_KEY, index);
+//		Intent intent = new Intent(this, TradeRequestFragment.class);
+//		intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.TradeRequestFragment");
+//		intent.putExtra(TradeRequestFragment.TYPE_KEY, index);
 //		startActivity(intent);
 
 		Bundle bundle = new Bundle();
-		bundle.putInt(PlayerTrade.TYPE_KEY, index);
-		PlayerTrade tradeFragment = new PlayerTrade();
+		bundle.putInt(TradeRequestFragment.TYPE_KEY, index);
+		TradeRequestFragment tradeFragment = new TradeRequestFragment();
 		tradeFragment.setArguments(bundle);
 
 		FragmentTransaction tradeFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
@@ -484,19 +485,19 @@ public class GameManager extends Fragment {
 
 
 
-		renderer.setState(board, player.isHuman() ? player : null, texture, board.getRoll());
+		renderer.setState(board, player.isHuman() ? player : null, texture, board.getLastDiceRollNumber());
 		
 		if (setZoom)
 			renderer.getGeometry().zoomOut();
 
 		// show card stealing dialog
-		if (board.isRobberPhase() && board.getRobber() != null)
+		if (board.isRobberPhase() && board.getCurRobberHex() != null)
 			steal();
 
 		// display winner
 		boolean hadWinner = board.getWinner(null) != null;
 		Player winner = board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
-				.getSettingsInstance());
+				.getAppSettingsInstance());
 		if (!hadWinner && winner != null) {
 			// declare winner
 			final Builder infoDialog = new AlertDialog.Builder(getActivity());
@@ -510,8 +511,8 @@ public class GameManager extends Fragment {
 					new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							//GameManager.this.finish();
-							// must ask the activity to close this Main Fragment
+							//ActiveGameFragment.this.finish();
+							// must ask the activity to close this StartScreenActivity Fragment
 							getActivity().getSupportFragmentManager().popBackStack();
 						}
 					});
@@ -523,7 +524,7 @@ public class GameManager extends Fragment {
 			action = Action.TOWN;
 		else if (board.isSetupRoad() || board.isProgressPhase())
 			action = Action.ROAD;
-		else if (board.isRobberPhase() && board.getRobber() == null)
+		else if (board.isRobberPhase() && board.getCurRobberHex() == null)
 			action = Action.ROBBER;
 		
 		renderer.setAction(action);
@@ -709,10 +710,10 @@ public class GameManager extends Fragment {
 	}
 
 	private void monopoly() {
-		CharSequence[] items = new CharSequence[Hexagon.TYPES.length];
+		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
 		for (int i = 0; i < items.length; i++)
 			items[i] = String.format(getString(R.string.game_monopoly_select),
-					getActivity().getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
+					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getString(R.string.game_monopoly_prompt));
@@ -722,7 +723,7 @@ public class GameManager extends Fragment {
 				Player player = board.getCurrentPlayer();
 
 				if (player.useCard(Board.Cards.MONOPOLY)) {
-					int total = player.monopoly(Hexagon.TYPES[which]);
+					int total = player.monopoly(Resource.RESOURCE_TYPES[which]);
 					toast(String.format(getString(R.string.game_used_monopoly),
 							total));
 					setup(false);
@@ -736,10 +737,10 @@ public class GameManager extends Fragment {
 	}
 
 	private void harvest() {
-		CharSequence[] items = new CharSequence[Hexagon.TYPES.length];
+		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
 		for (int i = 0; i < items.length; i++)
 			items[i] = String.format(getString(R.string.game_harvest_select),
-					getActivity().getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
+					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(getActivity().getString(R.string.game_harvest_prompt));
@@ -749,7 +750,7 @@ public class GameManager extends Fragment {
 				Player player = board.getCurrentPlayer();
 
 				if (player.useCard(Board.Cards.HARVEST)) {
-					player.harvest(Hexagon.TYPES[which], Hexagon.TYPES[which]);
+					player.harvest(Resource.RESOURCE_TYPES[which], Resource.RESOURCE_TYPES[which]);
 					toast(getString(R.string.game_used_harvest));
 					setup(false);
 				} else {
@@ -768,7 +769,7 @@ public class GameManager extends Fragment {
 			return;
 		}
 
-		Hexagon robbing = board.getRobber();
+		Hexagon robbing = board.getCurRobberHex();
 		if (robbing == null) {
 			Log.w(getActivity().getClass().getName(),
 					"shouldn't be calling steal() without robber location set");
@@ -786,7 +787,7 @@ public class GameManager extends Fragment {
 			player = board.getPlayer(i);
 
 			// don't steal from self or players without a town/city
-			if (player == current || !robbing.hasPlayer(player))
+			if (player == current || !robbing.adjacentToPlayer(player))
 				continue;
 
 			// addCubic to list of players to steal from
@@ -833,22 +834,22 @@ public class GameManager extends Fragment {
 
 		Player current = board.getCurrentPlayer();
 
-		Hexagon robbing = board.getRobber();
+		Hexagon robbing = board.getCurRobberHex();
 		if (robbing == null)
 			return;
 
 		int index = 0;
 		for (int i = 0; i < 4; i++) {
 			Player player = board.getPlayer(i);
-			if (player == current || !robbing.hasPlayer(player))
+			if (player == current || !robbing.adjacentToPlayer(player))
 				continue;
 
 			if (index == select) {
-				Hexagon.Type type = board.getCurrentPlayer().steal(player);
+				Resource.ResourceType resourceType = board.getCurrentPlayer().steal(player);
 
-				if (type != null)
+				if (resourceType != null)
 					toast(getString(R.string.game_stole) + " "
-							+ getActivity().getString(Hexagon.getTypeStringResource(type))
+							+ getActivity().getString(Resource.toRString(resourceType))
 							+ " " + getString(R.string.game_from) + " "
 							+ player.getName());
 				else
@@ -1008,7 +1009,7 @@ public class GameManager extends Fragment {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			//finish();
-			// must ask the activity to close this Main Fragment
+			// must ask the activity to close this StartScreenActivity Fragment
 			getActivity().getSupportFragmentManager().popBackStack();
 			return true;
 		case R.id.reference:
@@ -1030,7 +1031,7 @@ public class GameManager extends Fragment {
 //	@Override
 //	public void onBackPressed() {
 //		//finish();
-//		// must ask the activity to close this Main Fragment
+//		// must ask the activity to close this StartScreenActivity Fragment
 //		fa.getSupportFragmentManager().popBackStack();
 //	}
 }

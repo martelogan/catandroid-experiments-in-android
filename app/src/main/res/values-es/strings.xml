@@ -3,7 +3,7 @@
 
 	<!-- Spanish translation by Campanilla http://campanilla.info campanilla@campanilla.info -->
 
-	<!-- Main menu -->
+	<!-- StartScreenActivity menu -->
 	<string name="new_button">Nuevo juego</string>
 	<string name="rules_button">Instrucciones</string>
 	<string name="rules_failed">No se ha podido cargar el fichero de reglas</string>
@@ -16,7 +16,7 @@
 	<string name="site_button">Visitar web</string>
 	<string name="website_url">http://omnionic.com/settlers</string>
 	
-	<!-- Card types -->
+	<!-- Card resourceTypes -->
 	<string name="soldier">de soldado</string>
 	<string name="progress">de progreso</string>
 	<string name="victory">de victoria</string>
@@ -29,7 +29,7 @@
 	<string name="green">verde</string>
 	<string name="orange">naranja</string>
 	
-	<!-- Resource types -->
+	<!-- Resource resourceTypes -->
 	<string name="desert">desierto</string>
 	<string name="lumber">madera</string>
 	<string name="wool">ovejitas</string>
@@ -116,7 +116,7 @@
 	<string name="trade_counter_make">Hacer contraoferta</string>
 	<string name="trade_rejected">%s no ha aceptado la oferta</string>
 
-    <!-- Discard screen -->
+    <!-- DiscardResourcesFragment screen -->
 	<string name="discard_reason">%s ha sacado 7 en la tirada</string>
 	<string name="discard_instruction">ha descartado %d recursos</string>
 	<string name="discard_select">Selecciona recursos para descartar</string>

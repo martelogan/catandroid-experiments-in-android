@@ -1,4 +1,4 @@
-package com.catandroid.app.common.controllers.actions.trade;
+package com.catandroid.app.common.ui.fragments.interaction_fragments.trade;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,12 +17,12 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
+import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.players.Player;
 
-public class PlayerTrade extends Fragment {
+public class TradeRequestFragment extends Fragment {
 
 	public static final int REQUEST_TRADE_COMPLETED = 0;
 
@@ -83,12 +83,12 @@ public class PlayerTrade extends Fragment {
 
 		for (int i = 0; i < RESOURCES.length; i++) {
 			String res = String.format(getString(R.string.trade_for_resource),
-					getString(Hexagon.getTypeStringResource(Hexagon.TYPES[i])));
+					getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
 			choices.add(res);
 
-			int count = player.getResources(Hexagon.TYPES[i]);
+			int count = player.getResources(Resource.RESOURCE_TYPES[i]);
 			int ratio = player.getTradeValue();
-			if (player.hasTrader(Hexagon.TYPES[i]))
+			if (player.hasHarbor(Resource.RESOURCE_TYPES[i]))
 				ratio = 2;
 
 			TextView text = (TextView) tradeView.findViewById(RESOURCES[i]);
@@ -114,7 +114,7 @@ public class PlayerTrade extends Fragment {
 							Button minus = (Button) tradeView.findViewById(MINUS[i]);
 							minus.setEnabled(true);
 
-							if (value >= player.getResources(Hexagon.Type
+							if (value >= player.getResources(Resource.ResourceType
 									.values()[i]))
 								v.setEnabled(false);
 
@@ -175,7 +175,7 @@ public class PlayerTrade extends Fragment {
 				selected = position;
 
 				for (int i = 0; i < RESOURCES.length; i++) {
-					int count = player.getResources(Hexagon.Type.values()[i]);
+					int count = player.getResources(Resource.ResourceType.values()[i]);
 
 					TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 					offer.setText("0");
@@ -200,7 +200,7 @@ public class PlayerTrade extends Fragment {
 		propose.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int[] trade = new int[Hexagon.TYPES.length];
+				int[] trade = new int[Resource.RESOURCE_TYPES.length];
 				for (int i = 0; i < trade.length; i++) {
 					TextView offer = (TextView) tradeView.findViewById(OFFERS[i]);
 					trade[i] = Integer.parseInt((String) offer.getText(), 10);
@@ -209,12 +209,12 @@ public class PlayerTrade extends Fragment {
 				//@TODO
 				//ADD THE LOGIC TO SEND MESSAGE FOR TRADE PROPOSAL
 
-//				Intent intent = new Intent(PlayerTrade.this, AcceptTrade.class);
-//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.trade.AcceptTrade");
+//				Intent intent = new Intent(TradeRequestFragment.this, TradeResponseFragment.class);
+//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.trade.TradeResponseFragment");
 //				intent.putExtra(TYPE_KEY, selected);
 //				intent.putExtra(OFFER_KEY, trade);
 //
-//				PlayerTrade.this.startActivityForResult(intent,
+//				TradeRequestFragment.this.startActivityForResult(intent,
 //						REQUEST_TRADE_COMPLETED);
 			}
 		});
@@ -223,9 +223,9 @@ public class PlayerTrade extends Fragment {
 		tradeButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Hexagon.Type type = Hexagon.TYPES[selected];
+				Resource.ResourceType resourceType = Resource.RESOURCE_TYPES[selected];
 
-				int[] offer = new int[Hexagon.TYPES.length];
+				int[] offer = new int[Resource.RESOURCE_TYPES.length];
 				for (int i = 0; i < RESOURCES.length; i++) {
 					CharSequence offerChar = ((TextView) tradeView.findViewById(OFFERS[i]))
 							.getText();
@@ -233,9 +233,9 @@ public class PlayerTrade extends Fragment {
 					offer[i] = number;
 				}
 
-				if (player.trade(type, offer)) {
+				if (player.trade(resourceType, offer)) {
 					toast(getString(R.string.trade_for_past) + " "
-							+ getString(Hexagon.getTypeStringResource(type)));
+							+ getString(Resource.toRString(resourceType)));
 					//finish();
 					getActivity().getSupportFragmentManager().popBackStack();
 				} else {
@@ -247,9 +247,9 @@ public class PlayerTrade extends Fragment {
 	}
 
 	private void checkAmounts(View tradeView) {
-		Hexagon.Type type = Hexagon.TYPES[selected];
+		Resource.ResourceType resourceType = Resource.RESOURCE_TYPES[selected];
 		int types = 0;
-		int[] offer = new int[Hexagon.TYPES.length];
+		int[] offer = new int[Resource.RESOURCE_TYPES.length];
 
 		for (int i = 0; i < RESOURCES.length; i++) {
 			CharSequence offerChar = ((TextView) tradeView.findViewById(OFFERS[i]))
@@ -264,7 +264,7 @@ public class PlayerTrade extends Fragment {
 		if (!Player.canTradeMixed() && types != 1)
 			tradeButton.setEnabled(false);
 		else
-			tradeButton.setEnabled(player.canTrade(type, offer));
+			tradeButton.setEnabled(player.canTrade(resourceType, offer));
 	}
 
 	private void toast(String message) {

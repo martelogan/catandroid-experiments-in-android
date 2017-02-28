@@ -1,6 +1,6 @@
 package com.catandroid.app.common.components;
 
-import com.catandroid.app.common.components.Hexagon.Type;
+import com.catandroid.app.common.components.Resource.ResourceType;
 
 public class Harbor {
 	
@@ -14,22 +14,22 @@ public class Harbor {
 			Position.SOUTHWEST, Position.NORTHWEST, Position.NORTH
 	};
 
-	private Type type;
+	private ResourceType resourceType;
 	private Position position;
 	private int index;
 	private Edge myEdge = null;
 
-	public Harbor(Type type, int index) {
-		this.type = type;
+	public Harbor(ResourceType resourceType, int index) {
+		this.resourceType = resourceType;
 		this.index = index;
 	}
 	
-	public void setType(Type type) {
-		this.type = type;
+	public void setResourceType(ResourceType resourceType) {
+		this.resourceType = resourceType;
 	}
 
-	public Type getType() {
-		return type;
+	public Resource.ResourceType getResourceType() {
+		return resourceType;
 	}
 
 	public void setPosition(Position p) {

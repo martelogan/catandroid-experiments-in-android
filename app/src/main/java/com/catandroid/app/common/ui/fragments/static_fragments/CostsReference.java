@@ -1,7 +1,5 @@
-package com.catandroid.app.common.ui.activities;
+package com.catandroid.app.common.ui.fragments.static_fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -10,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.catandroid.app.common.ui.views.GameView;
 
 import com.catandroid.app.R;
 
