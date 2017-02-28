@@ -1,6 +1,7 @@
 package com.catandroid.app.common.components;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -18,18 +19,20 @@ public class ComponentUtils
      * @return a hexagon array
      */
     public static Hexagon[] initRandomHexes(Board board) {
-        int hexCount = board.getBoardGeometry().getHexCount();
+        int hexCount, curTerrainTypeCount, typeIndex;
+        hexCount = board.getBoardGeometry().getHexCount();
         Hexagon[] hexagons = new Hexagon[hexCount];
-        int [] countPerTerrainType = Board.COUNT_PER_TERRAIN;
+        Hexagon.TerrainType[] terrainTypes = Hexagon.TerrainType.values();
+        Hexagon.TerrainType terrainType;
         // generate random board layout
-        for (int type = 0; type < countPerTerrainType.length; type++) {
-            for (int count = 0; count < countPerTerrainType[type]; count++) {
-
+        for (typeIndex = 0; typeIndex < terrainTypes.length; typeIndex++) {
+            terrainType = terrainTypes[typeIndex];
+            curTerrainTypeCount = board.getTerrainCount(terrainType);
+            for (int count = 0; count < curTerrainTypeCount; count++) {
                 // pick hexagon index (location)
                 while (true) {
                     int index = (int) (hexCount * Math.random());
                     if (hexagons[index] == null) {
-                        Hexagon.TerrainType terrainType = Hexagon.TerrainType.values()[type];
                         hexagons[index] = new Hexagon(terrainType, index);
 
                         if (terrainType == Hexagon.TerrainType.DESERT) {
@@ -52,7 +55,9 @@ public class ComponentUtils
         Harbor[] harbors = new Harbor[harborCount];
         boolean[] usedHarbor = new boolean[harborCount];
         for (int i = 0; i < harborCount; i++)
+        {
             usedHarbor[i] = false;
+        }
 
         // for each harbor type (one of each resource, 4 any 3:1 harbors)
         for (int i = 0; i < harborCount; i++) {
@@ -62,9 +67,13 @@ public class ComponentUtils
                 if (!usedHarbor[pick]) {
                     Resource.ResourceType resourceType;
                     if (i >= Resource.RESOURCE_TYPES.length)
+                    {
                         resourceType = Resource.ResourceType.ANY;
+                    }
                     else
+                    {
                         resourceType = Resource.ResourceType.values()[i];
+                    }
 
                     harbors[pick] = new Harbor(resourceType, pick);
                     usedHarbor[pick] = true;
@@ -97,7 +106,9 @@ public class ComponentUtils
     public static Hexagon[] generateHexes(int hexCount, Hexagon.TerrainType[] terrainTypes) {
         Hexagon[] hexagons = new Hexagon[hexCount];
         for (int i = 0; i < hexagons.length; i++)
+        {
             hexagons[i] = new Hexagon(terrainTypes[i], i);
+        }
 
         return hexagons;
     }
@@ -224,7 +235,9 @@ public class ComponentUtils
     public static <E> List<E> pickNRandomElements(List<E> list, int n, Random r) {
         int length = list.size();
 
-        if (length < n) return null;
+        if (length < n) {
+            return null;
+        }
 
         //We don't need to shuffle the whole list
         for (int i = length - 1; i >= length - n; --i)

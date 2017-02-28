@@ -18,7 +18,37 @@ public class Board {
 	}
 
 	public final static int[] COUNT_PER_DICE_SUM = { 0, 0, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2 };
-	public final static int[] COUNT_PER_TERRAIN = { 4, 4, 4, 3, 5, 2, 37, 2 };
+
+	private final HashMap<Hexagon.TerrainType, Integer> terrainTypeToCountMap;
+	private HashMap<Hexagon.TerrainType, Integer> initTerrainTypeToCountMap(int boardSize)
+	{
+		HashMap<Hexagon.TerrainType, Integer> terrainTypeToCountMap =
+				new HashMap<Hexagon.TerrainType, Integer>();
+		terrainTypeToCountMap.put(Hexagon.TerrainType.DESERT, 2);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.GOLD_FIELD, 2);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.HILLS, 3);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.FOREST, 4);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.PASTURE, 4);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.MOUNTAINS, 4);
+		terrainTypeToCountMap.put(Hexagon.TerrainType.FIELDS, 5);
+		switch (boardSize) {
+			case 0:
+				terrainTypeToCountMap.put(Hexagon.TerrainType.SEA, 13);
+				break;
+			case 1:
+				terrainTypeToCountMap.put(Hexagon.TerrainType.SEA, 37);
+				break;
+		}
+		return terrainTypeToCountMap;
+	}
+
+	public Integer getTerrainCount(Hexagon.TerrainType terrainType) {
+		Integer count = terrainTypeToCountMap.get(terrainType);
+		if (count == null) {
+			return 0;
+		}
+		return count;
+	}
 
 	private static final int NUM_SOLDIER = 14;
 	private static final int NUM_PROGRESS = 2;
@@ -62,6 +92,7 @@ public class Board {
 			boolean autoDiscard) {
 		this.maxPoints = maxPoints;
 		this.boardGeometry = boardGeometry;
+		this.terrainTypeToCountMap = initTerrainTypeToCountMap(boardGeometry.getBoardSize());
 		commonInit();
 
 		this.autoDiscard = autoDiscard;

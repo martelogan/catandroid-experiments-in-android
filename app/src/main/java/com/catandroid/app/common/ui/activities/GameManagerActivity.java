@@ -702,7 +702,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 		//TODO: set board size via UI
-		BoardGeometry boardGeometry = new BoardGeometry(1);
+		BoardGeometry boardGeometry = new BoardGeometry(0);
 		app.setBoardInstance(new Board(names, types, maxPoints, boardGeometry,
 				autoDiscard));
 
