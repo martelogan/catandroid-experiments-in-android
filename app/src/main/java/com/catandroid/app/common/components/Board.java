@@ -187,15 +187,20 @@ public class Board {
 		return players[turn];
 	}
 
+
 	/**
-	 * Get a players by index
+	 * Get a player by player number
 	 * 
-	 * @param index
-	 *            players index [0, 3]
+	 * @param playerNumber
+	 *            players playerNumber [0, 3]
 	 * @return the players
 	 */
-	public Player getPlayer(int index) {
-		return players[index];
+	public Player getPlayer(int playerNumber) {
+		if (playerNumber < 0 || playerNumber >= players.length)
+		{
+			return null;
+		}
+		return players[playerNumber];
 	}
 
 	/**
@@ -641,7 +646,7 @@ public class Board {
 			if (edges[i].hasRoad()) {
 				int length = edges[i].getRoadLength(++roadCountId);
 
-				Player owner = edges[i].getOwner();
+				Player owner = edges[i].getOwnerPlayer();
 				owner.setRoadLength(length);
 				if (length > longestRoad) {
 					longestRoad = length;

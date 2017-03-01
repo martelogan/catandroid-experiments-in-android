@@ -208,7 +208,7 @@ public class Vertex {
 	 */
 	public boolean hasRoad(Player player) {
 		for (int i = 0; i < 3; i++) {
-			if (edgeIds[i] != -1 && board.getEdgeById(edgeIds[i]).getOwner() == player)
+			if (edgeIds[i] != -1 && board.getEdgeById(edgeIds[i]).getOwnerPlayer() == player)
 				return true;
 		}
 
@@ -227,9 +227,9 @@ public class Vertex {
 	}
 
 	/**
-	 * Check if there are no adjacent settlements
+	 * Check if there are no adjacent settlementIds
 	 * 
-	 * @return true if there are no adjacent settlements
+	 * @return true if there are no adjacent settlementIds
 	 */
 	public boolean couldBuild() {
 		// check for adjacent buildings
@@ -338,7 +338,7 @@ public class Vertex {
 	 *            omit an edgeIds already considered
 	 * @return the road length
 	 */
-	public int getRoadLength(Player player, int omit, int countId) {
+	public int getRoadLength(Player player, Edge omit, int countId) {
 		int longest = 0;
 
 		// FIXME: if two road paths diverge and re-converge, the result may be
@@ -352,12 +352,12 @@ public class Vertex {
 
 		// find the longest road aside from one passing through the given edgeIds
 		for (int i = 0; i < 3; i++) {
-			if (edgeIds[i] == -1 || edgeIds[i] == omit)
+			if (edgeIds[i] == -1 || edgeIds[i] == omit.getId())
 			{
 				continue;
 			}
 
-			int length = board.getEdgeById(edgeIds[i]).getRoadLength(player, this.id, countId);
+			int length = board.getEdgeById(edgeIds[i]).getRoadLength(player, this, countId);
 			if (length > longest)
 			{
 				longest = length;

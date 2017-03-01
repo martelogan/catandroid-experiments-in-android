@@ -11,8 +11,8 @@ public class Hexagon {
 	private NumberToken numberToken;
 	private Resource resourceProduced;
 	private TerrainType terrainType;
-	private int[] vertexIds;
-	private int[] edgeIds;
+	private int[] vertexIds = {-1, -1, -1, -1, -1, -1};
+	private int[] edgeIds = {-1, -1, -1, -1, -1, -1};
 	private AxialHexLocation coord;
 	private boolean hasRobber = false;
 	private int id;
@@ -34,8 +34,6 @@ public class Hexagon {
 		this.terrainType = terrainType;
 		this.resourceProduced = getResource(terrainType);
 		this.numberToken = new NumberToken(0);
-		this.vertexIds = new int[6];
-		this.edgeIds = new int[6];
 		this.id = id;
 		this.board = board;
 	}

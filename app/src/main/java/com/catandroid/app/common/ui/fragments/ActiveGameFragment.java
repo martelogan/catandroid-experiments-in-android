@@ -160,12 +160,12 @@ public class ActiveGameFragment extends Fragment {
 
 //				//Intent intent = new Intent(ActiveGameFragment.this, DiscardResourcesFragment.class);
 //				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.DiscardResourcesFragment");
-//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getId());
+//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getPlayerNumber());
 //				intent.putExtra(DiscardResourcesFragment.QUANTITY_KEY, extra);
 //				ActiveGameFragment.this.startActivity(intent);
 
 				Bundle bundle = new Bundle();
-				bundle.putInt(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getIndex());
+				bundle.putInt(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getPlayerNumber());
 				bundle.putInt(DiscardResourcesFragment.QUANTITY_KEY, extra);
 				DiscardResourcesFragment discardResourcesFragment = new DiscardResourcesFragment();
 				discardResourcesFragment.setArguments(bundle);
@@ -893,7 +893,7 @@ public class ActiveGameFragment extends Fragment {
 		String message = "";
 
 		// show log of the other players' turns
-		int offset = board.getCurrentPlayer().getIndex() + 1;
+		int offset = board.getCurrentPlayer().getPlayerNumber() + 1;
 		for (int i = offset; i < offset + 3; i++) {
 			// don't include players after you on your first turn
 			if (board.getTurnNumber() == 1 && (i % 4) >= offset)

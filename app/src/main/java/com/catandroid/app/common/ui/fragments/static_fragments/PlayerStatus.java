@@ -138,11 +138,11 @@ public class PlayerStatus extends Fragment {
 
 		ViewPager viewPager = (ViewPager) view.findViewById(R.id.status);
 		viewPager.setAdapter(new StatusTabAdapter());
-		viewPager.setCurrentItem(board.getCurrentPlayer().getIndex());
+		viewPager.setCurrentItem(board.getCurrentPlayer().getPlayerNumber());
 		
 		PagerTitleStrip titleStrip = (PagerTitleStrip) view.findViewById(R.id.status_title_strip);
 		titleStrip.setBackgroundColor(TextureManager.darken(TextureManager.getColor(
-				CatAndroidApp.getInstance().getBoardInstance().getPlayer(board.getCurrentPlayer().getIndex()).getColor()), 0.35));
+				CatAndroidApp.getInstance().getBoardInstance().getPlayer(board.getCurrentPlayer().getPlayerNumber()).getColor()), 0.35));
 		
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override

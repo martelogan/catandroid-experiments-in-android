@@ -127,7 +127,7 @@ public class TradeResponseFragment extends Activity {
 						intent.putExtra(TradeRequestFragment.TYPE_KEY, resourceType.ordinal());
 						intent.putExtra(TradeRequestFragment.OFFER_KEY, trade);
 						intent.putExtra(TradeRequestFragment.PLAYER_KEY, player
-								.getIndex());
+								.getPlayerNumber());
 						intent.putExtra(TradeRequestFragment.INDEX_KEY, index);
 						TradeResponseFragment.this.startActivityForResult(intent,
 								REQUEST_TRADE_ACCEPTED);

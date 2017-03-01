@@ -332,7 +332,7 @@ public class TextureManager {
 		y[0] = boardGeometry.getVertexY(edge.getV0Clockwise().getId());
 		y[1] = boardGeometry.getVertexY(edge.getV1Clockwise().getId());
 
-		Player owner = edge.getOwner();
+		Player owner = edge.getOwnerPlayer();
 		float[] color;
 		if (owner != null)
 			color = getColorArray(getColor(owner.getColor()));

@@ -58,8 +58,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
             // try to build a city
             if (canCity && affordCity()) {
-                for (int i = 0; i < settlements.size(); i++) {
-                    Vertex settlement = board.getVertexById(settlements.get(i));
+                for (int i = 0; i < settlementIds.size(); i++) {
+                    Vertex settlement = board.getVertexById(settlementIds.get(i));
                     if (settlement.getBuilding() == Vertex.TOWN
                             && build(settlement, Vertex.CITY))
                         done = false;
@@ -72,8 +72,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
                 // try to build towards somewhere nearby to settle
                 if (settlementPriority) {
-                    for (int i = 0; i < reaching.size(); i++) {
-                        Vertex vertex = board.getVertexById(reaching.get(i));
+                    for (int i = 0; i < reachingIds.size(); i++) {
+                        Vertex vertex = board.getVertexById(reachingIds.get(i));
                         for (int j = 0; j < 3; j++) {
                             Edge edge = vertex.getEdge(j);
                             if (edge == null || edge.hasRoad())
@@ -93,9 +93,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                 }
 
                 // build off an existing road
-                if (!builtRoad && reaching.size() > 0) {
+                if (!builtRoad && reachingIds.size() > 0) {
                     for (int i = 0; i < 3; i++) {
-                        Vertex lastRoadEnd = board.getVertexById(reaching.get(reaching.size() - 1));
+                        Vertex lastRoadEnd = board.getVertexById(reachingIds.get(reachingIds.size() - 1));
                         Edge edge = lastRoadEnd.getEdge(i);
                         if (edge != null && build(edge))
                             builtRoad = true;
@@ -205,8 +205,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
     public int setupRoad(Edge[] edges) {
         // build from random settlement and build in a random cubicDirection
         while (true) {
-            Vertex vertex = board.getVertexById(settlements.get(
-                    (int) (Math.random() * settlements.size())));
+            Vertex vertex = board.getVertexById(settlementIds.get(
+                    (int) (Math.random() * settlementIds.size())));
             int pick = (int) (Math.random() * 3);
             Edge edge = vertex.getEdge(pick);
             if (edge != null && build(edge))
@@ -248,7 +248,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         }
 
         build(vertices[index], Vertex.TOWN);
-        reaching.add(index);
+        reachingIds.add(index);
         return index;
     }
 
@@ -319,8 +319,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
     protected Edge pickRoad() {
         // build off an existing road
-        if (reaching.size() > 0) {
-            Vertex lastRoadEnd = board.getVertexById(reaching.get(reaching.size() - 1));
+        if (reachingIds.size() > 0) {
+            Vertex lastRoadEnd = board.getVertexById(reachingIds.get(reachingIds.size() - 1));
             for (int i = 0; i < 3; i++) {
                 Edge edge = lastRoadEnd.getEdge(i);
                 if (edge != null && canBuild(edge))

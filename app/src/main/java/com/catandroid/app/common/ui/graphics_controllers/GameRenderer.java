@@ -180,7 +180,7 @@ public class GameRenderer implements Renderer {
 			boolean build = action == Action.ROAD && player != null
 					&& player.canBuild(edge);
 
-			if (build || edge.getOwner() != null)
+			if (build || edge.getOwnerPlayer() != null)
 				texture.draw(edge, build, gl, boardGeometry);
 		}
 

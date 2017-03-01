@@ -6,12 +6,12 @@ public class Edge {
 
 	private int id;
 	private int[] vertexIds;
-	private Player owner;
+	private int ownerPlayerNumber;
 	private int lastRoadCountId;
 	private int originHexId;
     private int originHexDirect;
     private int myHarborId = -1;
-	private Board board;
+	private transient Board board;
 
 	/**
 	 * Initialize edge with vertexIds set to null
@@ -20,7 +20,7 @@ public class Edge {
 		this.id = id;
 		vertexIds = new int[2];
 		vertexIds[0] = vertexIds[1] = -1;
-		owner = null;
+		ownerPlayerNumber = -1;
 		lastRoadCountId = 0;
 		this.board = board;
 	}
@@ -118,16 +118,16 @@ public class Edge {
 	 * @return true if a road was built
 	 */
 	public boolean hasRoad() {
-		return (owner != null);
+		return (ownerPlayerNumber != -1);
 	}
 
 	/**
-	 * Get the owner's player number
+	 * Get the owner of this edge
 	 * 
-	 * @return 0 or the owner's player number
+	 * @return null or the owner of this edge
 	 */
-	public Player getOwner() {
-		return owner;
+	public Player getOwnerPlayer() {
+		return board.getPlayer(ownerPlayerNumber);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class Edge {
 	 * @return true if player can build a road on edge
 	 */
 	public boolean canBuild(Player player) {
-		if (owner != null) {
+		if (ownerPlayerNumber != -1) {
 			return false;
 		}
 
@@ -320,7 +320,7 @@ public class Edge {
 	 * Build a road on edge
 	 * 
 	 * @param player
-	 *            the road owner
+	 *            the road ownerPlayerNumber
 	 * @return true if player can build a road on edge
 	 */
 	public boolean build(Player player) {
@@ -328,7 +328,7 @@ public class Edge {
 			return false;
 		}
 
-		owner = player;
+		ownerPlayerNumber = player.getPlayerNumber();
 		return true;
 	}
 
@@ -343,8 +343,8 @@ public class Edge {
 	 *            unique id for this count iteration
 	 * @return the road length
 	 */
-	public int getRoadLength(Player player, int from, int countId) {
-		if (owner != player || lastRoadCountId == countId) {
+	public int getRoadLength(Player player, Vertex from, int countId) {
+		if (ownerPlayerNumber != player.getPlayerNumber() || lastRoadCountId == countId) {
 			return 0;
 		}
 
@@ -352,10 +352,10 @@ public class Edge {
 		lastRoadCountId = countId;
 
 		// find other vertexIds
-		int to = (from == vertexIds[0] ? vertexIds[1] : vertexIds[0]);
+		int to = (from.getId() == vertexIds[0] ? vertexIds[1] : vertexIds[0]);
 
 		// return road length
-		return board.getVertexById(to).getRoadLength(player, id, countId) + 1;
+		return board.getVertexById(to).getRoadLength(player, this, countId) + 1;
 	}
 
 	/**
@@ -366,15 +366,16 @@ public class Edge {
 	 * @return the road length
 	 */
 	public int getRoadLength(int countId) {
-		if (owner == null) {
+		Player ownerPlayer = board.getPlayer(ownerPlayerNumber);
+		if (ownerPlayer == null) {
 			return 0;
 		}
 
 		// this ensures that that road isn't counted multiple times (cycles)
 		lastRoadCountId = countId;
 
-		int length1 = board.getVertexById(vertexIds[0]).getRoadLength(owner, id, countId);
-		int length2 = board.getVertexById(vertexIds[1]).getRoadLength(owner, id, countId);
+		int length1 = board.getVertexById(vertexIds[0]).getRoadLength(ownerPlayer, this, countId);
+		int length2 = board.getVertexById(vertexIds[1]).getRoadLength(ownerPlayer, this, countId);
 		return length1 + length2 + 1;
 	}
 }

@@ -28,7 +28,8 @@ public class Player {
 	public static final int[] CITY_COST = { 0, 0, 2, 0, 3 };
 	public static final int[] CARD_COST = { 0, 1, 1, 0, 1 };
 
-	private String participantId;
+	private String googlePlayParticipantId;
+	private int playerNumber;
 	private Color color;
 	private String name;
 	protected int towns;
@@ -38,11 +39,10 @@ public class Player {
 	private boolean[] harbors;
 	private Vector<Cards> newCards;
 	private boolean usedCard;
-	private int index, type;
+	private int type, lastVertexPieceId;
 	private String actionLog;
-	private int lastVertexPieceId;
 
-	protected Vector<Integer> settlements, reaching;
+	protected Vector<Integer> settlementIds, reachingIds;
 	protected Vector<Edge> roads;
 
 	protected transient Board board;
@@ -65,13 +65,13 @@ public class Player {
 	 * @param type
 	 *            PLAYER_HUMAN, PLAYER_BOT, or PLAYER_ONLINE
 	 */
-	public Player(Board board, int index, String participantId, Color color, String name, int type) {
+	public Player(Board board, int playerNumber, String googlePlayParticipantId, Color color, String name, int type) {
 		this.board = board;
-		this.participantId = participantId;
+		this.googlePlayParticipantId = googlePlayParticipantId;
 		this.color = color;
 		this.name = name;
 		this.type = type;
-		this.index = index;
+		this.playerNumber = playerNumber;
 
 		towns = 0;
 		cities = 0;
@@ -85,8 +85,8 @@ public class Player {
 
 		newCards = new Vector<Cards>();
 
-		settlements = new Vector<Integer>();
-		reaching = new Vector<Integer>();
+		settlementIds = new Vector<Integer>();
+		reachingIds = new Vector<Integer>();
 		roads = new Vector<Edge>();
 
 		// initialise number of each kind of development card
@@ -182,15 +182,15 @@ public class Player {
 		roads.add(edge);
 
 		int vertexId = edge.getV0Clockwise().getId();
-		if (!reaching.contains(vertexId))
+		if (!reachingIds.contains(vertexId))
 		{
-			reaching.add(vertexId);
+			reachingIds.add(vertexId);
 		}
 
 		vertexId = edge.getV1Clockwise().getId();
-		if (!reaching.contains(vertexId))
+		if (!reachingIds.contains(vertexId))
 		{
-			reaching.add(vertexId);
+			reachingIds.add(vertexId);
 		}
 
 		return true;
@@ -233,7 +233,7 @@ public class Player {
 				useResources(Resource.ResourceType.WOOL, 1);
 			}
 			towns += 1;
-			settlements.add(vertex.getId());
+			settlementIds.add(vertex.getId());
 			board.checkLongestRoad();
 		} else {
 			if (!setup) {
@@ -304,12 +304,12 @@ public class Player {
 	}
 
 	/**
-	 * Returns the player's particpant id
+	 * Returns the player's particpant playerNumber
 	 *
-	 * @return participantId
+	 * @return googlePlayParticipantId
 	 */
-	public String getParticipantId() {
-		return participantId;
+	public String getGooglePlayParticipantId() {
+		return googlePlayParticipantId;
 	}
 
 	/**
@@ -495,12 +495,12 @@ public class Player {
 	}
 
 	/**
-	 * Get the player's index number
+	 * Get the player's playerNumber number
 	 *
-	 * @return the index number [0, 3]
+	 * @return the playerNumber number [0, 3]
 	 */
-	public int getIndex() {
-		return index;
+	public int getPlayerNumber() {
+		return playerNumber;
 	}
 
 	/**
@@ -1129,7 +1129,7 @@ public class Player {
 	 * Add an action to the turn log using a resource string
 	 *
 	 * @param action
-	 *            string resource id for action
+	 *            string resource playerNumber for action
 	 */
 	private void appendAction(int action) {
 		Context context = CatAndroidApp.getInstance().getContext();
@@ -1141,7 +1141,7 @@ public class Player {
 	 * string
 	 *
 	 * @param action
-	 *            string resource id for action
+	 *            string resource playerNumber for action
 	 * @param additional
 	 *            string to substitute into %s in action
 	 */
@@ -1155,7 +1155,7 @@ public class Player {
 	 * string
 	 *
 	 * @param action
-	 *            string resource id for action
+	 *            string resource playerNumber for action
 	 * @param additional
 	 *            string resource to substitute into %s in action
 	 */

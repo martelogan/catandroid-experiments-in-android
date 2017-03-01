@@ -48,7 +48,9 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer;
 import com.google.example.games.basegameutils.BaseGameUtils;
+import com.google.gson.Gson;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class GameManagerActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -703,8 +705,13 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 		//TODO: set board size via UI
 		BoardGeometry boardGeometry = new BoardGeometry(0);
-		app.setBoardInstance(new Board(names, types, maxPoints, boardGeometry,
-				autoDiscard));
+		Board board = new Board(names, types, maxPoints, boardGeometry,
+				autoDiscard);
+		// test serialization
+		Gson gson = new Gson();
+		String serializedBoard = gson.toJson(board);
+		int length = serializedBoard.getBytes(Charset.forName("UTF-8")).length;
+		app.setBoardInstance(board);
 
 		//@TODO
 		//Add this logic to the game so that the first turn is initialized

@@ -17,7 +17,7 @@ public class Harbor {
 	private ResourceType resourceType;
 	private Position position;
 	private int id;
-	private int edgeId;
+	private int edgeId = -1;
 
 	private transient Board board;
 
