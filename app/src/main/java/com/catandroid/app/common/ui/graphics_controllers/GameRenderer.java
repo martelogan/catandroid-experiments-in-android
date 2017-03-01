@@ -160,23 +160,23 @@ public class GameRenderer implements Renderer {
 
 		// draw the hexangons with backdrop
 		for (int i = 0; i < HEX_COUNT; i++)
-			texture.draw1(board.getHexagon(i), gl, boardGeometry);
+			texture.draw1(board.getHexagonById(i), gl, boardGeometry);
 
 		// draw the executeDiceRoll numbers, robber, and highlighting
 		for (int i = 0; i < HEX_COUNT; i++)
-			texture.draw2(board.getHexagon(i), gl, boardGeometry);
+			texture.draw2(board.getHexagonById(i), gl, boardGeometry);
 		for (int i = 0; i < HEX_COUNT; i++)
-			texture.draw3(board.getHexagon(i), gl, boardGeometry, lastRoll);
+			texture.draw3(board.getHexagonById(i), gl, boardGeometry, lastRoll);
 		for (int i = 0; i < HEX_COUNT; i++)
-			texture.draw4(board.getHexagon(i), gl, boardGeometry);
+			texture.draw4(board.getHexagonById(i), gl, boardGeometry);
 
 		// draw harbors
 		for (int i = 0; i < HARBOR_COUNT; i++)
-			texture.draw(board.getHarbor(i), gl, boardGeometry);
+			texture.draw(board.getHarborById(i), gl, boardGeometry);
 
 		// draw edges
 		for (int i = 0; i < EDGE_COUNT; i++) {
-			Edge edge = board.getEdge(i);
+			Edge edge = board.getEdgeById(i);
 			boolean build = action == Action.ROAD && player != null
 					&& player.canBuild(edge);
 
@@ -186,7 +186,7 @@ public class GameRenderer implements Renderer {
 
 		// draw vertices
 		for (int i = 0; i < VERTEX_COUNT; i++) {
-			Vertex vertex = board.getVertex(i);
+			Vertex vertex = board.getVertexById(i);
 			boolean town = player != null && action == Action.TOWN
 					&& player.canBuild(vertex, Vertex.TOWN);
 			boolean city = player != null && action == Action.CITY

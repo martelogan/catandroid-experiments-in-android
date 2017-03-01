@@ -9,68 +9,96 @@ import java.util.Vector;
 public class Hexagon {
 
 	private NumberToken numberToken;
-    private Resource resourceProduced;
-    private TerrainType terrainType;
-	private Vertex[] vertices;
-	private Edge[] edges;
+	private Resource resourceProduced;
+	private TerrainType terrainType;
+	private int[] vertexIds;
+	private int[] edgeIds;
 	private AxialHexLocation coord;
-    private boolean hasRobber = false;
+	private boolean hasRobber = false;
 	private int id;
+	private transient Board board;
 
-    public enum TerrainType {
-        FOREST, PASTURE, FIELDS, HILLS, MOUNTAINS, DESERT, SEA, GOLD_FIELD, LIGHT, DIM, SHORE
-    }
+	public enum TerrainType {
+		FOREST, PASTURE, FIELDS, HILLS, MOUNTAINS, DESERT, SEA, GOLD_FIELD, LIGHT, DIM, SHORE
+	}
 
 	/**
 	 * Initialize the hexagon with a resource resourceType and numberToken number
-	 * 
+	 *
 	 * @param terrainType
 	 *            terrainType of hexagon
-	 * @param index
+	 * @param id
 	 *            id number for the hexagon
 	 */
-	public Hexagon(TerrainType terrainType, int index) {
-        this.terrainType = terrainType;
+	public Hexagon(Board board, TerrainType terrainType, int id) {
+		this.terrainType = terrainType;
 		this.resourceProduced = getResource(terrainType);
 		this.numberToken = new NumberToken(0);
-		vertices = new Vertex[6];
-		edges = new Edge[6];
-		id = index;
+		this.vertexIds = new int[6];
+		this.edgeIds = new int[6];
+		this.id = id;
+		this.board = board;
+	}
+
+	/**
+	 * Set the board
+	 *
+	 * @param board
+	 *
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 
 	/**
 	 * Set a vertex of the hexagon
 	 *
-	 * @param index
-	 *            the index to set
+	 * @param vDirect
+	 *            the vertex direction on hexagon
+	 * @param v
+	 * 			  the vertex to set
 	 * @return
 	 */
-	public void setVertex(Vertex v, int index) {
-		vertices[index] = v;
+	public void setVertex(Vertex v, int vDirect) {
+		vertexIds[vDirect] = v.getId();
 		v.addHexagon(this);
 	}
 
 	/**
-	 * Get a vertices of the hexagon
+	 * Set a vertex of the hexagon
 	 *
-	 * @param index
-	 *            the index of the vertices
-	 * @return the vertices
+	 * @param vDirect
+	 *            the vertex direction on hexagon
+	 * @param vertexId
+	 * 			  id of the vertex to set
+	 * @return
 	 */
-	public Vertex getVertex(int index) {
-		return vertices[index];
+	public void setVertexId(int vertexId, int vDirect) {
+		vertexIds[vDirect] = vertexId;
+		board.getVertexById(vertexId).addHexagon(this);
 	}
 
 	/**
-	 * Get a vertex index from vertices
+	 * Get a vertex at vDirect on the hexagon
+	 *
+	 * @param vDirect
+	 *            the vertex direction on hexagon
+	 * @return the vertex at vDirect on hexagon
+	 */
+	public Vertex getVertex(int vDirect) {
+		return board.getVertexById(vertexIds[vDirect]);
+	}
+
+	/**
+	 * Get the vertex direction in vertexIds
 	 *
 	 * @param v
 	 *            the vertex to find
-	 * @return index of the vertex
+	 * @return vDirect of vertex on hexagon
 	 */
-	public int findVertex(Vertex v) {
+	public int findVdirect(Vertex v) {
 		for (int i = 0; i < 6; i++) {
-			if (vertices[i] == v) {
+			if (board.getVertexById(vertexIds[i]) == v) {
 				return i;
 			}
 		}
@@ -78,71 +106,119 @@ public class Hexagon {
 	}
 
 	/**
-	 * Get an edge index from edges
+	 * Get the vertex direction in vertexIds
+	 *
+	 * @param vertexId
+	 *            the id of vertex to find
+	 * @return vDirect of vertex on hexagon
+	 */
+	public int findVdirectById(int vertexId) {
+		for (int i = 0; i < 6; i++) {
+			if (vertexIds[i] == vertexId) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Get the edge direction in edgeIds
 	 *
 	 * @param e
 	 *            the edge to find
-	 * @return index of the edge
+	 * @return vDirect of edge on hexagon
 	 */
-	public int findEdge(Edge e) {
+	public int findEdgeDirect(Edge e) {
 		for (int i = 0; i < 6; i++) {
-			if (edges[i] == e) {
+			if (board.getEdgeById(edgeIds[i]) == e) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-    /**
-     * Get the hexagon's produced resource
-     *
-     * @return the hexagon's produced resource
-     */
-    public Resource getResource() {
-        return resourceProduced;
-    }
+	/**
+	 * Get the edge direction in edgeIds
+	 *
+	 * @param edgeId
+	 *            the id of the edge to find
+	 * @return vDirect of edge on hexagon
+	 */
+	public int findEdgeDirectById(int edgeId) {
+		for (int i = 0; i < 6; i++) {
+			if (edgeIds[i] == edgeId) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Get the hexagon's produced resource
+	 *
+	 * @return the hexagon's produced resource
+	 */
+	public Resource getResource() {
+		return resourceProduced;
+	}
 
 	/**
 	 * Get the hexagon's produced resourceType
-	 * 
+	 *
 	 * @return the hexagon's produced resourceType
 	 */
 	public Resource.ResourceType getResourceType()
-    {
+	{
 		if (resourceProduced == null) {
-            return null;
-        }
-        return resourceProduced.getResourceType();
+			return null;
+		}
+		return resourceProduced.getResourceType();
 	}
 
-    /**
-     * Get the hexagon's terrainType
-     *
-     * @return the hexagon's terrainType
-     */
-    public TerrainType getTerrainType() { return terrainType; }
+	/**
+	 * Get the hexagon's terrainType
+	 *
+	 * @return the hexagon's terrainType
+	 */
+	public TerrainType getTerrainType() { return terrainType; }
 
 	/**
 	 * Get an edge of the hexagon
 	 *
 	 * @param direction
-	 *            the index of the edge
+	 *            the direction of the edge on the hexagon
 	 * @return the edge
 	 */
 	public Edge getEdge(int direction) {
-		return edges[direction];
+		return board.getEdgeById(edgeIds[direction]);
 	}
 
 	/**
 	 * Set an edge of the hexagon
 	 *
 	 * @param direction
-	 *            index to set the edge
+	 *            the direction of the edge on the hexagon
+	 * @param edge
+	 * 			  the edge to set
 	 * @return
 	 */
 	public void setEdge(Edge edge, int direction) {
 		edge.setOriginHexDirect(direction);
-		edges[direction] = edge;
+		edgeIds[direction] = edge.getId();
+	}
+
+	/**
+	 * Set an edge of the hexagon
+	 *
+	 * @param direction
+	 *            the direction of the edge on the hexagon
+	 * @param edgeId
+	 * 			  id of the edge to set
+	 * @return
+	 */
+	public void setEdgeById(int edgeId, int direction) {
+		board.getEdgeById(edgeId).setOriginHexDirect(direction);
+		edgeIds[direction] = edgeId;
 	}
 
 	/**
@@ -155,18 +231,18 @@ public class Hexagon {
 		return this.numberToken.getTokenNum();
 	}
 
-    /**
-     * Get the number token object placed on this hexagon
-     *
-     * @return number token currently placed on this hexagon
-     */
-    public NumberToken getNumberTokenAsObject() {
-        return this.numberToken;
-    }
+	/**
+	 * Get the number token object placed on this hexagon
+	 *
+	 * @return number token currently placed on this hexagon
+	 */
+	public NumberToken getNumberTokenAsObject() {
+		return this.numberToken;
+	}
 
 	/**
 	 * Place number token on this hexagon (pass by int)
-	 * 
+	 *
 	 * @param tokenNum
 	 *            integer rep of number token to place
 	 */
@@ -174,15 +250,15 @@ public class Hexagon {
 		this.numberToken = new NumberToken(tokenNum);
 	}
 
-    /**
-     * Place number token on this hexagon (pass by obect)
-     *
-     * @param token
-     *            object rep of number token to place
-     */
-    public void placeNumberToken(NumberToken token) {
-        this.numberToken = token;
-    }
+	/**
+	 * Place number token on this hexagon (pass by obect)
+	 *
+	 * @param token
+	 *            object rep of number token to place
+	 */
+	public void placeNumberToken(NumberToken token) {
+		this.numberToken = token;
+	}
 
 	/**
 	 * Set hexagon's axial coordinate
@@ -207,7 +283,7 @@ public class Hexagon {
 
 	/**
 	 * Distribute resources from this hexagon
-	 * 
+	 *
 	 * @param diceRoll
 	 *            the current dice sum
 	 */
@@ -218,38 +294,38 @@ public class Hexagon {
 
 		for (int i = 0; i < 6; i++)
 		{
-			vertices[i].distributeResources(resourceProduced.getResourceType());
+			board.getVertexById(vertexIds[i]).distributeResources(resourceProduced.getResourceType());
 		}
 	}
 
 	/**
 	 * Check if a given player owns land adjacent to the hexagon
-	 * 
+	 *
 	 * @param player
 	 *            the player to check
 	 * @return true iff player has a settlement adjacent to the hexagon
 	 */
 	public boolean adjacentToPlayer(Player player) {
 		for (int i = 0; i < 6; i++) {
-			if (vertices[i].getOwner() == player) {
-                return true;
-            }
+			if (board.getVertexById(vertexIds[i]).getOwner() == player) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	/**
 	 * Get all players owning a settlement adjacent to the hexagon
-	 * 
+	 *
 	 * @return a vector of players
 	 */
 	public Vector<Player> getPlayers() {
 		Vector<Player> players = new Vector<Player>();
 		for (int i = 0; i < 6; i++) {
-			Player owner = vertices[i].getOwner();
+			Player owner = board.getVertexById(vertexIds[i]).getOwner();
 			if (owner != null && !players.contains(owner)) {
-                players.add(owner);
-            }
+				players.add(owner);
+			}
 		}
 
 		return players;
@@ -257,7 +333,7 @@ public class Hexagon {
 
 	/**
 	 * Check if this hexagon is adjacent to a given hexagon
-	 * 
+	 *
 	 * @param hexagon
 	 *            the hexagon to check for
 	 * @return true if hexagon is adjacent to this hexagon
@@ -265,13 +341,13 @@ public class Hexagon {
 	public boolean isAdjacent(Hexagon hexagon) {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
-				Hexagon adjacent = vertices[i].getHexagon(j);
-				if (adjacent == null || adjacent == this) {
-                    continue;
-                }
+				Hexagon adjacent = board.getVertexById(vertexIds[i]).getHexagon(j);
+				if (adjacent == null || adjacent.getId() == this.id) {
+					continue;
+				}
 				else if (hexagon == adjacent) {
-                    return true;
-                }
+					return true;
+				}
 			}
 		}
 		return false;
@@ -303,7 +379,7 @@ public class Hexagon {
 
 	/**
 	 * Check if the hexagon has the robber
-	 * 
+	 *
 	 * @return true iff the hexagon has the robber
 	 */
 	public boolean hasRobber() {
@@ -312,35 +388,35 @@ public class Hexagon {
 
 	/**
 	 * Get the hexagon id
-	 * 
+	 *
 	 * @return the hexagon id number
 	 */
 	public int getId() {
 		return id;
 	}
 
-    private static final HashMap<TerrainType, Resource> terrainTypeToResourceMap =
-            initTerrainTypeToResourceMap();
-    private static HashMap<TerrainType, Resource> initTerrainTypeToResourceMap()
-    {
-        HashMap<TerrainType, Resource> terrainToResourceMap =
-                new HashMap<TerrainType, Resource>();
-        Resource lumber, wool, grain, brick, ore;
-        lumber = new Resource(Resource.ResourceType.LUMBER);
-        wool = new Resource(Resource.ResourceType.WOOL);
-        grain = new Resource(Resource.ResourceType.GRAIN);
-        brick = new Resource(Resource.ResourceType.BRICK);
-        ore = new Resource(Resource.ResourceType.ORE);
-        terrainToResourceMap.put(TerrainType.FOREST, lumber);
-        terrainToResourceMap.put(TerrainType.PASTURE, wool);
-        terrainToResourceMap.put(TerrainType.FIELDS, grain);
-        terrainToResourceMap.put(TerrainType.HILLS, brick);
-        terrainToResourceMap.put(TerrainType.MOUNTAINS, ore);
-        return terrainToResourceMap;
-    }
+	private static final HashMap<TerrainType, Resource> terrainTypeToResourceMap =
+			initTerrainTypeToResourceMap();
+	private static HashMap<TerrainType, Resource> initTerrainTypeToResourceMap()
+	{
+		HashMap<TerrainType, Resource> terrainToResourceMap =
+				new HashMap<TerrainType, Resource>();
+		Resource lumber, wool, grain, brick, ore;
+		lumber = new Resource(Resource.ResourceType.LUMBER);
+		wool = new Resource(Resource.ResourceType.WOOL);
+		grain = new Resource(Resource.ResourceType.GRAIN);
+		brick = new Resource(Resource.ResourceType.BRICK);
+		ore = new Resource(Resource.ResourceType.ORE);
+		terrainToResourceMap.put(TerrainType.FOREST, lumber);
+		terrainToResourceMap.put(TerrainType.PASTURE, wool);
+		terrainToResourceMap.put(TerrainType.FIELDS, grain);
+		terrainToResourceMap.put(TerrainType.HILLS, brick);
+		terrainToResourceMap.put(TerrainType.MOUNTAINS, ore);
+		return terrainToResourceMap;
+	}
 
-    public static Resource getResource(TerrainType terrainType) {
-        return terrainTypeToResourceMap.get(terrainType);
-    }
+	public static Resource getResource(TerrainType terrainType) {
+		return terrainTypeToResourceMap.get(terrainType);
+	}
 
 }

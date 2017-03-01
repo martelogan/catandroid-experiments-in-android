@@ -3,32 +3,40 @@ package com.catandroid.app.common.components;
 import com.catandroid.app.common.components.Resource.ResourceType;
 
 public class Harbor {
-	
+
 	public enum Position {
 		NORTH, SOUTH, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
 	}
 
 	// default positions
 	private static final Position[] POSITIONS_BY_VDIRECT = {
-		Position.NORTHEAST, Position.SOUTHEAST, Position.SOUTH,
+			Position.NORTHEAST, Position.SOUTHEAST, Position.SOUTH,
 			Position.SOUTHWEST, Position.NORTHWEST, Position.NORTH
 	};
 
 	private ResourceType resourceType;
 	private Position position;
-	private int index;
-	private Edge myEdge = null;
+	private int id;
+	private int edgeId;
 
-	public Harbor(ResourceType resourceType, int index) {
+	private transient Board board;
+
+	public Harbor(Board board, ResourceType resourceType, int id) {
 		this.resourceType = resourceType;
-		this.index = index;
+		this.id = id;
+		this.board = board;
 	}
-	
+
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
 	public void setResourceType(ResourceType resourceType) {
 		this.resourceType = resourceType;
 	}
 
-	public Resource.ResourceType getResourceType() {
+	public ResourceType getResourceType() {
 		return resourceType;
 	}
 
@@ -40,19 +48,23 @@ public class Harbor {
 		return position;
 	}
 
-	public void setMyEdge(Edge e) {
-		this.myEdge = e;
+	public void setEdge(Edge edge) {
+		this.edgeId = edge.getId();
 	}
 
-	public Edge getMyEdge() {
-		return myEdge;
+	public void setEdgeById(int edgeId) {
+		this.edgeId = edgeId;
+	}
+
+	public Edge getEdge() {
+		return board.getEdgeById(edgeId);
 	}
 
 	public static Position vdirectToPosition(int vdirect) {
 		return POSITIONS_BY_VDIRECT[vdirect];
 	}
-	
-	public int getIndex() {
-		return index;
+
+	public int getId() {
+		return id;
 	}
 }

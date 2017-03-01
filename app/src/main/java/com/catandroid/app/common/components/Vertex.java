@@ -8,108 +8,156 @@ public class Vertex {
 	public static final int TOWN = 1;
 	public static final int CITY = 2;
 
-	private int index;
+	private int id;
 	private int building;
 
 	private Player owner;
 
-	private Edge[] edges;
-	private Hexagon[] hexagons;
+	private int[] edgeIds;
+	private int[] hexagonIds;
 	private Harbor harbors;
 
+	private transient Board board;
+
 	/**
-	 * Initialize a vertex with edges set to null
+	 * Initialize a vertex with edgeIds set to -1
 	 * 
-	 * @param index
-	 *            the vertex index for drawing
+	 * @param id
+	 *            the vertex id for drawing
 	 */
-	public Vertex(int index) {
-		this.index = index;
+	public Vertex(Board board, int id) {
+		this.id = id;
 		owner = null;
 		building = NONE;
 
-		edges = new Edge[3];
-		edges[0] = edges[1] = edges[2] = null;
+		edgeIds = new int[3];
+		edgeIds[0] = edgeIds[1] = edgeIds[2] = -1;
 
-		hexagons = new Hexagon[3];
-		hexagons[0] = hexagons[1] = hexagons[2] = null;
+		hexagonIds = new int[3];
+		hexagonIds[0] = hexagonIds[1] = hexagonIds[2] = -1;
 		setHarbor(null);
+		this.board = board;
 	}
 
 	/**
-	 * Associate an edges with vertex
+	 * Set the board
+	 *
+	 * @param board
+	 *
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	/**
+	 * Associate an edge with vertex
 	 * 
 	 * @param e
-	 *            the edges to addCubic (ignored if already associated)
+	 *            the edge to add (ignored if already associated)
 	 */
 	public void addEdge(Edge e) {
 		for (int i = 0; i < 3; i++) {
-			if (edges[i] == null) {
-				edges[i] = e;
+			if (edgeIds[i] == -1) {
+				edgeIds[i] = e.getId();
 				return;
-			} else if (edges[i] == e) {
+			} else if (edgeIds[i] == e.getId()) {
 				return;
 			}
 		}
 	}
 
 	/**
-	 * Associate an hexagons with vertex
-	 * 
-	 * @param h
-	 *            the hexagons to addCubic (ignored if already associated)
+	 * Associate an edge with vertex
+	 *
+	 * @param edgeId
+	 *            id of the edge to add (ignored if already associated)
 	 */
-	public void addHexagon(Hexagon h) {
+	public void addEdgeById(int edgeId) {
 		for (int i = 0; i < 3; i++) {
-			if (hexagons[i] == null) {
-				hexagons[i] = h;
+			if (edgeIds[i] == -1) {
+				edgeIds[i] = edgeId;
 				return;
-			} else if (hexagons[i] == h) {
+			} else if (edgeIds[i] == edgeId) {
 				return;
 			}
 		}
 	}
 
 	/**
-	 * Get the hexagons at the given index
+	 * Associate a hexagon with vertex
+	 * 
+	 * @param hex
+	 *            the hexagon to add (ignored if already associated)
+	 */
+	public void addHexagon(Hexagon hex) {
+		for (int i = 0; i < 3; i++) {
+			if (hexagonIds[i] == -1) {
+				hexagonIds[i] = hex.getId();
+				return;
+			} else if (hexagonIds[i] == hex.getId()) {
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Associate an hexagonIds with vertex
+	 *
+	 * @param hexId
+	 *            id of the hexagon to add (ignored if already associated)
+	 */
+	public void addHexagonById(int hexId) {
+		for (int i = 0; i < 3; i++) {
+			if (hexagonIds[i] == -1) {
+				hexagonIds[i] = hexId;
+				return;
+			} else if (hexagonIds[i] == hexId) {
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Get the hexagon at the given index of hexagonIds
 	 * 
 	 * @param index
-	 *            the hexagons index (0, 1, or 2)
-	 * @return the hexagons or null
-	 */
+	 *            the hexagonIds index (0, 1, or 2)
+	 * @return the hexagon (or null)
+	 * */
 	public Hexagon getHexagon(int index) {
-		return hexagons[index];
+		return board.getHexagonById(hexagonIds[index]);
 	}
 
 	/**
-	 * Get the hexagons's index for drawing
+	 * Get the hexagonIds's id for drawing
 	 * 
-	 * @return the index
+	 * @return the id
 	 */
-	public int getIndex() {
-		return index;
+	public int getId() {
+		return id;
 	}
 
 	/**
-	 * Determine if an edges is connected to vertex
+	 * Determine if an edge is connected to vertex
 	 * 
 	 * @param e
-	 *            the edges to check for
+	 *            the edge to check for
 	 * @return true if e is connected to the vertex
 	 */
 	public boolean hasEdge(Edge e) {
-		return (edges[0] == e || edges[1] == e || edges[2] == e);
+		int edgeId = e.getId();
+		return (edgeIds[0] == edgeId || edgeIds[1] == edgeId || edgeIds[2] == edgeId);
 	}
 
 	/**
-	 * Get an edges
-	 * 
+	 * Get the edge at the given index of edgeIds
+	 *
 	 * @param index
-	 *            the edges index [0, 2]
-	 * @return the edges or null
-	 */
+	 *            the edgeIds index (0, 1, or 2)
+	 * @return the edge (or null)
+	 * */
 	public Edge getEdge(int index) {
-		return edges[index];
+		return board.getEdgeById(edgeIds[index]);
 	}
 
 	/**
@@ -156,11 +204,11 @@ public class Vertex {
 	 * 
 	 * @param player
 	 *            the player to check for
-	 * @return true if one of the adjacent edges has a road for player
+	 * @return true if one of the adjacent edgeIds has a road for player
 	 */
 	public boolean hasRoad(Player player) {
 		for (int i = 0; i < 3; i++) {
-			if (edges[i] != null && edges[i].getOwner() == player)
+			if (edgeIds[i] != -1 && board.getEdgeById(edgeIds[i]).getOwner() == player)
 				return true;
 		}
 
@@ -186,7 +234,10 @@ public class Vertex {
 	public boolean couldBuild() {
 		// check for adjacent buildings
 		for (int i = 0; i < 3; i++) {
-			if (edges[i] != null && edges[i].getAdjacent(this).hasBuilding())
+			if (edgeIds[i] != -1 &&
+					board.getVertexById(
+							board.getEdgeById(
+									edgeIds[i]).getAdjacent(this).getId()).hasBuilding())
 				return false;
 		}
 
@@ -284,10 +335,10 @@ public class Vertex {
 	 * @param player
 	 *            the player
 	 * @param omit
-	 *            omit an edges already considered
+	 *            omit an edgeIds already considered
 	 * @return the road length
 	 */
-	public int getRoadLength(Player player, Edge omit, int countId) {
+	public int getRoadLength(Player player, int omit, int countId) {
 		int longest = 0;
 
 		// FIXME: if two road paths diverge and re-converge, the result may be
@@ -299,14 +350,14 @@ public class Vertex {
 			return 0;
 		}
 
-		// find the longest road aside from one passing through the given edges
+		// find the longest road aside from one passing through the given edgeIds
 		for (int i = 0; i < 3; i++) {
-			if (edges[i] == null || edges[i] == omit)
+			if (edgeIds[i] == -1 || edgeIds[i] == omit)
 			{
 				continue;
 			}
 
-			int length = edges[i].getRoadLength(player, this, countId);
+			int length = board.getEdgeById(edgeIds[i]).getRoadLength(player, this.id, countId);
 			if (length > longest)
 			{
 				longest = length;

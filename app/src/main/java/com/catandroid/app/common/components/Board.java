@@ -150,9 +150,9 @@ public class Board {
 
 		// randomly initialize hexagons
 		hexagons = ComponentUtils.initRandomHexes(this);
-		harbors = ComponentUtils.initRandomHarbors(boardGeometry.getHarborCount());
-		vertices = ComponentUtils.generateVertices(boardGeometry.getVertexCount());
-		edges = ComponentUtils.generateEdges(boardGeometry.getEdgeCount());
+		harbors = ComponentUtils.initRandomHarbors(this, boardGeometry.getHarborCount());
+		vertices = ComponentUtils.generateVertices(this, boardGeometry.getVertexCount());
+		edges = ComponentUtils.generateEdges(this, boardGeometry.getEdgeCount());
 
 		// populate board map with starting parameters
 		boardGeometry.populateBoard(hexagons, vertices, edges, harbors, hexMap);
@@ -506,17 +506,17 @@ public class Board {
 	}
 
 	/**
-	 * Get a given hexagons
+	 * Get a given hexagon by id
 	 * 
-	 * @param index
-	 *            the index of the hexagons
-	 * @return the hexagons
+	 * @param hexId
+	 *            the id of the hexagon
+	 * @return the hexagon with hexId (or null)
 	 */
-	public Hexagon getHexagon(int index) {
-		if (index < 0 || index >= boardGeometry.getHexCount())
+	public Hexagon getHexagonById(int hexId) {
+		if (hexId < 0 || hexId >= boardGeometry.getHexCount())
 			return null;
 
-		return hexagons[index];
+		return hexagons[hexId];
 	}
 	
 	public Hexagon[] getHexagons() {
@@ -524,49 +524,53 @@ public class Board {
 	}
 
 	/**
-	 * Get a given harbors
+	 * Get a given harbor by id
 	 * 
-	 * @param index
-	 *            the index of the harbors
-	 * @return the harbors
+	 * @param harborId
+	 *            the id of the harbor
+	 * @return the harbor with harborId (or null)
 	 */
-	public Harbor getHarbor(int index) {
-		if (index < 0 || index >= boardGeometry.getHarborCount())
+	public Harbor getHarborById(int harborId) {
+		if (harborId < 0 || harborId >= boardGeometry.getHarborCount())
 			return null;
 
-		return harbors[index];
+		return harbors[harborId];
 	}
 
 	/**
-	 * Get the given edges
+	 * Get the edge with the given id
 	 * 
-	 * @param index
-	 *            the index of the edges
-	 * @return the edges
+	 * @param edgeId
+	 *            the id of the edge
+	 * @return the edge with edgeId (or null)
 	 */
-	public Edge getEdge(int index) {
-		if (index < 0 || index >= boardGeometry.getEdgeCount())
-			return null;
+	public Edge getEdgeById(int edgeId) {
+		if (edgeId < 0 || edgeId >= boardGeometry.getEdgeCount())
+        {
+            return null;
+        }
 
-		return edges[index];
+		return edges[edgeId];
 	}
 	
 	public Edge[] getEdges() {
 		return edges;
 	}
 
-	/**
-	 * Get the given vertices
-	 * 
-	 * @param index
-	 *            the index of the vertices
-	 * @return the vertices
-	 */
-	public Vertex getVertex(int index) {
-		if (index < 0 || index >= boardGeometry.getEdgeCount())
-			return null;
+    /**
+     * Get the vertex with the given id
+     *
+     * @param vertexId
+     *            the id of the vertex
+     * @return the vertex
+     */
+	public Vertex getVertexById(int vertexId) {
+		if (vertexId < 0 || vertexId >= boardGeometry.getEdgeCount())
+        {
+            return null;
+        }
 
-		return vertices[index];
+		return vertices[vertexId];
 	}
 	
 	public Vertex[] getVertices() {

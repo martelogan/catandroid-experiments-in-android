@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -338,7 +336,7 @@ public class BoardGeometry {
 		HashSet<Hexagon> successfullyHashed = new HashSet<Hexagon>();
 
         // variables for hexagon population logic
-		int hexagonIndex = 0, edgeIndex = 0, vertexIndex = 0;
+		int hexagonIndex = 0, edgeIndexOnHex = 0, vertexIndex = 0;
         Long hexLocationHash;
 		Hexagon curHex = null, curNeighborHex = null;
         AxialHexLocation curHexLocation = null, neighborLocation = null;
@@ -374,9 +372,9 @@ public class BoardGeometry {
                                 vDirect, (vDirect + 1) % 6);
                     } else { // there was no clockwise axialNeighbor
                         // get and increment next available edge
-                        clockwiseEdge = edges[edgeIndex];
+                        clockwiseEdge = edges[edgeIndexOnHex];
 						clockwiseEdge.setOriginHex(curHex);
-                        edgeIndex += 1;
+                        edgeIndexOnHex += 1;
                         // new edge is candidate for harbor
                         portEdges.add(clockwiseEdge);
                         // use current hex's next vertex if already placed
@@ -388,8 +386,8 @@ public class BoardGeometry {
                             hexLocationHash = HexGridUtils.perfectHash(neighborLocation);
                             curNeighborHex = hexMap.get(hexLocationHash);
                             if (curNeighborHex != null) { // we have a clockwise axialNeighbor
-                                neighborEdge = resolveNeighborHex(portEdges, curHex, curNeighborHex,
-                                        (vDirect + 1) % 6, (vDirect + 2) % 6);
+								neighborEdge = resolveNeighborHex(portEdges, curHex, curNeighborHex,
+										(vDirect + 1) % 6, (vDirect + 2) % 6);
                                 clockwiseV1 = neighborEdge.getV1Clockwise();
                                 curHex.setVertex(clockwiseV0, (vDirect + 1) % 6);
                             } else { // there was no clockwise axialNeighbor
@@ -494,13 +492,13 @@ public class BoardGeometry {
                 break;
             }
             harbor = harbors[i];
-            edgeIndex = curHex.findEdge(clockwiseEdge);
-            harbor.setPosition(Harbor.vdirectToPosition(edgeIndex));
+            edgeIndexOnHex = curHex.findEdgeDirect(clockwiseEdge);
+            harbor.setPosition(Harbor.vdirectToPosition(edgeIndexOnHex));
             clockwiseEdge.setMyHarbor(harbor);
             clockwiseEdge.getV0Clockwise().setHarbor(harbor);
-            clockwiseEdge.getV1Clockwise().setHarbor(harbor);
-			HARBOR_EDGES[i] = clockwiseEdge.getIndex();
-			HARBOR_HEXES[i] = clockwiseEdge.getOriginHex().getId();
+			clockwiseEdge.getV1Clockwise().setHarbor(harbor);
+			HARBOR_EDGES[i] = clockwiseEdge.getId();
+			HARBOR_HEXES[i] = clockwiseEdge.getOriginHexId();
         }
 
 		initCoordinates(hexagons, vertices, edges);
@@ -513,38 +511,36 @@ public class BoardGeometry {
 		AxialHexLocation axialCoord;
 		float center_X, center_Y;
 		HexPoint cartesianCoord, vertexOffset;
-		int index;
+		int hexId, edgeId, vertexId, v0_Id, v1_Id, angleDirection;
 		for (Hexagon h : hexagons) {
 			// set hex cartesian coordinates
-			index = h.getId();
+			hexId = h.getId();
 			axialCoord = h.getCoord();
 			cartesianCoord = HexGridLayout.hexToPixel(layout, axialCoord);
 			center_X = (float) cartesianCoord.x;
 			center_Y = (float) cartesianCoord.y;
-			HEXAGONS_X[index] = center_X;
-			HEXAGONS_Y[index] = center_Y;
+			HEXAGONS_X[hexId] = center_X;
+			HEXAGONS_Y[hexId] = center_Y;
 		}
         Hexagon myHex;
-        int myHexIndex, angleDirection;
         for (Vertex v: vertices)
         {
             // set vertex cartesian coordinates
-            index = v.getIndex();
+            vertexId = v.getId();
             myHex = v.getHexagon(0);
-            myHexIndex = myHex.getId();
-            angleDirection = -((((myHex.findVertex(v) - 1)  % 6) + 6) % 6);
+            hexId = myHex.getId();
+            angleDirection = -((((myHex.findVdirect(v) - 1)  % 6) + 6) % 6);
             vertexOffset = HexGridLayout.hexCornerOffset(layout, angleDirection);
-            VERTICES_X[index] = HEXAGONS_X[myHexIndex] + ((float) vertexOffset.x);
-            VERTICES_Y[index] = HEXAGONS_Y[myHexIndex] + ((float) vertexOffset.y);
+            VERTICES_X[vertexId] = HEXAGONS_X[hexId] + ((float) vertexOffset.x);
+            VERTICES_Y[vertexId] = HEXAGONS_Y[hexId] + ((float) vertexOffset.y);
         }
-		int v0_index, v1_index;
 		for (Edge e : edges) {
 			// set edge cartesian coordinates
-			index = e.getIndex();
-			v0_index = e.getV0Clockwise().getIndex();
-			v1_index = e.getV1Clockwise().getIndex();
-			EDGES_X[index] = (float) ((VERTICES_X[v0_index] + VERTICES_X[v1_index])/2.0);
-			EDGES_Y[index] = (float) ((VERTICES_Y[v0_index] + VERTICES_Y[v1_index])/2.0);
+			edgeId = e.getId();
+			v0_Id = e.getV0Clockwise().getId();
+			v1_Id = e.getV1Clockwise().getId();
+			EDGES_X[edgeId] = (float) ((VERTICES_X[v0_Id] + VERTICES_X[v1_Id])/2.0);
+			EDGES_Y[edgeId] = (float) ((VERTICES_Y[v0_Id] + VERTICES_Y[v1_Id])/2.0);
 		}
 	}
 }

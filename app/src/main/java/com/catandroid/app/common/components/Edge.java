@@ -4,64 +4,109 @@ import com.catandroid.app.common.players.Player;
 
 public class Edge {
 
-	private int index;
-	private Vertex[] vertices;
+	private int id;
+	private int[] vertexIds;
 	private Player owner;
 	private int lastRoadCountId;
-	private Hexagon originHex;
+	private int originHexId;
     private int originHexDirect;
-    private Harbor myHarbor = null;
+    private int myHarborId = -1;
+	private Board board;
 
 	/**
-	 * Initialize edge with vertices set to null
+	 * Initialize edge with vertexIds set to null
 	 */
-	public Edge(int index) {
-		this.index = index;
-		vertices = new Vertex[2];
-		vertices[0] = vertices[1] = null;
+	public Edge(Board board, int id) {
+		this.id = id;
+		vertexIds = new int[2];
+		vertexIds[0] = vertexIds[1] = -1;
 		owner = null;
 		lastRoadCountId = 0;
+		this.board = board;
+	}
+
+	/**
+	 * Set the board
+	 *
+	 * @param board
+	 *
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 
 	/**
 	 * Set vertices for the edge
-	 * 
+	 *
+	 * @param v0
+	 *            the first vertex
 	 * @param v1
-	 *            the first vertices
-	 * @param v2
-	 *            the second vertices
+	 *            the second vertex
 	 */
-	public void setVertices(Vertex v1, Vertex v2) {
-		vertices[0] = v1;
-		vertices[1] = v2;
+	public void setVertices(Vertex v0, Vertex v1) {
+		vertexIds[0] = v0.getId();
+		vertexIds[1] = v1.getId();
+		v0.addEdge(this);
 		v1.addEdge(this);
-		v2.addEdge(this);
 	}
 
 	/**
-	 * Check if the edge has a given vertices
+	 * Set vertices for the edge by id
+	 * 
+	 * @param v0_Id
+	 *            the id of the first vertex
+	 * @param v1_Id
+	 *            the id of the second vertex
+	 */
+	public void setVerticesById(int v0_Id, int v1_Id) {
+		vertexIds[0] = v0_Id;
+		vertexIds[1] = v1_Id;
+		board.getVertexById(v0_Id).addEdge(this);
+		board.getVertexById(v1_Id).addEdge(this);
+	}
+
+	/**
+	 * Check if the edge has a given vertexIds
 	 * 
 	 * @param v
-	 *            the vertices to check for
+	 *            the vertexIds to check for
 	 * @return true if v is associated with the edge
 	 */
-	public boolean hasVertex(Vertex v) {
-		return (vertices[0] == v || vertices[1] == v);
+	public boolean hasVertex(int v) {
+		return (vertexIds[0] == v || vertexIds[1] == v);
 	}
 
 	/**
-	 * Get the other vertices associated with edge
+	 * Get the other vertex associated with edge
 	 * 
 	 * @param v
-	 *            one vertices
-	 * @return the other associated vertices or null if not completed
+	 *            one vertex
+	 * @return the other associated vertex or null if not completed
 	 */
 	public Vertex getAdjacent(Vertex v) {
-		if (vertices[0] == v) {
-			return vertices[1];
+		if (board.getVertexById(vertexIds[0]) == v) {
+			return board.getVertexById(vertexIds[1]);
 		}
-		else if (vertices[1] == v) {
-			return vertices[0];
+		else if (board.getVertexById(vertexIds[1]) == v) {
+			return board.getVertexById(vertexIds[0]);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the other vertex associated with edge
+	 *
+	 * @param vertexId
+	 *            id of the vertex
+	 * @return the other associated vertexIds or null if not completed
+	 */
+	public Vertex getAdjacentById(int vertexId) {
+		if (vertexIds[0] == vertexId) {
+			return board.getVertexById(vertexIds[1]);
+		}
+		else if (vertexIds[1] == vertexId) {
+			return board.getVertexById(vertexIds[0]);
 		}
 
 		return null;
@@ -97,12 +142,12 @@ public class Edge {
 			return false;
 		}
 
-		// check for roads to each vertices
+		// check for roads to each vertexIds
 		for (int i = 0; i < 2; i++) {
-			// the player has a road to an unoccupied vertices,
+			// the player has a road to an unoccupied vertexIds,
 			// or the player has an adjacent building
-			if (vertices[i].hasRoad(player) && !vertices[i].hasBuilding()
-					|| vertices[i].hasBuilding(player)) {
+			if (board.getVertexById(vertexIds[i]).hasRoad(player) && !board.getVertexById(vertexIds[i]).hasBuilding()
+					|| board.getVertexById(vertexIds[i]).hasBuilding(player)) {
 				return true;
 			}
 		}
@@ -117,7 +162,17 @@ public class Edge {
 	 * @return
 	 */
 	public void setOriginHex(Hexagon h) {
-		this.originHex = h;
+		this.originHexId = h.getId();
+	}
+
+	/**
+	 * Set the origin hexagon
+	 * @param hexId
+	 *            the id of hex to set
+	 * @return
+	 */
+	public void setOriginHexById(int hexId) {
+		this.originHexId = hexId;
 	}
 
 
@@ -127,7 +182,16 @@ public class Edge {
 	 * @return the origin hexagon
 	 */
 	public Hexagon getOriginHex() {
-		return originHex;
+		return board.getHexagonById(originHexId);
+	}
+
+	/**
+	 * Get the origin hexagon id
+	 *
+	 * @return the origin hexagon id
+	 */
+	public int getOriginHexId() {
+		return originHexId;
 	}
 
     /**
@@ -194,50 +258,62 @@ public class Edge {
         }
     }
 
-    /**
-     * Set a harbor on this edge
-     * @param harbor
-     *            the harbor to set
-     * @return
-     */
-    public void setMyHarbor(Harbor harbor) {
-        harbor.setMyEdge(this);
-        this.myHarbor = harbor;
-    }
+	/**
+	 * Set a harbor on this edge
+	 * @param harbor
+	 *            the harbor to set
+	 * @return
+	 */
+	public void setMyHarbor(Harbor harbor) {
+		harbor.setEdgeById(this.getId());
+		this.myHarborId = harbor.getId();
+	}
+
+	/**
+	 * Set a harbor on this edge by id
+	 * @param harborId
+	 *            the id of harbor to set
+	 * @return
+	 */
+	public void setMyHarborById(int harborId) {
+		board.getHarborById(harborId).setEdgeById(this.getId());
+		this.myHarborId = harborId;
+	}
 
     /**
      * Get the harbor on this edge
      * @return the harbor
      */
-    public Harbor getMyHarbor() {
-        return this.myHarbor;
+    public int getMyHarborId() {
+        return this.myHarborId;
     }
 
 	/**
-	 * Get the first vertices
+	 * Get the first vertex
 	 * 
-	 * @return the first vertices
+	 * @return the first vertex
 	 */
 	public Vertex getV0Clockwise() {
-		return vertices[0];
+
+		return board.getVertexById(vertexIds[0]);
 	}
 
 	/**
-	 * Get the second vertices
+	 * Get the second vertex
 	 * 
-	 * @return the second vertices
+	 * @return the second vertex
 	 */
 	public Vertex getV1Clockwise() {
-		return vertices[1];
+		return board.getVertexById(vertexIds[1]);
 	}
 
 	/**
-	 * Get the index of this edge
+	 * Get the id of this edge
 	 * 
-	 * @return the index
+	 * @return the id
 	 */
-	public int getIndex() {
-		return index;
+	public int getId() {
+		return id;
 	}
 
 	/**
@@ -267,7 +343,7 @@ public class Edge {
 	 *            unique id for this count iteration
 	 * @return the road length
 	 */
-	public int getRoadLength(Player player, Vertex from, int countId) {
+	public int getRoadLength(Player player, int from, int countId) {
 		if (owner != player || lastRoadCountId == countId) {
 			return 0;
 		}
@@ -275,11 +351,11 @@ public class Edge {
 		// this ensures that that road isn't counted multiple times (cycles)
 		lastRoadCountId = countId;
 
-		// find other vertices
-		Vertex to = (from == vertices[0] ? vertices[1] : vertices[0]);
+		// find other vertexIds
+		int to = (from == vertexIds[0] ? vertexIds[1] : vertexIds[0]);
 
 		// return road length
-		return to.getRoadLength(player, this, countId) + 1;
+		return board.getVertexById(to).getRoadLength(player, id, countId) + 1;
 	}
 
 	/**
@@ -297,8 +373,8 @@ public class Edge {
 		// this ensures that that road isn't counted multiple times (cycles)
 		lastRoadCountId = countId;
 
-		int length1 = vertices[0].getRoadLength(owner, this, countId);
-		int length2 = vertices[1].getRoadLength(owner, this, countId);
+		int length1 = board.getVertexById(vertexIds[0]).getRoadLength(owner, id, countId);
+		int length2 = board.getVertexById(vertexIds[1]).getRoadLength(owner, id, countId);
 		return length1 + length2 + 1;
 	}
 }

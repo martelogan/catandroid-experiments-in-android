@@ -160,7 +160,7 @@ public class ActiveGameFragment extends Fragment {
 
 //				//Intent intent = new Intent(ActiveGameFragment.this, DiscardResourcesFragment.class);
 //				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.DiscardResourcesFragment");
-//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getIndex());
+//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getId());
 //				intent.putExtra(DiscardResourcesFragment.QUANTITY_KEY, extra);
 //				ActiveGameFragment.this.startActivity(intent);
 
@@ -186,16 +186,16 @@ public class ActiveGameFragment extends Fragment {
 	public void select(Action action, int id) {
 		switch (action) {
 		case ROBBER:
-			select(action, board.getHexagon(id));
+			select(action, board.getHexagonById(id));
 			break;
 			
 		case TOWN:
 		case CITY:
-			select(action, board.getVertex(id));
+			select(action, board.getVertexById(id));
 			break;
 			
 		case ROAD:
-			select(action, board.getEdge(id));
+			select(action, board.getEdgeById(id));
 			break;
 			
 		default:

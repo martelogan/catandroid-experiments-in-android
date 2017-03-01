@@ -40,12 +40,12 @@ public class Player {
 	private boolean usedCard;
 	private int index, type;
 	private String actionLog;
-	private Vertex lastTown;
+	private int lastVertexPieceId;
 
-	protected Vector<Vertex> settlements, reaching;
+	protected Vector<Integer> settlements, reaching;
 	protected Vector<Edge> roads;
 
-	protected Board board;
+	protected transient Board board;
 
 	public enum Color {
 		RED, BLUE, GREEN, ORANGE, SELECT, NONE
@@ -57,7 +57,7 @@ public class Player {
 
 	/**
 	 * Initialize player object
-	 * 
+	 *
 	 * @param board
 	 *            board reference
 	 * @param name
@@ -81,12 +81,12 @@ public class Player {
 		tradeValue = 4;
 		usedCard = false;
 		actionLog = "";
-		lastTown = null;
+		lastVertexPieceId = -1;
 
 		newCards = new Vector<Cards>();
 
-		settlements = new Vector<Vertex>();
-		reaching = new Vector<Vertex>();
+		settlements = new Vector<Integer>();
+		reaching = new Vector<Integer>();
 		roads = new Vector<Edge>();
 
 		// initialise number of each kind of development card
@@ -104,7 +104,7 @@ public class Player {
 
 	/**
 	 * Roll the dice
-	 * 
+	 *
 	 * @return the result of the executeDiceRoll
 	 */
 	public int roll() {
@@ -113,7 +113,7 @@ public class Player {
 
 	/**
 	 * Roll the dice with a predefined result
-	 * 
+	 *
 	 * @param roll
 	 *            the desired executeDiceRoll
 	 * @return the result of the executeDiceRoll
@@ -149,7 +149,7 @@ public class Player {
 
 	/**
 	 * Attempt to build a road on edge. Returns true on success
-	 * 
+	 *
 	 * @param edge
 	 *            edge to build on
 	 * @return
@@ -181,20 +181,24 @@ public class Player {
 
 		roads.add(edge);
 
-		Vertex vertex = edge.getV0Clockwise();
-		if (!reaching.contains(vertex))
-			reaching.add(vertex);
+		int vertexId = edge.getV0Clockwise().getId();
+		if (!reaching.contains(vertexId))
+		{
+			reaching.add(vertexId);
+		}
 
-		vertex = edge.getV1Clockwise();
-		if (!reaching.contains(vertex))
-			reaching.add(vertex);
+		vertexId = edge.getV1Clockwise().getId();
+		if (!reaching.contains(vertexId))
+		{
+			reaching.add(vertexId);
+		}
 
 		return true;
 	}
 
 	/**
 	 * Attempt to build an establishment on vertex. Returns true on success
-	 * 
+	 *
 	 * @param vertex
 	 *            vertex to build on
 	 * @return
@@ -229,7 +233,7 @@ public class Player {
 				useResources(Resource.ResourceType.WOOL, 1);
 			}
 			towns += 1;
-			settlements.add(vertex);
+			settlements.add(vertex.getId());
 			board.checkLongestRoad();
 		} else {
 			if (!setup) {
@@ -243,13 +247,13 @@ public class Player {
 		// collect resources for second town during setup
 		if (board.isSetupPhase2()) {
 			for (int i = 0; i < 3; i++) {
-				Hexagon hexagon = vertex.getHexagon(i);
-				if (hexagon != null && hexagon.getTerrainType() != Hexagon.TerrainType.DESERT)
-					addResources(hexagon.getResourceType(), 1);
+				int hexId = vertex.getHexagon(i).getId();
+				if (hexId != -1 && board.getHexagonById(hexId).getTerrainType() != Hexagon.TerrainType.DESERT)
+					addResources(board.getHexagonById(hexId).getResourceType(), 1);
 			}
 		}
 
-		lastTown = vertex;
+		lastVertexPieceId = vertex.getId();
 
 		appendAction(type == Vertex.TOWN ? R.string.player_town
 				: R.string.player_city);
@@ -259,7 +263,7 @@ public class Player {
 
 	/**
 	 * Can you build on this edge? Maybe
-	 * 
+	 *
 	 * @param edge
 	 * @return
 	 */
@@ -268,8 +272,16 @@ public class Player {
 			return false;
 
 		if (board.isSetupPhase()) {
+			Vertex v;
+			if (lastVertexPieceId == -1) {
+				v = null;
+			}
+			else {
+				v = board.getVertexById(lastVertexPieceId);
+			}
 			// check if the edge is adjacent to the last town built
-			if (lastTown != edge.getV0Clockwise() && lastTown != edge.getV1Clockwise())
+			if (v != edge.getV0Clockwise() &&
+					v != edge.getV1Clockwise())
 				return false;
 		}
 
@@ -278,7 +290,7 @@ public class Player {
 
 	/**
 	 * Can you build on this vertex? We'll see
-	 * 
+	 *
 	 * @param vertex
 	 * @return
 	 */
@@ -302,7 +314,7 @@ public class Player {
 
 	/**
 	 * Returns the number of cards in the players hand
-	 * 
+	 *
 	 * @return sum of player's resources
 	 */
 	public int getResourceCount() {
@@ -314,7 +326,7 @@ public class Player {
 
 	/**
 	 * Add resources to the player
-	 * 
+	 *
 	 * @param resourceType
 	 *            resourceType of resources to add
 	 * @param count
@@ -326,7 +338,7 @@ public class Player {
 
 	/**
 	 * Get the number of resources a player has of a given resourceType
-	 * 
+	 *
 	 * @param resourceType
 	 *            the resourceType
 	 * @return the number of resources
@@ -337,7 +349,7 @@ public class Player {
 
 	/**
 	 * Get a copy of the player's resource list
-	 * 
+	 *
 	 * @return an editable copy of the player's resource list
 	 */
 	public int[] getResources() {
@@ -351,7 +363,7 @@ public class Player {
 
 	/**
 	 * Consume resources of a given resourceType
-	 * 
+	 *
 	 * @param resourceType
 	 *            the resourceType to use
 	 * @param count
@@ -363,7 +375,7 @@ public class Player {
 
 	/**
 	 * Pick a random resource and deduct it from this player
-	 * 
+	 *
 	 * @return the type stolen
 	 */
 	private Resource.ResourceType stealResource() {
@@ -387,7 +399,7 @@ public class Player {
 
 	/**
 	 * Steal a resource from another player
-	 * 
+	 *
 	 * @param from
 	 *            the player to steal from
 	 * @return the type of resource stolen
@@ -399,7 +411,7 @@ public class Player {
 
 	/**
 	 * Steal a resource from another player
-	 * 
+	 *
 	 * @param from
 	 *            the player to steal from
 	 * @param resourceType
@@ -411,13 +423,13 @@ public class Player {
 			addResources(resourceType, 1);
 			appendAction(R.string.player_stole_from, from.getName());
 		}
-		
+
 		return resourceType;
 	}
 
 	/**
 	 * DiscardResourcesFragment one resource of a given resourceType
-	 * 
+	 *
 	 * @param resourceType
 	 *            or null for random
 	 */
@@ -443,7 +455,7 @@ public class Player {
 
 	/**
 	 * Trade with another player
-	 * 
+	 *
 	 * @param player
 	 *            the player to trade with
 	 * @param resourceType
@@ -475,7 +487,7 @@ public class Player {
 
 	/**
 	 * Get the player's Color
-	 * 
+	 *
 	 * @return the player's Color
 	 */
 	public Color getColor() {
@@ -484,7 +496,7 @@ public class Player {
 
 	/**
 	 * Get the player's index number
-	 * 
+	 *
 	 * @return the index number [0, 3]
 	 */
 	public int getIndex() {
@@ -493,7 +505,7 @@ public class Player {
 
 	/**
 	 * Determine if the player can build a road
-	 * 
+	 *
 	 * @return true if the player can build a road
 	 */
 	public boolean affordRoad() {
@@ -504,7 +516,7 @@ public class Player {
 
 	/**
 	 * Determine if a player can build a town
-	 * 
+	 *
 	 * @return true if the player can build a town
 	 */
 	public boolean affordTown() {
@@ -517,7 +529,7 @@ public class Player {
 
 	/**
 	 * Determine if the player can build a city
-	 * 
+	 *
 	 * @return true if the player can build a city
 	 */
 	public boolean affordCity() {
@@ -527,7 +539,7 @@ public class Player {
 
 	/**
 	 * Determine if the player can buy a card
-	 * 
+	 *
 	 * @return true if the player can buy a card
 	 */
 	public boolean affordCard() {
@@ -537,7 +549,7 @@ public class Player {
 
 	/**
 	 * Get the number of victory points that are evident to other players
-	 * 
+	 *
 	 * @return the number of victory points
 	 */
 	public int getPublicVictoryPoints() {
@@ -554,7 +566,7 @@ public class Player {
 
 	/**
 	 * Return player's current total victory points
-	 * 
+	 *
 	 * @return the number of victory points
 	 */
 	public int getVictoryPoints() {
@@ -563,7 +575,7 @@ public class Player {
 
 	/**
 	 * Buy a card
-	 * 
+	 *
 	 * @return the card type
 	 */
 	public Board.Cards buyCard() {
@@ -572,7 +584,7 @@ public class Player {
 
 	/**
 	 * Buy a predetermined card
-	 * 
+	 *
 	 * @param card
 	 *            the type of card to buy
 	 * @return the type of card bought
@@ -602,7 +614,7 @@ public class Player {
 
 	/**
 	 * Get the player's development cards
-	 * 
+	 *
 	 * @return an array with the number of each type of card
 	 */
 	public int[] getCards() {
@@ -611,7 +623,7 @@ public class Player {
 
 	/**
 	 * Get the number of a given development card type that a player has
-	 * 
+	 *
 	 * @param card
 	 *            the card type
 	 * @return the number of that card type including new cards
@@ -628,7 +640,7 @@ public class Player {
 
 	/**
 	 * Get the number of victory point cards
-	 * 
+	 *
 	 * @return the number of victory point cards the player has
 	 */
 	public int getVictoryCards() {
@@ -637,7 +649,7 @@ public class Player {
 
 	/**
 	 * Determine if the player has a card to use
-	 * 
+	 *
 	 * @return true if the player is allowed to use a card
 	 */
 	public boolean canUseCard() {
@@ -654,7 +666,7 @@ public class Player {
 
 	/**
 	 * Add a development card of the given type
-	 * 
+	 *
 	 * @param card
 	 *            the card type
 	 */
@@ -669,7 +681,7 @@ public class Player {
 
 	/**
 	 * Determine if the player has a particular card
-	 * 
+	 *
 	 * @param card
 	 *            the card type to check for
 	 * @return true if the player has this card type
@@ -680,7 +692,7 @@ public class Player {
 
 	/**
 	 * Use a card
-	 * 
+	 *
 	 * @param card
 	 *            the card type to use
 	 * @return true if the card was used successfully
@@ -690,21 +702,21 @@ public class Player {
 			return false;
 
 		switch (card) {
-		case SOLDIER:
-			boolean hadLargest = (board.getLargestArmyOwner() == this);
-			soldiers += 1;
-			board.checkLargestArmy(this, soldiers);
-			if (!hadLargest && board.getLargestArmyOwner() == this)
-				appendAction(R.string.player_largest_army);
-			board.startRobberPhase();
-			break;
-		case PROGRESS:
-			board.startProgressPhase1();
-			break;
-		case VICTORY:
-			return false;
-		default:
-			break;
+			case SOLDIER:
+				boolean hadLargest = (board.getLargestArmyOwner() == this);
+				soldiers += 1;
+				board.checkLargestArmy(this, soldiers);
+				if (!hadLargest && board.getLargestArmyOwner() == this)
+					appendAction(R.string.player_largest_army);
+				board.startRobberPhase();
+				break;
+			case PROGRESS:
+				board.startProgressPhase1();
+				break;
+			case VICTORY:
+				return false;
+			default:
+				break;
 		}
 
 		cards[card.ordinal()] -= 1;
@@ -718,7 +730,7 @@ public class Player {
 
 	/**
 	 * Steal all resources of a given resourceType from the other players
-	 * 
+	 *
 	 * @param resourceType
 	 */
 	public int monopoly(Resource.ResourceType resourceType) {
@@ -746,7 +758,7 @@ public class Player {
 
 	/**
 	 * Get 2 free resources
-	 * 
+	 *
 	 * @param resourceType1
 	 *            first resource type
 	 * @param resourceType2
@@ -764,7 +776,7 @@ public class Player {
 
 	/**
 	 * Get the number of cards that are required to trade for 1 resource
-	 * 
+	 *
 	 * @return the number of resources cards needed
 	 */
 	public int getTradeValue() {
@@ -773,22 +785,22 @@ public class Player {
 
 	/**
 	 * Determine if the player has a particular harbor resourceType
-	 * 
+	 *
 	 * @param resourceType
 	 *            the resource resourceType, or null for 3:1 harbor
 	 * @return
 	 */
 	public boolean hasHarbor(Resource.ResourceType resourceType) {
 		if (resourceType == null) {
-            return (tradeValue == 3);
-        }
+			return (tradeValue == 3);
+		}
 
 		return harbors[resourceType.ordinal()];
 	}
 
 	/**
 	 * Add a harbor
-	 * 
+	 *
 	 * @param resourceType
 	 *            the harbor resourceType
 	 */
@@ -806,7 +818,7 @@ public class Player {
 
 	/**
 	 * Determine if a trade is valid
-	 * 
+	 *
 	 * @param resourceType
 	 *            the resourceType to trade for
 	 * @param trade
@@ -833,7 +845,7 @@ public class Player {
 
 	/**
 	 * Trade for a resource
-	 * 
+	 *
 	 * @param resourceType
 	 *            the resourceType to trade for
 	 * @param trade
@@ -889,7 +901,7 @@ public class Player {
 
 	/**
 	 * Find all possible trade combinations
-	 * 
+	 *
 	 * @param want
 	 *            the type of resource to trade for
 	 * @return a Vector of arrays of the number of each card type to offer
@@ -962,7 +974,7 @@ public class Player {
 
 	/**
 	 * Determine if the player is a human player on this device
-	 * 
+	 *
 	 * @return true if the player is human controlled on this device
 	 */
 	public boolean isHuman() {
@@ -971,7 +983,7 @@ public class Player {
 
 	/**
 	 * Determine if the player is a bot
-	 * 
+	 *
 	 * @return true if the player is a bot
 	 */
 	public boolean isBot() {
@@ -980,7 +992,7 @@ public class Player {
 
 	/**
 	 * Determine if the player is an online player
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isOnline() {
@@ -989,7 +1001,7 @@ public class Player {
 
 	/**
 	 * Set the player's name
-	 * 
+	 *
 	 * @param name
 	 *            the player's new name
 	 */
@@ -999,7 +1011,7 @@ public class Player {
 
 	/**
 	 * Get the player's name
-	 * 
+	 *
 	 * @return the player's name
 	 */
 	public String getName() {
@@ -1016,7 +1028,7 @@ public class Player {
 	/**
 	 * Notify the player of a road length and update its longest road length if
 	 * greater
-	 * 
+	 *
 	 * @param roadLength
 	 *            the length of a road
 	 */
@@ -1027,7 +1039,7 @@ public class Player {
 
 	/**
 	 * Get the length of the player's longest road
-	 * 
+	 *
 	 * @return the longest road length
 	 */
 	public int getRoadLength() {
@@ -1036,7 +1048,7 @@ public class Player {
 
 	/**
 	 * Get the number of soldiers in the player's army
-	 * 
+	 *
 	 * @return the number of soldier cards used
 	 */
 	public int getArmySize() {
@@ -1045,7 +1057,7 @@ public class Player {
 
 	/**
 	 * Get the number of towns
-	 * 
+	 *
 	 * @return the number of towns the player has
 	 */
 	public int getNumTowns() {
@@ -1054,7 +1066,7 @@ public class Player {
 
 	/**
 	 * Get the number of development cards the player has
-	 * 
+	 *
 	 * @return the number of development cards the player has
 	 */
 	public int getNumDevCards() {
@@ -1067,7 +1079,7 @@ public class Player {
 
 	/**
 	 * Get the number of resource cards the player has
-	 * 
+	 *
 	 * @return the number of resource cards the player has
 	 */
 	public int getNumResources() {
@@ -1080,7 +1092,7 @@ public class Player {
 
 	/**
 	 * Get the number of cities
-	 * 
+	 *
 	 * @return the number of cities the player has
 	 */
 	public int getNumCities() {
@@ -1089,7 +1101,7 @@ public class Player {
 
 	/**
 	 * Get the number of roads built
-	 * 
+	 *
 	 * @return the number of roads the player built
 	 */
 	public int getNumRoads() {
@@ -1098,7 +1110,7 @@ public class Player {
 
 	/**
 	 * Add an action to the turn log
-	 * 
+	 *
 	 * @param action
 	 *            a string of the action
 	 */
@@ -1115,7 +1127,7 @@ public class Player {
 
 	/**
 	 * Add an action to the turn log using a resource string
-	 * 
+	 *
 	 * @param action
 	 *            string resource id for action
 	 */
@@ -1127,7 +1139,7 @@ public class Player {
 	/**
 	 * Add an action to the turn log using a resource string and supplementary
 	 * string
-	 * 
+	 *
 	 * @param action
 	 *            string resource id for action
 	 * @param additional
@@ -1141,7 +1153,7 @@ public class Player {
 	/**
 	 * Add an action to the turn log using a resource string and supplementary
 	 * string
-	 * 
+	 *
 	 * @param action
 	 *            string resource id for action
 	 * @param additional
@@ -1155,7 +1167,7 @@ public class Player {
 
 	/**
 	 * Get the action log
-	 * 
+	 *
 	 * @return a String containing the log
 	 */
 	public String getActionLog() {
@@ -1164,29 +1176,29 @@ public class Player {
 
 	/**
 	 * Get the string resource for a color
-	 * 
+	 *
 	 * @param color
 	 *            the color
 	 * @return the string resource
 	 */
 	public static int getColorStringResource(Color color) {
 		switch (color) {
-		case RED:
-			return R.string.red;
-		case BLUE:
-			return R.string.blue;
-		case GREEN:
-			return R.string.green;
-		case ORANGE:
-			return R.string.orange;
-		default:
-			return R.string.nostring;
+			case RED:
+				return R.string.red;
+			case BLUE:
+				return R.string.blue;
+			case GREEN:
+				return R.string.green;
+			case ORANGE:
+				return R.string.orange;
+			default:
+				return R.string.nostring;
 		}
 	}
 
 	/**
 	 * Enabled mixed trades
-	 * 
+	 *
 	 * @param mixed
 	 *            whether mixed trades should be allowed
 	 */
@@ -1196,7 +1208,7 @@ public class Player {
 
 	/**
 	 * Determine if mixed trades are allowed
-	 * 
+	 *
 	 * @return true if mixed trades are allowed
 	 */
 	public static boolean canTradeMixed() {

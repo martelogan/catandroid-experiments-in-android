@@ -1,7 +1,6 @@
 package com.catandroid.app.common.components;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -33,7 +32,7 @@ public class ComponentUtils
                 while (true) {
                     int index = (int) (hexCount * Math.random());
                     if (hexagons[index] == null) {
-                        hexagons[index] = new Hexagon(terrainType, index);
+                        hexagons[index] = new Hexagon(board, terrainType, index);
 
                         if (terrainType == Hexagon.TerrainType.DESERT) {
                             hexagons[index].placeNumberToken(7);
@@ -49,7 +48,7 @@ public class ComponentUtils
         return hexagons;
     }
 
-    public static Harbor[] initRandomHarbors(int harborCount) {
+    public static Harbor[] initRandomHarbors(Board board, int harborCount) {
 
         // mark all harbors as unassigned
         Harbor[] harbors = new Harbor[harborCount];
@@ -75,7 +74,7 @@ public class ComponentUtils
                         resourceType = Resource.ResourceType.values()[i];
                     }
 
-                    harbors[pick] = new Harbor(resourceType, pick);
+                    harbors[pick] = new Harbor(board, resourceType, pick);
                     usedHarbor[pick] = true;
                     break;
                 }
@@ -85,10 +84,10 @@ public class ComponentUtils
         return harbors;
     }
 
-    public static Harbor[] generateHarbors(Resource.ResourceType[] resourceTypes) {
+    public static Harbor[] generateHarbors(Board board, Resource.ResourceType[] resourceTypes) {
         Harbor[] harbors = new Harbor[resourceTypes.length];
         for (int i = 0; i < harbors.length; i++) {
-            harbors[i] = new Harbor(resourceTypes[i], i);
+            harbors[i] = new Harbor(board, resourceTypes[i], i);
         }
 
         return harbors;
@@ -103,11 +102,11 @@ public class ComponentUtils
      *            an array of hexagon resourceTypes
      * @return a hexagon array
      */
-    public static Hexagon[] generateHexes(int hexCount, Hexagon.TerrainType[] terrainTypes) {
+    public static Hexagon[] generateHexes(Board board, int hexCount, Hexagon.TerrainType[] terrainTypes) {
         Hexagon[] hexagons = new Hexagon[hexCount];
         for (int i = 0; i < hexagons.length; i++)
         {
-            hexagons[i] = new Hexagon(terrainTypes[i], i);
+            hexagons[i] = new Hexagon(board, terrainTypes[i], i);
         }
 
         return hexagons;
@@ -120,10 +119,10 @@ public class ComponentUtils
      *          number of vertices to generate
      * @return array of vertices
      */
-    public static Vertex[] generateVertices(int vertexCount) {
+    public static Vertex[] generateVertices(Board board, int vertexCount) {
         Vertex[] vertices = new Vertex[vertexCount];
         for (int i = 0; i < vertexCount; i++) {
-            vertices[i] = new Vertex(i);
+            vertices[i] = new Vertex(board, i);
         }
 
         return vertices;
@@ -135,10 +134,10 @@ public class ComponentUtils
      *          number of edges to generate
      * @return array of edges
      */
-    public static Edge[] generateEdges(int edgeCount) {
+    public static Edge[] generateEdges(Board board, int edgeCount) {
         Edge[] edges = new Edge[edgeCount];
         for (int i = 0; i < edgeCount; i++) {
-            edges[i] = new Edge(i);
+            edges[i] = new Edge(board, i);
         }
 
         return edges;

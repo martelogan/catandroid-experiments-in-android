@@ -307,7 +307,7 @@ public class TextureManager {
 	}
 
 	public void draw(Harbor harbor, GL10 gl, BoardGeometry boardGeometry) {
-		int id = harbor.getIndex();
+		int id = harbor.getId();
 
 		// draw shore access notches
 		gl.glPushMatrix();
@@ -318,8 +318,8 @@ public class TextureManager {
 
 		// draw type icon
 		gl.glPushMatrix();
-		gl.glTranslatef(boardGeometry.getHarborIconX(id, harbor.getMyEdge()),
-				boardGeometry.getHarborIconY(id, harbor.getMyEdge()), 0);
+		gl.glTranslatef(boardGeometry.getHarborIconX(id, harbor.getEdge()),
+				boardGeometry.getHarborIconY(id, harbor.getEdge()), 0);
 		square.get(hash(Type.RESOURCE, harbor.getResourceType().ordinal())).render(gl);
 		gl.glPopMatrix();
 	}
@@ -327,10 +327,10 @@ public class TextureManager {
 	public void draw(Edge edge, boolean build, GL10 gl, BoardGeometry boardGeometry) {
 		float[] x = new float[2];
 		float[] y = new float[2];
-		x[0] = boardGeometry.getVertexX(edge.getV0Clockwise().getIndex());
-		x[1] = boardGeometry.getVertexX(edge.getV1Clockwise().getIndex());
-		y[0] = boardGeometry.getVertexY(edge.getV0Clockwise().getIndex());
-		y[1] = boardGeometry.getVertexY(edge.getV1Clockwise().getIndex());
+		x[0] = boardGeometry.getVertexX(edge.getV0Clockwise().getId());
+		x[1] = boardGeometry.getVertexX(edge.getV1Clockwise().getId());
+		y[0] = boardGeometry.getVertexY(edge.getV0Clockwise().getId());
+		y[1] = boardGeometry.getVertexY(edge.getV1Clockwise().getId());
 
 		Player owner = edge.getOwner();
 		float[] color;
@@ -346,7 +346,7 @@ public class TextureManager {
 
 		gl.glPushMatrix();
 		
-		gl.glTranslatef(boardGeometry.getEdgeX(edge.getIndex()), boardGeometry.getEdgeY(edge.getIndex()), Type.ROAD.ordinal());
+		gl.glTranslatef(boardGeometry.getEdgeX(edge.getId()), boardGeometry.getEdgeY(edge.getId()), Type.ROAD.ordinal());
 		gl.glRotatef((float) (180 / Math.PI * Math.atan(dy / dx)), 0, 0, 1);
 		
 		square.get(hash(Type.ROAD, 0)).render(gl);
@@ -377,7 +377,7 @@ public class TextureManager {
 		Square object = square.get(hash(type, color.ordinal()));
 		if (object != null) {
 			gl.glPushMatrix();
-			int id = vertex.getIndex();
+			int id = vertex.getId();
 			gl.glTranslatef(boardGeometry.getVertexX(id), boardGeometry.getVertexY(id), Type.TOWN.ordinal());
 			object.render(gl);
 			gl.glPopMatrix();
