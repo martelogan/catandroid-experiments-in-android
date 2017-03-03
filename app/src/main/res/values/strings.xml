@@ -45,6 +45,7 @@
 	<string name="grain">grain</string>
 	<string name="brick">brick</string>
 	<string name="ore">ore</string>
+	<string name="gold">gold</string>
 
 	<!-- Options screen -->
 	<string name="options">Options</string>
@@ -238,7 +239,7 @@
 	<!-- Prompt strings -->
 	<string name="phase_first_town">Place first town</string>
 	<string name="phase_first_road">Place first road</string>
-	<string name="phase_second_town">Place second town</string>
+	<string name="phase_first_city">Place first city</string>
 	<string name="phase_second_road">Place second road</string>
 	<string name="phase_roll_production">Roll for production</string>
 	<string name="phase_build">Build</string>

@@ -10,7 +10,7 @@ public class Resource {
 
     public static final ResourceType[] RESOURCE_TYPES =
             { ResourceType.LUMBER, ResourceType.WOOL, ResourceType.GRAIN,
-                    ResourceType.BRICK, ResourceType.ORE };
+                    ResourceType.BRICK, ResourceType.ORE, ResourceType.GOLD };
 
     private ResourceType resourceType;
 
@@ -23,7 +23,7 @@ public class Resource {
     }
 
     public enum ResourceType {
-        LUMBER, WOOL, GRAIN, BRICK, ORE, ANY
+        LUMBER, WOOL, GRAIN, BRICK, ORE, GOLD, ANY
     }
 
     public int toResourceIndex() {
@@ -46,6 +46,8 @@ public class Resource {
                 return 3;
             case ORE:
                 return 4;
+            case GOLD:
+                return 5;
             default:
                 return -1;
         }
@@ -63,6 +65,8 @@ public class Resource {
                 return R.string.brick;
             case ORE:
                 return R.string.ore;
+            case GOLD:
+                return R.string.gold;
             default:
                 return R.string.nostring;
         }

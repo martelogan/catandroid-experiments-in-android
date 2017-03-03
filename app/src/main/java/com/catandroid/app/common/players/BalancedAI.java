@@ -12,7 +12,7 @@ import com.catandroid.app.common.components.Vertex;
 
 public class BalancedAI extends Player implements AutomatedPlayer {
 
-    protected static final int[] preference = { 9, 8, 8, 10, 7 };
+    protected static final int[] preference = { 9, 8, 8, 10, 7, 8 };
 
     public BalancedAI(Board board, int index, Color color, String name) {
         super(board, index, "", color, name, Player.PLAYER_BOT);
@@ -53,7 +53,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             if (canSettle && affordTown()) {
                 Vertex pick = pickTown();
                 if (pick != null && build(pick, Vertex.TOWN))
+                {
                     done = false;
+                }
             }
 
             // try to build a city
@@ -62,7 +64,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                     Vertex settlement = board.getVertexById(settlementIds.get(i));
                     if (settlement.getBuilding() == Vertex.TOWN
                             && build(settlement, Vertex.CITY))
+                    {
                         done = false;
+                    }
                 }
             }
 
@@ -203,14 +207,16 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
     @Override
     public int setupRoad(Edge[] edges) {
-        // build from random settlement and build in a random cubicDirection
+        // build from random settlement and build in a random direction
         while (true) {
             Vertex vertex = board.getVertexById(settlementIds.get(
                     (int) (Math.random() * settlementIds.size())));
             int pick = (int) (Math.random() * 3);
             Edge edge = vertex.getEdge(pick);
             if (edge != null && build(edge))
+            {
                 return edge.getId();
+            }
         }
     }
 
@@ -238,7 +244,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
         for (int i = 0; i < vertices.length; i++) {
             if (vertices[i].getOwner() != null)
+            {
                 continue;
+            }
 
             int score = vertexValue(vertices[i], preference);
             if (score > highest && canBuild(vertices[i], Vertex.TOWN)) {
@@ -251,6 +259,31 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         reachingIds.add(index);
         return index;
     }
+
+    //TODO: does this work?
+    @Override
+    public int setupCity(Vertex[] vertices) {
+        int highest = 0;
+        int index = 0;
+
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].getOwner() != null)
+            {
+                continue;
+            }
+
+            int score = vertexValue(vertices[i], preference);
+            if (score > highest && canBuild(vertices[i], Vertex.CITY)) {
+                highest = score;
+                index = i;
+            }
+        }
+
+        build(vertices[index], Vertex.CITY);
+        reachingIds.add(index);
+        return index;
+    }
+
 
     @Override
     public int placeRobber(Hexagon[] hexagons, Hexagon exception) {
@@ -351,7 +384,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
     }
 
     protected int hexagonValue(Hexagon hexagon, int[] factors) {
-        if (factors != null && hexagon.getTerrainType() != Hexagon.TerrainType.DESERT) {
+        if (factors != null && hexagon.getTerrainType() != Hexagon.TerrainType.DESERT
+                && hexagon.getTerrainType() != Hexagon.TerrainType.SEA) {
             return factors[hexagon.getResourceType().ordinal()] * hexagon.getNumberTokenAsObject().getTotalWaysToSum();
         }
         else {
@@ -374,12 +408,16 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         // copy list of resource we have
         int[] have = new int[Resource.RESOURCE_TYPES.length];
         for (int i = 0; i < have.length; i++)
+        {
             have[i] = getResources(Resource.RESOURCE_TYPES[i]);
+        }
 
         // create list of resources we need
         int[] need = new int[Resource.RESOURCE_TYPES.length];
         for (int i = 0; i < need.length; i++)
+        {
             need[i] = want[i] - have[i];
+        }
 
         Vector<Resource.ResourceType> resourceTypes = new Vector<Resource.ResourceType>();
         Vector<int[]> trades = new Vector<int[]>();

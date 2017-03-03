@@ -26,7 +26,7 @@ import com.catandroid.app.common.players.Player;
 public class TextureManager {
 
 	private enum Type {
-		NONE, BACKGROUND, SHORE, TILE, ROBBER, LIGHT, TRADER, RESOURCE, ROLL, ROAD, TOWN, CITY, ORNAMENT, BUTTONBG, BUTTON
+		NONE, BACKGROUND, SHORE, TILE, ROBBER, LIGHT, HARBOR, RESOURCE, NUMBER_TOKEN, ROAD, TOWN, CITY, ORNAMENT, BUTTONBG, BUTTON
 	}
 
 	public enum Location {
@@ -80,17 +80,17 @@ public class TextureManager {
 		add(Type.TILE, Hexagon.TerrainType.DIM.ordinal(), R.drawable.tile_dim, res);
 		add(Type.LIGHT, 0, R.drawable.tile_light, res);
 
-		// load executeDiceRoll number textures
-		add(Type.ROLL, 2, R.drawable.roll_2, res);
-		add(Type.ROLL, 3, R.drawable.roll_3, res);
-		add(Type.ROLL, 4, R.drawable.roll_4, res);
-		add(Type.ROLL, 5, R.drawable.roll_5, res);
-		add(Type.ROLL, 6, R.drawable.roll_6, res);
-		add(Type.ROLL, 8, R.drawable.roll_8, res);
-		add(Type.ROLL, 9, R.drawable.roll_9, res);
-		add(Type.ROLL, 10, R.drawable.roll_10, res);
-		add(Type.ROLL, 11, R.drawable.roll_11, res);
-		add(Type.ROLL, 12, R.drawable.roll_12, res);
+		// load number token textures
+		add(Type.NUMBER_TOKEN, 2, R.drawable.num_2, res);
+		add(Type.NUMBER_TOKEN, 3, R.drawable.num_3, res);
+		add(Type.NUMBER_TOKEN, 4, R.drawable.num_4, res);
+		add(Type.NUMBER_TOKEN, 5, R.drawable.num_5, res);
+		add(Type.NUMBER_TOKEN, 6, R.drawable.num_6, res);
+		add(Type.NUMBER_TOKEN, 8, R.drawable.num_8, res);
+		add(Type.NUMBER_TOKEN, 9, R.drawable.num_9, res);
+		add(Type.NUMBER_TOKEN, 10, R.drawable.num_10, res);
+		add(Type.NUMBER_TOKEN, 11, R.drawable.num_11, res);
+		add(Type.NUMBER_TOKEN, 12, R.drawable.num_12, res);
 
 		// load robber textures
 		add(Type.ROBBER, 0, R.drawable.tile_robber, res);
@@ -111,7 +111,7 @@ public class TextureManager {
 		add(Type.BUTTON, UIButton.Type.CITY.ordinal(), R.drawable.button_city,
 				res);
 		add(Type.BUTTON, UIButton.Type.DEVCARD.ordinal(),
-				R.drawable.button_development, res);
+				R.drawable.button_development_cards, res);
 		add(Type.BUTTON, UIButton.Type.TRADE.ordinal(),
 				R.drawable.button_trade, res);
 		add(Type.BUTTON, UIButton.Type.ENDTURN.ordinal(),
@@ -123,7 +123,7 @@ public class TextureManager {
 				
 		// load large town textures
 		add(Type.TOWN, Player.Color.SELECT.ordinal(),
-				R.drawable.settlement_purple, res);
+				R.drawable.settlement_grey, res);
 		add(Type.TOWN, Player.Color.RED.ordinal(), R.drawable.settlement_red,
 				res);
 		add(Type.TOWN, Player.Color.BLUE.ordinal(),
@@ -131,15 +131,15 @@ public class TextureManager {
 		add(Type.TOWN, Player.Color.GREEN.ordinal(),
 				R.drawable.settlement_green, res);
 		add(Type.TOWN, Player.Color.ORANGE.ordinal(),
-				R.drawable.settlement_orange, res);
+				R.drawable.settlement_yellow, res);
 
 		// load large city textures
-		add(Type.CITY, Player.Color.SELECT.ordinal(), R.drawable.city_purple,
+		add(Type.CITY, Player.Color.SELECT.ordinal(), R.drawable.city_grey,
 				res);
 		add(Type.CITY, Player.Color.RED.ordinal(), R.drawable.city_red, res);
 		add(Type.CITY, Player.Color.BLUE.ordinal(), R.drawable.city_blue, res);
 		add(Type.CITY, Player.Color.GREEN.ordinal(), R.drawable.city_green, res);
-		add(Type.CITY, Player.Color.ORANGE.ordinal(), R.drawable.city_orange,
+		add(Type.CITY, Player.Color.ORANGE.ordinal(), R.drawable.city_yellow,
 				res);
 
 		// load large resource icons
@@ -152,22 +152,22 @@ public class TextureManager {
 		add(Type.RESOURCE, Resource.ResourceType.BRICK.ordinal(), R.drawable.res_brick,
 				res);
 		add(Type.RESOURCE, Resource.ResourceType.ORE.ordinal(), R.drawable.res_ore, res);
-		add(Type.RESOURCE, Resource.ResourceType.ANY.ordinal(), R.drawable.trader_any,
+		add(Type.RESOURCE, Resource.ResourceType.ANY.ordinal(), R.drawable.harbor_special,
 				res);
 
-		// load large trader textures
-		add(Type.TRADER, Harbor.Position.NORTH.ordinal(),
-				R.drawable.trader_north, res);
-		add(Type.TRADER, Harbor.Position.SOUTH.ordinal(),
-				R.drawable.trader_south, res);
-		add(Type.TRADER, Harbor.Position.NORTHEAST.ordinal(),
-				R.drawable.trader_northeast, res);
-		add(Type.TRADER, Harbor.Position.NORTHWEST.ordinal(),
-				R.drawable.trader_northwest, res);
-		add(Type.TRADER, Harbor.Position.SOUTHEAST.ordinal(),
-				R.drawable.trader_southeast, res);
-		add(Type.TRADER, Harbor.Position.SOUTHWEST.ordinal(),
-				R.drawable.trader_southwest, res);
+		// load large harbor textures
+		add(Type.HARBOR, Harbor.Position.NORTH.ordinal(),
+				R.drawable.harbor_north, res);
+		add(Type.HARBOR, Harbor.Position.SOUTH.ordinal(),
+				R.drawable.harbor_south, res);
+		add(Type.HARBOR, Harbor.Position.NORTHEAST.ordinal(),
+				R.drawable.harbor_northeast, res);
+		add(Type.HARBOR, Harbor.Position.NORTHWEST.ordinal(),
+				R.drawable.harbor_northwest, res);
+		add(Type.HARBOR, Harbor.Position.SOUTHEAST.ordinal(),
+				R.drawable.harbor_southeast, res);
+		add(Type.HARBOR, Harbor.Position.SOUTHWEST.ordinal(),
+				R.drawable.harbor_southwest, res);
 
 		// load corner ornaments
 		add(Type.ORNAMENT, Location.BOTTOM_LEFT.ordinal(),
@@ -300,7 +300,7 @@ public class TextureManager {
 
 		if (roll != 0 && roll != 7) {
 			gl.glScalef(1.5f, 1.5f, 1);
-			square.get(hash(Type.ROLL, roll)).render(gl);
+			square.get(hash(Type.NUMBER_TOKEN, roll)).render(gl);
 		}
 
 		gl.glPopMatrix();
@@ -312,7 +312,7 @@ public class TextureManager {
 		// draw shore access notches
 		gl.glPushMatrix();
 		gl.glTranslatef(boardGeometry.getHarborX(id), boardGeometry.getHarborY(id), 0);
-		square.get(hash(Type.TRADER, harbor.getPosition().ordinal()))
+		square.get(hash(Type.HARBOR, harbor.getPosition().ordinal()))
 				.render(gl);
 		gl.glPopMatrix();
 
@@ -361,18 +361,28 @@ public class TextureManager {
 
 		Type type = Type.NONE;
 		if (vertex.getBuilding() == Vertex.CITY || buildCity)
+		{
 			type = Type.CITY;
+		}
 		else if (vertex.getBuilding() == Vertex.TOWN || buildTown)
+		{
 			type = Type.TOWN;
+		}
 
 		Player.Color color;
 		Player owner = vertex.getOwner();
 		if (buildTown || buildCity)
+		{
 			color = Player.Color.SELECT;
+		}
 		else if (owner != null)
+		{
 			color = owner.getColor();
+		}
 		else
+		{
 			color = Player.Color.NONE;
+		}
 
 		Square object = square.get(hash(type, color.ordinal()));
 		if (object != null) {

@@ -227,21 +227,41 @@ public class Vertex {
 	}
 
 	/**
-	 * Check if there are no adjacent settlementIds
+	 * Ensure that this vertex is available for vertexUnits
 	 * 
-	 * @return true if there are no adjacent settlementIds
+	 * @return true iff the vertex is connected to at least one land hex
+	 * and there are no adjacent cities/towns
 	 */
 	public boolean couldBuild() {
-		// check for adjacent buildings
+		int curEdgeId, curHexId, adjVertexId;
+		boolean noAdjacentCommunity = true,
+				isOnLand = false;
+		Edge intersectingEdge;
+		Hexagon adjacentHex;
+		// for each connected edge and/or hexagon
 		for (int i = 0; i < 3; i++) {
-			if (edgeIds[i] != -1 &&
-					board.getVertexById(
-							board.getEdgeById(
-									edgeIds[i]).getAdjacent(this).getId()).hasBuilding())
-				return false;
+			curEdgeId = edgeIds[i];
+			curHexId = hexagonIds[i];
+			intersectingEdge = curEdgeId == -1 ? null : board.getEdgeById(curEdgeId);
+			adjacentHex = curHexId == -1 ? null : board.getHexagonById(curHexId);
+			if (intersectingEdge != null)
+			{
+				adjVertexId = intersectingEdge.getAdjacent(this).getId();
+				if(board.getVertexById(adjVertexId).hasBuilding()) {
+					// there is a nearby community and we cannot build here
+					noAdjacentCommunity = false;
+					break;
+				}
+			}
+			if (adjacentHex != null) {
+				if (adjacentHex.getTerrainType() != Hexagon.TerrainType.SEA) {
+					// the vertex is indeed connected to land
+					isOnLand = true;
+				}
+			}
 		}
 
-		return true;
+		return noAdjacentCommunity && isOnLand;
 	}
 
 	/**
@@ -258,6 +278,7 @@ public class Vertex {
 			return false;
 		}
 
+		//TODO: change this to cities & knights version
 		// only allow building towns
 		if (setup) {
 			return (owner == null);
@@ -299,12 +320,14 @@ public class Vertex {
 	 */
 	public boolean build(Player player, int type, boolean setup) {
 		if (!this.canBuild(player, type, setup))
+		{
 			return false;
+		}
 
 		switch (building) {
 			case NONE:
 				owner = player;
-				building = TOWN;
+				building = board.isSetupPhase2() ? CITY : TOWN;
 				break;
 			case TOWN:
 				building = CITY;

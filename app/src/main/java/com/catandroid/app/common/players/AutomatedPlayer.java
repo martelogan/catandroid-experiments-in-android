@@ -18,6 +18,16 @@ public interface AutomatedPlayer {
 	int setupTown(Vertex[] vertices);
 
 	/**
+	 * Select the location to build a city; Note: you must build there before
+	 * returning
+	 *
+	 * @param vertices
+	 *            the vertex list
+	 * @return the index of the vertex you built on
+	 */
+	int setupCity(Vertex[] vertices);
+
+	/**
 	 * Select the location to place a road; Note: you must build there before
 	 * returning
 	 * 

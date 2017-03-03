@@ -226,8 +226,10 @@ public class ActiveGameFragment extends Fragment {
 
 		Player player = board.getCurrentPlayer();
 		if (player.build(vertex, type)) {
-			if (board.isSetupTown())
+			if (board.isSetupTown() || board.isSetupCity())
+			{
 				board.nextPhase();
+			}
 
 			setup(false);
 		}
@@ -522,6 +524,8 @@ public class ActiveGameFragment extends Fragment {
 		Action action = Action.NONE;
 		if (board.isSetupTown())
 			action = Action.TOWN;
+		else if (board.isSetupCity())
+			action = Action.CITY;
 		else if (board.isSetupRoad() || board.isProgressPhase())
 			action = Action.ROAD;
 		else if (board.isRobberPhase() && board.getCurRobberHex() == null)
@@ -546,8 +550,9 @@ public class ActiveGameFragment extends Fragment {
 			getActivity().setTitle(player.getName() + ": " + getActivity().getString(resourceId));
 		else
 			getActivity().setTitle(player.getName());
-		
-		resources.setValues(player);
+
+		// TODO: remove resources reference
+//		resources.setValues(player);
 
 		Log.d("myTag", "end of setup");
 	}
@@ -947,17 +952,19 @@ public class ActiveGameFragment extends Fragment {
 		view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.MATCH_PARENT, 1));
 		frame.addView(view);
-		
-		boolean horizontal = getActivity().getResources().getDisplayMetrics().widthPixels < getActivity().getResources().getDisplayMetrics().heightPixels;
-		resources = new ResourceView(getActivity());
-		resources.setOrientation(horizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
-		RelativeLayout.LayoutParams params;
-		if (horizontal)
-			params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		else
-			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-		params.addRule(horizontal ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-		frame.addView(resources, params);
+
+		// TODO: remove/replace all references to resources
+//		boolean horizontal = getActivity().getResources().getDisplayMetrics().widthPixels
+//				< getActivity().getResources().getDisplayMetrics().heightPixels;
+//		resources = new ResourceView(getActivity());
+//		resources.setOrientation(horizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+//		RelativeLayout.LayoutParams params;
+//		if (horizontal)
+//			params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//		else
+//			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+//		params.addRule(horizontal ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+//		frame.addView(resources, params);
 
 		board = app.getBoardInstance();
 

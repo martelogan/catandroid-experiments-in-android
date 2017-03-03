@@ -23,10 +23,10 @@ public class Player {
 	public static final int MAX_CITIES = 4;
 	public static final int MAX_ROADS = 15;
 
-	public static final int[] ROAD_COST = { 1, 0, 0, 1, 0 };
-	public static final int[] TOWN_COST = { 1, 1, 1, 1, 0 };
-	public static final int[] CITY_COST = { 0, 0, 2, 0, 3 };
-	public static final int[] CARD_COST = { 0, 1, 1, 0, 1 };
+	public static final int[] ROAD_COST = { 1, 0, 0, 1, 0, 0 };
+	public static final int[] TOWN_COST = { 1, 1, 1, 1, 0, 0 };
+	public static final int[] CITY_COST = { 0, 0, 2, 0, 3, 0 };
+	public static final int[] CARD_COST = { 0, 1, 1, 0, 1, 0 };
 
 	private String googlePlayParticipantId;
 	private int playerNumber;
@@ -205,7 +205,9 @@ public class Player {
 	 */
 	public boolean build(Vertex vertex, int type) {
 		if (vertex == null || !canBuild(vertex, type))
+		{
 			return false;
+		}
 
 		boolean setup = board.isSetupPhase();
 
@@ -222,7 +224,9 @@ public class Player {
 		}
 
 		if (!vertex.build(this, type, setup))
+		{
 			return false;
+		}
 
 		// deduct resources based on type
 		if (vertex.getBuilding() == Vertex.TOWN) {
@@ -239,17 +243,27 @@ public class Player {
 			if (!setup) {
 				useResources(Resource.ResourceType.GRAIN, 2);
 				useResources(Resource.ResourceType.ORE, 3);
+				towns -= 1;
 			}
-			towns -= 1;
+			else {
+				settlementIds.add(vertex.getId());
+			}
 			cities += 1;
 		}
 
+		// TODO: does town vs. city matter?
 		// collect resources for second town during setup
 		if (board.isSetupPhase2()) {
 			for (int i = 0; i < 3; i++) {
-				int hexId = vertex.getHexagon(i).getId();
-				if (hexId != -1 && board.getHexagonById(hexId).getTerrainType() != Hexagon.TerrainType.DESERT)
-					addResources(board.getHexagonById(hexId).getResourceType(), 1);
+				Hexagon curHex = vertex.getHexagon(i);
+				Hexagon.TerrainType terrainType;
+				if (curHex != null) {
+					terrainType = curHex.getTerrainType();
+					if (terrainType != Hexagon.TerrainType.DESERT
+							&& terrainType != Hexagon.TerrainType.SEA) {
+						addResources(curHex.getResourceType(), 1);
+					}
+				}
 			}
 		}
 
@@ -296,9 +310,13 @@ public class Player {
 	 */
 	public boolean canBuild(Vertex vertex, int type) {
 		if (type == Vertex.TOWN && towns >= MAX_TOWNS)
+		{
 			return false;
+		}
 		else if (type == Vertex.CITY && cities >= MAX_CITIES)
+		{
 			return false;
+		}
 
 		return vertex.canBuild(this, type, board.isSetupPhase());
 	}

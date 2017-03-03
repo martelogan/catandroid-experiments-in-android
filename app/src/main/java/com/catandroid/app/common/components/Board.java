@@ -306,10 +306,11 @@ public class Board {
 			switch (phase) {
 
 			case SETUP_SETTLEMENT:
-			case SETUP_CITY:
 				current.setupTown(vertices);
 				break;
-
+			case SETUP_CITY:
+				current.setupCity(vertices);
+				break;
 			case SETUP_FIRST_R:
 			case SETUP_SECOND_R:
 				current.setupRoad(edges);
@@ -353,56 +354,56 @@ public class Board {
 		boolean turnChanged = false;
 
 		switch (phase) {
-		case SETUP_SETTLEMENT:
-			phase = Phase.SETUP_FIRST_R;
-			break;
-		case SETUP_FIRST_R:
-			if (turn < 3) {
-				turn++;
-				turnChanged = true;
-				phase = Phase.SETUP_SETTLEMENT;
-			} else {
-				phase = Phase.SETUP_CITY;
-			}
-			break;
-		case SETUP_CITY:
-			phase = Phase.SETUP_SECOND_R;
-			break;
-		case SETUP_SECOND_R:
-			if (turn > 0) {
-				turn--;
-				turnChanged = true;
-				phase = Phase.SETUP_CITY;
-			} else {
+			case SETUP_SETTLEMENT:
+				phase = Phase.SETUP_FIRST_R;
+				break;
+			case SETUP_FIRST_R:
+				if (turn < 3) {
+					turn++;
+					turnChanged = true;
+					phase = Phase.SETUP_SETTLEMENT;
+				} else {
+					phase = Phase.SETUP_CITY;
+				}
+				break;
+			case SETUP_CITY:
+				phase = Phase.SETUP_SECOND_R;
+				break;
+			case SETUP_SECOND_R:
+				if (turn > 0) {
+					turn--;
+					turnChanged = true;
+					phase = Phase.SETUP_CITY;
+				} else {
+					phase = Phase.PRODUCTION;
+				}
+				break;
+			case PRODUCTION:
+				phase = Phase.BUILD;
+				break;
+			case BUILD:
+				if (turn == 3)
+					turnNumber += 1;
+				players[turn].endTurn();
 				phase = Phase.PRODUCTION;
+				turn++;
+				turn %= 4;
+				turnChanged = true;
+				players[turn].beginTurn();
+				lastDiceRollNumber = 0;
+				break;
+			case PROGRESS_1:
+				phase = Phase.PROGRESS_2;
+				break;
+			case PROGRESS_2:
+				phase = returnPhase;
+				break;
+			case ROBBER:
+				phase = returnPhase;
+				break;
+			case DONE:
+				return false;
 			}
-			break;
-		case PRODUCTION:
-			phase = Phase.BUILD;
-			break;
-		case BUILD:
-			if (turn == 3)
-				turnNumber += 1;
-			players[turn].endTurn();
-			phase = Phase.PRODUCTION;
-			turn++;
-			turn %= 4;
-			turnChanged = true;
-			players[turn].beginTurn();
-			lastDiceRollNumber = 0;
-			break;
-		case PROGRESS_1:
-			phase = Phase.PROGRESS_2;
-			break;
-		case PROGRESS_2:
-			phase = returnPhase;
-			break;
-		case ROBBER:
-			phase = returnPhase;
-			break;
-		case DONE:
-			return false;
-		}
 
 		return turnChanged;
 	}
@@ -420,6 +421,9 @@ public class Board {
 	 * Enter the robber placement phase
 	 */
 	public void startRobberPhase() {
+		if(this.curRobberHex != null) {
+			this.curRobberHex.removeRobber();
+		}
 		this.prevRobberHex= this.curRobberHex;
 		this.returnPhase = phase;
 		this.curRobberHex = null;
@@ -438,7 +442,11 @@ public class Board {
 	}
 
 	public boolean isSetupTown() {
-		return (phase == Phase.SETUP_SETTLEMENT || phase == Phase.SETUP_CITY);
+		return (phase == Phase.SETUP_SETTLEMENT);
+	}
+
+	public boolean isSetupCity() {
+		return (phase == Phase.SETUP_CITY);
 	}
 
 	public boolean isSetupRoad() {
@@ -770,7 +778,7 @@ public class Board {
 		case SETUP_FIRST_R:
 			return R.string.phase_first_road;
 		case SETUP_CITY:
-			return R.string.phase_second_town;
+			return R.string.phase_first_city;
 		case SETUP_SECOND_R:
 			return R.string.phase_second_road;
 		case PRODUCTION:
@@ -846,8 +854,8 @@ public class Board {
 	 */
 	public Hexagon getPrevRobberHex() {
 		int hexCount = this.boardGeometry.getHexCount();
-		int curRobberId = this.curRobberHex.getId();
-		int prevRobberId = this.prevRobberHex.getId();
+		int curRobberId = this.curRobberHex != null ? this.curRobberHex.getId() : -1;
+		int prevRobberId = this.prevRobberHex != null ? this.prevRobberHex.getId() : -1;
 		if (this.phase == Phase.ROBBER && prevRobberId >= 0 && prevRobberId < hexCount)
 			return this.prevRobberHex;
 		else if (curRobberId >= 0 && curRobberId < hexCount) {

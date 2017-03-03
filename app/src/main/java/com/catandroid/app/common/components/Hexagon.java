@@ -399,17 +399,19 @@ public class Hexagon {
 	{
 		HashMap<TerrainType, Resource> terrainToResourceMap =
 				new HashMap<TerrainType, Resource>();
-		Resource lumber, wool, grain, brick, ore;
+		Resource lumber, wool, grain, brick, ore, gold;
 		lumber = new Resource(Resource.ResourceType.LUMBER);
 		wool = new Resource(Resource.ResourceType.WOOL);
 		grain = new Resource(Resource.ResourceType.GRAIN);
 		brick = new Resource(Resource.ResourceType.BRICK);
 		ore = new Resource(Resource.ResourceType.ORE);
+		gold = new Resource(Resource.ResourceType.GOLD);
 		terrainToResourceMap.put(TerrainType.FOREST, lumber);
 		terrainToResourceMap.put(TerrainType.PASTURE, wool);
 		terrainToResourceMap.put(TerrainType.FIELDS, grain);
 		terrainToResourceMap.put(TerrainType.HILLS, brick);
 		terrainToResourceMap.put(TerrainType.MOUNTAINS, ore);
+		terrainToResourceMap.put(TerrainType.GOLD_FIELD, gold);
 		return terrainToResourceMap;
 	}
 

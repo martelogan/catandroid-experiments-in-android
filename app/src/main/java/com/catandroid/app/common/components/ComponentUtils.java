@@ -60,20 +60,22 @@ public class ComponentUtils
 
         // for each harbor type (one of each resource, 4 any 3:1 harbors)
         for (int i = 0; i < harborCount; i++) {
+            Resource.ResourceType resourceType;
+            if (i >= Resource.RESOURCE_TYPES.length)
+            {
+                resourceType = Resource.ResourceType.ANY;
+            }
+            else
+            {
+                resourceType = Resource.ResourceType.values()[i];
+                if (resourceType == Resource.ResourceType.GOLD) {
+                    resourceType = Resource.ResourceType.ANY;
+                }
+            }
             while (true) {
                 // pick a random unassigned harbor
                 int pick = (int) (Math.random() * harborCount);
                 if (!usedHarbor[pick]) {
-                    Resource.ResourceType resourceType;
-                    if (i >= Resource.RESOURCE_TYPES.length)
-                    {
-                        resourceType = Resource.ResourceType.ANY;
-                    }
-                    else
-                    {
-                        resourceType = Resource.ResourceType.values()[i];
-                    }
-
                     harbors[pick] = new Harbor(board, resourceType, pick);
                     usedHarbor[pick] = true;
                     break;
