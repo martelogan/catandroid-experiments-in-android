@@ -2,6 +2,7 @@ package com.catandroid.app.common.ui.views;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
@@ -35,10 +36,13 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 	private boolean buttonsPlaced = false;
 	private ActiveGameFragment game;
 
-	public GameView(ActiveGameFragment manager, Context context) {
+	String myParticipantId;
+
+	public GameView(ActiveGameFragment manager, Context context, String myParticipantId) {
 		super(context);
 		
 		game = manager;
+		this.myParticipantId = myParticipantId;
 		
 		gesture = new GestureDetector(context, this);
 		pinch = new ScaleGestureDetector(context, this);
@@ -253,10 +257,11 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 
 	private boolean click(int x, int y) {
 		Player player = CatAndroidApp.getInstance().getBoardInstance().getCurrentPlayer();
+		Board board = CatAndroidApp.getInstance().getBoardInstance();
 		BoardGeometry boardGeometry = renderer.getGeometry();
 		GameRenderer.Action action = renderer.getAction();
 
-		if (!player.isHuman())
+		if (!player.isHuman() || !board.itsMyTurn(myParticipantId))
 			return false;
 
 		int select = -1;

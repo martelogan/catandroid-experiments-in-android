@@ -112,6 +112,16 @@ public class Player {
 	}
 
 	/**
+	 * Set the board
+	 *
+	 * @param board
+	 *
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	/**
 	 * Roll the dice with a predefined result
 	 *
 	 * @param roll

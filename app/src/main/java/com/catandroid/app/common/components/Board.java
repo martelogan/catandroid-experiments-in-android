@@ -5,13 +5,18 @@ import com.catandroid.app.common.logistics.AppSettings;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.BalancedAI;
 import com.catandroid.app.common.players.Player;
+import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Stack;
 
 public class Board {
 
+	private transient ActiveGameFragment activeGameFragment;
+
+	private ArrayList<String> gameParticipantIds;
 
 	public enum Cards {
 		SOLDIER, PROGRESS, HARVEST, MONOPOLY, VICTORY
@@ -67,6 +72,7 @@ public class Board {
 	private Vertex[] vertices;
 	private Edge[] edges;
 	private Player[] players;
+	private int numPlayers;
 	private Harbor[] harbors;
 	private int[] cards;
 	private Stack<Player> playersYetToDiscard;
@@ -88,43 +94,38 @@ public class Board {
 	 * @param human
 	 *            whether each players is human
 	 */
-	public Board(String[] names, boolean[] human, int maxPoints, BoardGeometry boardGeometry,
-			boolean autoDiscard) {
+	public Board(ArrayList<String> gameParticipantIds, String[] names, boolean[] human, int maxPoints, BoardGeometry boardGeometry,
+				 boolean autoDiscard, ActiveGameFragment activeGameFragment) {
 		this.maxPoints = maxPoints;
 		this.boardGeometry = boardGeometry;
 		this.terrainTypeToCountMap = initTerrainTypeToCountMap(boardGeometry.getBoardSize());
+		this.gameParticipantIds = gameParticipantIds;
+		this.activeGameFragment = activeGameFragment;
+		this.numPlayers = gameParticipantIds.size();
 		commonInit();
 
 		this.autoDiscard = autoDiscard;
 
 		// initialise players
-		players = new Player[4];
-		for (int i = 0; i < 4; i++)
-			players[i] = null;
+		players = new Player[numPlayers];
+		for (int i = 0; i < numPlayers; i++) {
+			Player.Color color = Player.Color.values()[i];
 
-		humans = 0;
-		for (int i = 0; i < 4; i++) {
-			while (true) {
-				int pick = (int) (Math.random() * 4);
-				if (players[pick] != null)
-					continue;
-
-				Player.Color color = Player.Color.values()[i];
-
-				if (human[i]) {
-					humans += 1;
-					String participantId = "";
-					players[pick] = new Player(this, pick, participantId, color, names[i],
-							Player.PLAYER_HUMAN);
-				} else {
-					players[pick] = new BalancedAI(this, pick, color, names[i]);
-				}
-
-				break;
+			if (human[i]) {
+				humans += 1;
+				String participantId = gameParticipantIds.get(i);
+				players[i] = new Player(this, i, participantId, color, names[i],
+						Player.PLAYER_HUMAN);
+			} else {
+				players[i] = new BalancedAI(this, i, color, names[i]);
 			}
+
 		}
 	}
 
+	public void setActiveGameFragment(ActiveGameFragment activeGameFragment){
+		this.activeGameFragment = activeGameFragment;
+	}
 	private void commonInit() {
 		turn = 0;
 		turnNumber = 1;
@@ -176,6 +177,15 @@ public class Board {
 	}
 
 	/**
+	 * Get the total number of players in this game
+	 *
+	 * @return the total number of players
+	 */
+	public int getNumPlayers() {
+		return numPlayers;
+	}
+
+	/**
 	 * Get a reference to the current players
 	 * 
 	 * @return the current players
@@ -212,7 +222,7 @@ public class Board {
 	public void executeDiceRoll(int diceRollNumber) {
 		if (diceRollNumber == 7) {
 			// reduce each players to 7 cards
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < numPlayers; i++) {
 				int cards = players[i].getResourceCount();
 				int extra = cards > 7 ? cards / 2 : 0;
 
@@ -272,7 +282,7 @@ public class Board {
 		setRobber(hex);
 
 		int count = 0;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < numPlayers; i++)
 		{
 			if (players[i] != players[turn] && hexagons[hex].adjacentToPlayer(players[i]))
 			{
@@ -282,7 +292,7 @@ public class Board {
 
 		if (count > 0) {
 			Player[] stealList = new Player[count];
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < numPlayers; i++)
 				if (players[i] != players[turn]
 						&& hexagons[hex].adjacentToPlayer(players[i]))
 				{
@@ -358,10 +368,13 @@ public class Board {
 				phase = Phase.SETUP_FIRST_R;
 				break;
 			case SETUP_FIRST_R:
-				if (turn < 3) {
+				if (turn < numPlayers-1) {
 					turn++;
 					turnChanged = true;
 					phase = Phase.SETUP_SETTLEMENT;
+					if(players[turn].isHuman()) {
+						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+					}
 				} else {
 					phase = Phase.SETUP_CITY;
 				}
@@ -374,6 +387,9 @@ public class Board {
 					turn--;
 					turnChanged = true;
 					phase = Phase.SETUP_CITY;
+					if(players[turn].isHuman()) {
+						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+					}
 				} else {
 					phase = Phase.PRODUCTION;
 				}
@@ -382,15 +398,18 @@ public class Board {
 				phase = Phase.BUILD;
 				break;
 			case BUILD:
-				if (turn == 3)
+				if (turn == numPlayers - 1)
 					turnNumber += 1;
 				players[turn].endTurn();
 				phase = Phase.PRODUCTION;
 				turn++;
-				turn %= 4;
+				turn %= numPlayers;
 				turnChanged = true;
 				players[turn].beginTurn();
 				lastDiceRollNumber = 0;
+                if(players[turn].isHuman()) {
+                    activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+                }
 				break;
 			case PROGRESS_1:
 				phase = Phase.PROGRESS_2;
@@ -644,7 +663,7 @@ public class Board {
 		longestRoadOwner = null;
 
 		// reset players' road lengths to 0
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < numPlayers; i++)
 		{
 			players[i].cancelRoadLength();
 		}
@@ -820,7 +839,7 @@ public class Board {
 		}
 
 		// check for winner
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < numPlayers; i++) {
 			if (players[i].getVictoryPoints() >= maxPoints) {
 				phase = Phase.DONE;
 				winner = players[i];
@@ -864,6 +883,11 @@ public class Board {
 		else {
 			return null;
 		}
+	}
+
+	public boolean itsMyTurn(String myParticipantId){
+		String s = this.getCurrentPlayer().getGooglePlayParticipantId();
+		return (this.getCurrentPlayer().getGooglePlayParticipantId().equals(myParticipantId));
 	}
 
 	/**
@@ -919,6 +943,25 @@ public class Board {
 			return R.string.monopoly;
 		default:
 			return R.string.nostring;
+		}
+	}
+
+	public void reinitBoardOnComponents(){
+
+		for (Hexagon hexagon : hexagons) {
+			hexagon.setBoard(this);
+		}
+		for (Vertex vertex : vertices) {
+			vertex.setBoard(this);
+		}
+		for (Edge edge : edges) {
+			edge.setBoard(this);
+		}
+		for (Harbor harbor : harbors) {
+			harbor.setBoard(this);
+		}
+		for (Player player : players) {
+			player.setBoard(this);
 		}
 	}
 

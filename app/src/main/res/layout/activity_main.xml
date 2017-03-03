@@ -184,12 +184,12 @@
                 android:onClick="onCheckGamesClicked"
                 android:text="@string/check_games" />
 
-            <Button
-                android:id="@+id/quickMatchButon"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:onClick="onQuickMatchClicked"
-                android:text="@string/quick_match" />
+            <!--<Button-->
+                <!--android:id="@+id/quickMatchButon"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:onClick="onQuickMatchClicked"-->
+                <!--android:text="@string/quick_match" />-->
         </LinearLayout>
     </ScrollView>
 

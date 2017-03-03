@@ -28,20 +28,19 @@ public class PlayerStatus extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//super.onCreate(state);
 		
-		//getActivity().setContentView(R.layout.status);
 		getActivity().setTitle(getString(R.string.status));
-
-		//LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		views = new View[4];
 		
 		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		if (board == null) {
 			//finish();
 			return null;
 		}
+
+		int numPlayers = board.getNumPlayers();
+
+		views = new View[numPlayers];
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < numPlayers; i++) {
 			views[i] = inflater.inflate(R.layout.status_player, null);
 			
 			Player player = board.getPlayer(i);

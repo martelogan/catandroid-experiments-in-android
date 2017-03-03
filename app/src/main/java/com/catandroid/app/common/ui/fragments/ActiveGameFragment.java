@@ -22,12 +22,14 @@ import com.catandroid.app.common.players.Player;
 import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -70,16 +72,30 @@ public class ActiveGameFragment extends Fragment {
 
 	private static final String[] ROLLS = { "", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅" };
 
-	public ActiveGameFragment() {}
+	public Listener mListener = null;
 
-	@SuppressLint("ValidFragment")
-	public ActiveGameFragment(Board b){
-		this.board = b;
-	}
+	private String myParticipantId;
+
+	public ActiveGameFragment(){ }
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		getActivity().findViewById(R.id.setup).setVisibility(View.GONE);
+	}
+
+	public void setBoard(Board board){ this.board = board;}
+
+	public interface Listener {
+		void endTurn(String nextParticipantId);
+	}
+
+	public void setmListener(Listener mListener){
+		this.mListener = mListener;
+	}
+
+	public void setMyParticipantId(String myParticipantId){
+		this.myParticipantId = myParticipantId;
 	}
 
 	class TurnThread implements Runnable {
@@ -158,11 +174,6 @@ public class ActiveGameFragment extends Fragment {
 				if (extra == 0)
 					break;
 
-//				//Intent intent = new Intent(ActiveGameFragment.this, DiscardResourcesFragment.class);
-//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.activities.DiscardResourcesFragment");
-//				intent.putExtra(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getPlayerNumber());
-//				intent.putExtra(DiscardResourcesFragment.QUANTITY_KEY, extra);
-//				ActiveGameFragment.this.startActivity(intent);
 
 				Bundle bundle = new Bundle();
 				bundle.putInt(DiscardResourcesFragment.PLAYER_KEY, toDiscard.getPlayerNumber());
@@ -485,9 +496,7 @@ public class ActiveGameFragment extends Fragment {
 		TextureManager texture = app.getTextureManagerInstance();
 		Player player = board.getCurrentPlayer();
 
-
-
-		renderer.setState(board, player.isHuman() ? player : null, texture, board.getLastDiceRollNumber());
+		renderer.setState(board, (player.isHuman() && board.itsMyTurn(myParticipantId))  ? player : null, texture, board.getLastDiceRollNumber());
 		
 		if (setZoom)
 			renderer.getGeometry().zoomOut();
@@ -538,16 +547,19 @@ public class ActiveGameFragment extends Fragment {
 
 		int color = TextureManager.getColor(board.getCurrentPlayer().getColor());
 		color = TextureManager.darken(color, 0.35);
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setBackgroundDrawable(new ColorDrawable(color));
 
-//		ActionBar actionBar = getActivity().getActionBar();
-//		actionBar.setHomeButtonEnabled(true);
-//		actionBar.setDisplayHomeAsUpEnabled(true);
-//		actionBar.setDisplayShowCustomEnabled(true);
-//		actionBar.setBackgroundDrawable(new ColorDrawable(color));
-
+		//Add check if its actually our turn and
 		int resourceId = board.getPhaseResource();
 		if (resourceId != 0)
-			getActivity().setTitle(player.getName() + ": " + getActivity().getString(resourceId));
+			if(board.itsMyTurn(myParticipantId)) {
+				getActivity().setTitle(player.getName() + ": " + getActivity().getString(resourceId));
+			} else{
+				getActivity().setTitle(R.string.not_my_turn);
+			}
 		else
 			getActivity().setTitle(player.getName());
 
@@ -925,6 +937,7 @@ public class ActiveGameFragment extends Fragment {
 			popup(getString(R.string.game_turn_log), message);
 	}
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		fa = (FragmentActivity) super.getActivity();
@@ -945,7 +958,7 @@ public class ActiveGameFragment extends Fragment {
 		}
 
 		//changed constructor
-		view = new GameView(this,getActivity());
+		view = new GameView(this, getActivity(), myParticipantId);
 		renderer = new GameRenderer(view, board.getBoardGeometry());
 		view.setRenderer(renderer);
 		view.requestFocus();

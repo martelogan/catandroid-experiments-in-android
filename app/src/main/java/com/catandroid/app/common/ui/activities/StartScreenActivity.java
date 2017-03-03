@@ -37,6 +37,8 @@ public class StartScreenActivity extends Activity {
 		actions = new Vector<Runnable>();
 
 		if (board != null && board.getWinner(appSettings) == null) {
+			//@TODO
+			//ADD RESUME FUNCTIONALITY. HAPPENS WHEN YOU DO BACK ON SCREEN
 			labels.add(getString(R.string.resume_button));
 			actions.add(new Runnable() {
 				@Override
@@ -54,13 +56,6 @@ public class StartScreenActivity extends Activity {
 			}
 		});
 
-//		labels.add(getString(R.string.stats));
-//		actions.add(new Runnable() {
-//			@Override
-//			public void run() {
-//				StartScreenActivity.this.startActivity(new Intent(StartScreenActivity.this, PlayerStatsActivity.class));
-//			}
-//		});
 
 		labels.add(getString(R.string.rules_button));
 		actions.add(new Runnable() {

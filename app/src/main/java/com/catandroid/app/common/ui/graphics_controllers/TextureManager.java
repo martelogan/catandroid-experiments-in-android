@@ -316,7 +316,7 @@ public class TextureManager {
 				.render(gl);
 		gl.glPopMatrix();
 
-		// draw type icon
+		// draw type icon+
 		gl.glPushMatrix();
 		gl.glTranslatef(boardGeometry.getHarborIconX(id, harbor.getEdge()),
 				boardGeometry.getHarborIconY(id, harbor.getEdge()), 0);
