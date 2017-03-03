@@ -260,6 +260,7 @@
 	<string name="button_undo">Undo</string>
 
 	<!-- Various strings in the game -->
+	<string name="not_my_turn">It\'s not your turn!</string>
 	<string name="game_turn_log">Turn log</string>
 	<string name="game_rolled">Rolled</string>
 	<string name="game_move_robber">move the robber</string>

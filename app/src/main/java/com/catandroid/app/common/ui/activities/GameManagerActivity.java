@@ -16,11 +16,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import android.support.v4.app.Fragment;
-
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.common.logistics.AppSettings;
+import com.catandroid.app.common.logistics.multiplayer.CatandroidTurn;
 import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 import com.catandroid.app.common.logistics.multiplayer.SkeletonTurn;
 import com.catandroid.app.R;
@@ -42,6 +41,7 @@ import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
+import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.turnbased.OnTurnBasedMatchUpdateReceivedListener;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
@@ -50,12 +50,11 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.gson.Gson;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class GameManagerActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
 		OnInvitationReceivedListener, OnTurnBasedMatchUpdateReceivedListener,
-		View.OnClickListener {
+		View.OnClickListener, ActiveGameFragment.Listener {
 
 	private String[] names;
 	private boolean[] types;
@@ -64,20 +63,12 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	private static final String MIXED_KEY = "mixed_trade";
 	private static final String AUTO_KEY = "auto_discard";
 
-	private static final String[] NAME_KEYS = { "player_name1", "player_name2",
-			"player_name3", "player_name4" };
 	private static final String[] HUMAN_KEYS = { "player_human1",
 			"player_human2", "player_human3", "player_human4" };
 
-	private static final int[] TEXT = { R.id.name1, R.id.name2, R.id.name3,
-			R.id.name4 };
-	private static final int[] CHECK = { R.id.human1, R.id.human2, R.id.human3,
-			R.id.human4 };
-
-	public static final int[] DEFAULT_NAMES = { R.string.player_name1,
-			R.string.player_name2, R.string.player_name3, R.string.player_name4 };
-
 	public static final boolean[] DEFAULT_HUMANS = { true, false, false, false };
+
+	private ActiveGameFragment activeGameFragment;
 
 	/******************
 	 * SkeletonActivity
@@ -100,9 +91,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// Current turn-based match
 	private TurnBasedMatch mTurnBasedMatch;
 
-	// Local convenience pointers
-	public TextView mDataView;
-	public TextView mTurnTextView;
 
 	private AlertDialog mAlertDialog;
 
@@ -120,7 +108,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// This is the current match data after being unpersisted.
 	// Do not retain references to match data once you have
 	// taken an action on the match, such as takeTurn()
-	public SkeletonTurn mTurnData;
+	public CatandroidTurn catandroidTurn;
 
 	public static void setup(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++)
@@ -128,20 +116,20 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	}
 
 	private void reset() {
-		for (int i = 0; i < 4; i++) {
-			names[i] = getString(DEFAULT_NAMES[i]);
-			types[i] = DEFAULT_HUMANS[i];
-		}
+//		for (int i = 0; i < 4; i++) {
+//			names[i] = getString(DEFAULT_NAMES[i]);
+//			types[i] = DEFAULT_HUMANS[i];
+//		}
 	}
 
 	private void populate() {
-		for (int i = 0; i < 4; i++) {
-			EditText name = (EditText) findViewById(TEXT[i]);
-			name.setText(names[i]);
-
-			CheckBox human = (CheckBox) findViewById(CHECK[i]);
-			human.setChecked(types[i]);
-		}
+//		for (int i = 0; i < 3; i++) {
+//			EditText name = (EditText) findViewById(TEXT[i]);
+//			name.setText(names[i]);
+//
+//			CheckBox human = (CheckBox) findViewById(CHECK[i]);
+//			human.setChecked(types[i]);
+//		}
 
 		CheckBox mixedTrade = (CheckBox) findViewById(R.id.mixed_trade);
 		mixedTrade.setChecked(mixed);
@@ -151,23 +139,23 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	}
 
 	private void load(AppSettings appSettings) {
-		for (int i = 0; i < 4; i++) {
-			names[i] = appSettings.get(NAME_KEYS[i]);
-			if (names[i] == null || names[i] == "")
-				names[i] = getString(DEFAULT_NAMES[i]);
-
-			types[i] = appSettings.getBool(HUMAN_KEYS[i]);
-		}
+//		for (int i = 0; i < 4; i++) {
+//			names[i] = appSettings.get(NAME_KEYS[i]);
+//			if (names[i] == null || names[i] == "")
+//				names[i] = getString(DEFAULT_NAMES[i]);
+//
+//			types[i] = appSettings.getBool(HUMAN_KEYS[i]);
+//		}
 
 		mixed = appSettings.getBool(MIXED_KEY);
 		auto_discard = appSettings.getBool(AUTO_KEY);
 	}
 
 	private void save(AppSettings appSettings) {
-		for (int i = 0; i < 4; i++) {
-			appSettings.set(NAME_KEYS[i], names[i]);
-			appSettings.set(HUMAN_KEYS[i], types[i]);
-		}
+//		for (int i = 0; i < 4; i++) {
+//			appSettings.set(NAME_KEYS[i], names[i]);
+//			appSettings.set(HUMAN_KEYS[i], types[i]);
+//		}
 
 		appSettings.set(MIXED_KEY, mixed);
 		appSettings.set(AUTO_KEY, auto_discard);
@@ -192,9 +180,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		// Setup signin and signout buttons
 		findViewById(R.id.sign_out_button).setOnClickListener(this);
 		findViewById(R.id.sign_in_button).setOnClickListener(this);
-
-		mDataView = ((TextView) findViewById(R.id.data_view));
-		mTurnTextView = ((TextView) findViewById(R.id.turn_counter_view));
 
 	}
 
@@ -250,8 +235,9 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				return;
 			}
 		}
-
-		setViewVisibility();
+		if(catandroidTurn.currentBoard == null) {
+			setViewVisibility();
+		}
 
 		// As a demonstration, we are registering this activity as a handler for
 		// invitation and match events.
@@ -299,6 +285,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// Displays your inbox. You will get back onActivityResult where
 	// you will need to figure out what you clicked on.
 	public void onCheckGamesClicked(View view) {
+		setContentView(R.layout.localgame);
 		Intent intent = Games.TurnBasedMultiplayer.getInboxIntent(mGoogleApiClient);
 		startActivityForResult(intent, RC_LOOK_AT_MATCHES);
 	}
@@ -306,24 +293,13 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// Open the create-game UI. You will get back an onActivityResult
 	// and figure out what to do.
 	public void onStartMatchCreationClicked(View view) {
-		//TODO
-		//GET THE NUMBER OF PLAYERS HERE BEFORE LAUNCHING THE INTENT
 
 		//********************
-		//GAMESETUP LOGIC START
+		//GAMESETUP LOGIC SCREEN INIT
 		//********************
-
-		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-//        //********************
-//        //GAMESETUP LOGIC END
-		//*******************
 
 		setContentView(R.layout.localgame);
 
-		names = new String[4];
-		types = new boolean[4];
 		load(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
 		//Set the checkboxes, spinners to default values
@@ -362,9 +338,21 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		playerChoices.add("3 Players");
 		playerChoices.add("4 Players");
 
-
 		playerSpinner.setAdapter(playerChoices);
-		playerSpinner.setSelection(1);
+		playerSpinner.setSelection(0);
+
+		//SET THE BOARD SIZE
+		Spinner boardSizeSpinner = (Spinner) findViewById(R.id.option_board_size);
+		ArrayAdapter<CharSequence> boardSizeChoice = new ArrayAdapter<CharSequence>(
+				this, android.R.layout.simple_spinner_item);
+		boardSizeChoice
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		boardSizeChoice.add("Regular Board");
+		boardSizeChoice.add("Large Board");
+
+		boardSizeSpinner.setAdapter(boardSizeChoice);
+		boardSizeSpinner.setSelection(0);
 
 		final Button start = (Button) findViewById(R.id.start);
 		start.setOnClickListener(new OnClickListener() {
@@ -372,11 +360,14 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 				//get the number of players from the spinner
 				Spinner playerSpinner = (Spinner) findViewById(R.id.option_num_players);
-				int numberPlayersTotal = playerSpinner.getSelectedItemPosition() + 2;
+				int numberPlayersToInvite = playerSpinner.getSelectedItemPosition() + 2;
+				int numberPlayersTotal = numberPlayersToInvite + 1;
+				names = new String[numberPlayersTotal];
+				types = new boolean[numberPlayersTotal];
 
 				//LAUNCH THE MULTIPLAYER SELECTION AND SUBSEQUENTLY LAUNCH GAME THHROUGH onActivityResult
 				Intent intent = Games.TurnBasedMultiplayer.getSelectOpponentsIntent(mGoogleApiClient,
-						numberPlayersTotal, numberPlayersTotal, true);
+						numberPlayersToInvite, numberPlayersToInvite, true);
 				startActivityForResult(intent, RC_SELECT_PLAYERS);
 
 			}
@@ -392,27 +383,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-	}
-
-	// Create a one-on-one automatch game.
-	public void onQuickMatchClicked(View view) {
-
-		Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(
-				4, 4, 0);
-
-		TurnBasedMatchConfig tbmc = TurnBasedMatchConfig.builder()
-				.setAutoMatchCriteria(autoMatchCriteria).build();
-
-		showSpinner();
-
-		// Start the match
-		ResultCallback<TurnBasedMultiplayer.InitiateMatchResult> cb = new ResultCallback<TurnBasedMultiplayer.InitiateMatchResult>() {
-			@Override
-			public void onResult(TurnBasedMultiplayer.InitiateMatchResult result) {
-				processResult(result);
-			}
-		};
-		Games.TurnBasedMultiplayer.createMatch(mGoogleApiClient, tbmc).setResultCallback(cb);
 	}
 
 	// In-game controls
@@ -472,21 +442,12 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		String nextParticipantId = getNextParticipantId();
 		// Create the next turn
-		mTurnData.turnCounter += 1;
-		mTurnData.data = mDataView.getText().toString();
 
 		showSpinner();
 
-		Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, mMatch.getMatchId(),
-				mTurnData.persist(), nextParticipantId).setResultCallback(
-				new ResultCallback<TurnBasedMultiplayer.UpdateMatchResult>() {
-					@Override
-					public void onResult(TurnBasedMultiplayer.UpdateMatchResult result) {
-						processResult(result);
-					}
-				});
 
-		mTurnData = null;
+
+		catandroidTurn = null;
 	}
 
 	// Sign-in, Sign out behavior
@@ -507,7 +468,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			return;
 		}
 
-
 		((TextView) findViewById(R.id.name_field)).setText(Games.Players.getCurrentPlayer(
 				mGoogleApiClient).getDisplayName());
 		findViewById(R.id.login_layout).setVisibility(View.GONE);
@@ -523,10 +483,15 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 	// Switch to gameplay view.
 	public void setGameplayUI() {
-		isDoingTurn = true;
-		setViewVisibility();
-		mDataView.setText(mTurnData.data);
-		mTurnTextView.setText("Turn " + mTurnData.turnCounter);
+
+		FragmentManager fragmentManager = getSupportFragmentManager();
+
+		//Start the fragment
+		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
+		fragmentManager.beginTransaction()
+				.replace(R.id.fragment_container,activeGameFragment)
+				.addToBackStack(null)
+				.commit();
 	}
 
 	// Helpful dialogs
@@ -657,42 +622,58 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 						}
 					});
 
-			//showSpinner();
 		}
 	}
 
 	// startMatch() happens in response to the createTurnBasedMatch()
 	// above. This is only called on success, so we should have a
 	// valid match object. We're taking this opportunity to setup the
-	// game, saving our initial state. Calling takeTurn() will
-	// callback to OnTurnBasedMatchUpdated(), which will show the game
-	// UI.
+	// game, saving our initial state.
 	public void startMatch(TurnBasedMatch match) {
+
+		//fetch multiplayer parameters
+		catandroidTurn = new CatandroidTurn();
+
+		mMatch = match;
+
+		String playerId = Games.Players.getCurrentPlayerId(mGoogleApiClient);
+		String myParticipantId = mMatch.getParticipantId(playerId);
+		ArrayList<String> gameParticipantIds = mMatch.getParticipantIds();
+
 		//Start the match based on old game logic - only single player
 
 		boolean blankName = false;
+		Participant thisPlayer;
+		String name;
+		boolean isHuman = true;
 
-		for (int i = 0; i < 4; i++) {
-			EditText name = (EditText) findViewById(TEXT[i]);
-			names[i] = name.getText().toString().trim();
+		for (int i = 0; i < gameParticipantIds.size(); i++) {
+			thisPlayer = mMatch.getParticipant(gameParticipantIds.get(i));
+			name = thisPlayer.getDisplayName();
 
-			if (names[i].length() == 0)
-				blankName = true;
+			names[i] = name;
 
-			CheckBox human = (CheckBox) findViewById(CHECK[i]);
-			types[i] = human.isChecked();
+			boolean ai = false;
+
+			if(gameParticipantIds.size() == 3 && ai) {
+				if (ai && (i == 1 || i == 2)) {
+					types[i] = !isHuman;
+				}
+			} else if(gameParticipantIds.size() == 4 && ai){
+				if (ai && (i == 1 || i == 2 || i == 3)) {
+					types[i] = !isHuman;
+				}
+			} else {
+				types[i] = isHuman;
+			}
+
 		}
 
+		Spinner boardSizeSpinner = (Spinner) findViewById(R.id.option_board_size);
+		int boardSelected = boardSizeSpinner.getSelectedItemPosition();
 		CheckBox mixedTrade = (CheckBox) findViewById(R.id.mixed_trade);
 		mixed = mixedTrade.isChecked();
 		Player.enableMixedTrades(mixed);
-
-		if (blankName) {
-			Toast.makeText(getApplicationContext(),
-					getString(R.string.player_set_names),
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
 
 		save(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
@@ -703,48 +684,30 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		boolean autoDiscard = discardCheck.isChecked();
 
 		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
-		//TODO: set board size via UI
-		BoardGeometry boardGeometry = new BoardGeometry(0);
-		Board board = new Board(names, types, maxPoints, boardGeometry,
-				autoDiscard);
-		// test serialization
-		Gson gson = new Gson();
-		String serializedBoard = gson.toJson(board);
-		int length = serializedBoard.getBytes(Charset.forName("UTF-8")).length;
-		app.setBoardInstance(board);
+
+		BoardGeometry boardGeometry = new BoardGeometry(boardSelected);
+
+		activeGameFragment = new ActiveGameFragment();
+		activeGameFragment.setmListener(this);
+		activeGameFragment.setMyParticipantId(myParticipantId);
 
 		//@TODO
-		//Add this logic to the game so that the first turn is initialized
+		//add the list of playerIds for the game and the number of players based on view
 
-		mTurnData = new SkeletonTurn();
-		// Some basic turn data
-		mTurnData.data = "First turn";
+		Board board = new Board(gameParticipantIds, names, types, maxPoints, boardGeometry,
+				autoDiscard, activeGameFragment);
+		activeGameFragment.setBoard(board);
 
-		mMatch = match;
+		Gson gson = new Gson();
+		String serializedBoard = gson.toJson(board);
+		app.setBoardInstance(board);
 
-		String playerId = Games.Players.getCurrentPlayerId(mGoogleApiClient);
-		String myParticipantId = mMatch.getParticipantId(playerId);
-
+		catandroidTurn.currentBoard = board;
 
 		Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, match.getMatchId(),
-				mTurnData.persist(), myParticipantId);
+				catandroidTurn.persist(), gameParticipantIds.get(0));
 
-//				.setResultCallback(
-//				new ResultCallback<TurnBasedMultiplayer.UpdateMatchResult>() {
-//					@Override
-//					public void onResult(TurnBasedMultiplayer.UpdateMatchResult result) {
-//						processResult(result);
-//					}
-//				});
-
-		FragmentManager fragmentManager = getSupportFragmentManager();
-
-		//Start the fragment
-		Fragment gameManager = new ActiveGameFragment(app.getBoardInstance());
-		fragmentManager.beginTransaction()
-				.replace(R.id.fragment_container,gameManager)
-				.addToBackStack(null)
-				.commit();
+		setGameplayUI();
 
 	}
 
@@ -799,10 +762,26 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		}
 	}
 
+	//Listener that we use to call endTurn from within the gameFragment.
+	@Override
+	public void endTurn(String nextParticipantId) {
+
+		Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, mMatch.getMatchId(),
+				catandroidTurn.persist(), nextParticipantId);
+	}
+
 	// This is the main function that gets called when players choose a match
 	// from the inbox, or else create a match and want to start it.
 	public void updateMatch(TurnBasedMatch match) {
 		mMatch = match;
+		catandroidTurn = new CatandroidTurn();
+
+		String playerId = Games.Players.getCurrentPlayerId(mGoogleApiClient);
+		String myParticipantId = mMatch.getParticipantId(playerId);
+
+		activeGameFragment = new ActiveGameFragment();
+		activeGameFragment.setmListener(this);
+		activeGameFragment.setMyParticipantId(myParticipantId);
 
 		int status = match.getStatus();
 		int turnStatus = match.getTurnStatus();
@@ -835,22 +814,23 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		// OK, it's active. Check on turn status.
 		switch (turnStatus) {
 			case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
-				mTurnData = SkeletonTurn.unpersist(mMatch.getData());
+				//fetch the board state from unpersist and set board
+				CatAndroidApp app = (CatAndroidApp) getApplicationContext();
+				Board board = CatandroidTurn.unpersist(mMatch.getData());
+				app.setBoardInstance(board);
+				catandroidTurn.currentBoard = board;
+				activeGameFragment.setBoard(board);
+				board.reinitBoardOnComponents();
+				board.setActiveGameFragment(activeGameFragment);
 				setGameplayUI();
-				//LAUCH THE FRAGMENT OF THE GAME HERE on resume!!!!!
-				return;
+
 			case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
-				// Should return results.
-				showWarning("Alas...", "It's not your turn.");
-				break;
+
 			case TurnBasedMatch.MATCH_TURN_STATUS_INVITED:
 				showWarning("Good inititative!",
 						"Still waiting for invitations.\n\nBe patient!");
 		}
 
-		mTurnData = null;
-
-		setViewVisibility();
 	}
 
 	private void processResult(TurnBasedMultiplayer.CancelMatchResult result) {
