@@ -658,10 +658,14 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			if(gameParticipantIds.size() == 3 && ai) {
 				if (ai && (i == 1 || i == 2)) {
 					types[i] = !isHuman;
+				} else{
+					types[i] = isHuman;
 				}
 			} else if(gameParticipantIds.size() == 4 && ai){
 				if (ai && (i == 1 || i == 2 || i == 3)) {
 					types[i] = !isHuman;
+				} else {
+					types[i] = isHuman;
 				}
 			} else {
 				types[i] = isHuman;
@@ -814,6 +818,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		// OK, it's active. Check on turn status.
 		switch (turnStatus) {
 			case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
+            case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
 				//fetch the board state from unpersist and set board
 				CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 				Board board = CatandroidTurn.unpersist(mMatch.getData());
@@ -823,12 +828,11 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				board.reinitBoardOnComponents();
 				board.setActiveGameFragment(activeGameFragment);
 				setGameplayUI();
-
-			case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
-
+				break;
 			case TurnBasedMatch.MATCH_TURN_STATUS_INVITED:
-				showWarning("Good inititative!",
-						"Still waiting for invitations.\n\nBe patient!");
+				showWarning("Catandroid",
+						"Loaded ongoing game");
+				break;
 		}
 
 	}
@@ -912,6 +916,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	@Override
 	public void onTurnBasedMatchReceived(TurnBasedMatch match) {
 		Toast.makeText(this, "A match was updated.", Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override

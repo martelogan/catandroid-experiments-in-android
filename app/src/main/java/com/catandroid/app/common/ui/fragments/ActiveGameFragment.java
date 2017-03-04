@@ -14,9 +14,9 @@ import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
 import com.catandroid.app.common.components.Vertex;
 import com.catandroid.app.common.ui.views.GameView;
-import com.catandroid.app.common.ui.fragments.static_fragments.CostsReference;
+import com.catandroid.app.common.ui.fragments.static_fragments.CostsReferenceFragment;
 import com.catandroid.app.common.ui.views.ResourceView;
-import com.catandroid.app.common.ui.fragments.static_fragments.PlayerStatus;
+import com.catandroid.app.common.ui.fragments.static_fragments.PlayerStatusFragment;
 import com.catandroid.app.common.ui.resources.UIButton.Type;
 import com.catandroid.app.common.players.Player;
 import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
@@ -48,7 +48,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 
 public class ActiveGameFragment extends Fragment {
 
@@ -82,6 +81,7 @@ public class ActiveGameFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		getActivity().findViewById(R.id.setup).setVisibility(View.GONE);
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	public void setBoard(Board board){ this.board = board;}
@@ -284,12 +284,12 @@ public class ActiveGameFragment extends Fragment {
 			//INFO IS THE BUTTON THAT IS ALWAYS VISIBLE IN TOP LEFT CORNER
 			Log.d("myTag", "about to launch PLAYER INFO");
 
-			PlayerStatus playerStatus = new PlayerStatus();
+			PlayerStatusFragment playerStatusFragment = new PlayerStatusFragment();
 
 			FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
-			fragmentTransaction.replace(R.id.fragment_container, playerStatus,playerStatus.getClass().getSimpleName());
-			fragmentTransaction.addToBackStack(playerStatus.getClass().getSimpleName());
+			fragmentTransaction.replace(R.id.fragment_container, playerStatusFragment, playerStatusFragment.getClass().getSimpleName());
+			fragmentTransaction.addToBackStack(playerStatusFragment.getClass().getSimpleName());
 			fragmentTransaction.commit();
 			break;
 
@@ -800,7 +800,7 @@ public class ActiveGameFragment extends Fragment {
 		int index = 0;
 
 		Player player = null;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < board.getNumPlayers(); i++) {
 			player = board.getPlayer(i);
 
 			// don't steal from self or players without a town/city
@@ -856,7 +856,7 @@ public class ActiveGameFragment extends Fragment {
 			return;
 
 		int index = 0;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < board.getNumPlayers(); i++) {
 			Player player = board.getPlayer(i);
 			if (player == current || !robbing.adjacentToPlayer(player))
 				continue;
@@ -911,12 +911,12 @@ public class ActiveGameFragment extends Fragment {
 
 		// show log of the other players' turns
 		int offset = board.getCurrentPlayer().getPlayerNumber() + 1;
-		for (int i = offset; i < offset + 3; i++) {
+		for (int i = offset; i < offset + board.getNumPlayers()-1; i++) {
 			// don't include players after you on your first turn
-			if (board.getTurnNumber() == 1 && (i % 4) >= offset)
+			if (board.getTurnNumber() == 1 && (i % board.getNumPlayers()) >= offset)
 				continue;
 
-			Player player = board.getPlayer(i % 4);
+			Player player = board.getPlayer(i % board.getNumPlayers());
 			String name = player.getName()
 					+ " ("
 					+ getActivity().getString(Player
@@ -1033,12 +1033,12 @@ public class ActiveGameFragment extends Fragment {
 			getActivity().getSupportFragmentManager().popBackStack();
 			return true;
 		case R.id.reference:
-			CostsReference costsReference = new CostsReference();
+			CostsReferenceFragment costsReferenceFragment = new CostsReferenceFragment();
 
 			Log.d("myTag", "about to launch costs fragment");
 			FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
-			fragmentTransaction.replace(R.id.fragment_container, costsReference);
+			fragmentTransaction.replace(R.id.fragment_container, costsReferenceFragment);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
 

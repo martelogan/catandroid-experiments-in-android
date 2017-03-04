@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class PlayerStatus extends Fragment {
+public class PlayerStatusFragment extends Fragment {
 	
 	private View[] views;
 

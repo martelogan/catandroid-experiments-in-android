@@ -170,12 +170,12 @@ public class TextureManager {
 				R.drawable.harbor_southwest, res);
 
 		// load corner ornaments
-		add(Type.ORNAMENT, Location.BOTTOM_LEFT.ordinal(),
-				R.drawable.bl_corner, res);
-		add(Type.ORNAMENT, Location.TOP_LEFT.ordinal(), R.drawable.tl_corner,
-				res);
-		add(Type.ORNAMENT, Location.TOP_RIGHT.ordinal(), R.drawable.tr_corner,
-				res);
+//		add(Type.ORNAMENT, Location.BOTTOM_LEFT.ordinal(),
+//				R.drawable.bl_corner, res);
+//		add(Type.ORNAMENT, Location.TOP_LEFT.ordinal(), R.drawable.tl_corner,
+//				res);
+//		add(Type.ORNAMENT, Location.TOP_RIGHT.ordinal(), R.drawable.tr_corner,
+//				res);
 	}
 
 	public static int getColor(Player.Color color) {

@@ -139,7 +139,7 @@
 	<string name="discard_select">Select resources to discard</string>
 	<string name="discard_button">Discard resources</string>
 
-	<!-- PlayerStatus screen -->
+	<!-- PlayerStatusFragment screen -->
 	<string name="status">Status</string>
 	<string name="status_turn">Turn</string>
 	<string name="status_resources">Resources</string>
