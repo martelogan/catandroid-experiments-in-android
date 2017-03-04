@@ -10,7 +10,10 @@ public class Edge {
 	private int lastRoadCountId;
 	private int originHexId;
     private int originHexDirect;
+    private int portHexId = -1;
+	private int portHexDirect = -1;
     private int myHarborId = -1;
+	private boolean isBorderingSea = false;
 	private transient Board board;
 
 	/**
@@ -156,43 +159,120 @@ public class Edge {
 	}
 
 	/**
-	 * Set the origin hexagon
+	 * Set the port hexagon
 	 * @param h
 	 *            the hex to set
 	 * @return
 	 */
-	public void setOriginHex(Hexagon h) {
-		this.originHexId = h.getId();
+	public void setPortHex(Hexagon h) {
+
+		this.portHexId = h.getId();
+		this.portHexDirect = h.findEdgeDirect(this);
 	}
 
 	/**
-	 * Set the origin hexagon
+	 * Set the port hexagon
 	 * @param hexId
 	 *            the id of hex to set
 	 * @return
 	 */
-	public void setOriginHexById(int hexId) {
-		this.originHexId = hexId;
-	}
-
-
-	/**
-	 * Get the origin hexagon
-	 *
-	 * @return the origin hexagon
-	 */
-	public Hexagon getOriginHex() {
-		return board.getHexagonById(originHexId);
+	public void setPortHexById(int hexId) {
+		this.portHexId = hexId;
+		this.portHexDirect = board.getHexagonById(hexId).findEdgeDirect(this);
 	}
 
 	/**
-	 * Get the origin hexagon id
-	 *
-	 * @return the origin hexagon id
+	 * Remove port hexagon (candidacy lost)
+	 * @return
 	 */
-	public int getOriginHexId() {
-		return originHexId;
+	public void removePortHex() {
+
+		this.portHexId = -1;
+		this.portHexDirect = -1;
+		this.isBorderingSea = false;
 	}
+
+	public void setBorderingSea(boolean borderingSea) {
+		isBorderingSea = borderingSea;
+	}
+
+	public boolean isBorderingSea() {
+		return isBorderingSea;
+	}
+
+	/**
+	 * Get the port hexagon
+	 *
+	 * @return the port hexagon
+	 */
+	public Hexagon getPortHex() {
+		return board.getHexagonById(portHexId);
+	}
+
+	/**
+	 * Get the port hexagon direction
+	 *
+	 * @return the port hexagon direction
+	 */
+	public int getPortHexDirect() {
+		return this.portHexDirect;
+	}
+
+	/**
+	 * Get the port hexagon id
+	 *
+	 * @return the port hexagon id
+	 */
+	public int getPortHexId() {
+		return portHexId;
+	}
+
+    public int getDirectTowardsSea_X() {
+		return Hexagon.getVDirectXsign(this.portHexDirect);
+    }
+
+    public int getDirectTowardsSea_Y() {
+		return Hexagon.getVDirectYsign(this.portHexDirect);
+    }
+
+    /**
+     * Set the origin hexagon
+     * @param h
+     *            the hex to set
+     * @return
+     */
+    public void setOriginHex(Hexagon h) {
+        this.originHexId = h.getId();
+    }
+
+    /**
+     * Set the origin hexagon
+     * @param hexId
+     *            the id of hex to set
+     * @return
+     */
+    public void setOriginHexById(int hexId) {
+        this.originHexId = hexId;
+    }
+
+
+    /**
+     * Get the origin hexagon
+     *
+     * @return the origin hexagon
+     */
+    public Hexagon getOriginHex() {
+        return board.getHexagonById(originHexId);
+    }
+
+    /**
+     * Get the origin hexagon id
+     *
+     * @return the origin hexagon id
+     */
+    public int getOriginHexId() {
+        return originHexId;
+    }
 
     /**
      * Set the origin hexagon direction
@@ -217,45 +297,15 @@ public class Edge {
      * @return the marginal X sign of the origin hexagon direction
      */
     public int getOriginHexDirectXsign() {
-        switch(this.originHexDirect) {
-            case 0:
-                return 1;
-            case 1:
-                return 1;
-            case 2:
-                return 0;
-            case 3:
-                return -1;
-            case 4:
-                return -1;
-            case 5:
-                return 0;
-            default:
-                return Integer.MIN_VALUE;
-        }
+        return Hexagon.getVDirectXsign(this.originHexDirect);
     }
 
     /**
-     * Get the marginal X sign of the origin hexagon direction
-     * @return the marginal X sign of the origin hexagon direction
+     * Get the marginal Y sign of the origin hexagon direction
+     * @return the marginal Y sign of the origin hexagon direction
      */
     public int getOriginHexDirectYsign() {
-        switch(this.originHexDirect) {
-            case 0:
-                return 1;
-            case 1:
-                return -1;
-            case 2:
-                return -1;
-            case 3:
-                return -1;
-            case 4:
-                return 1;
-            case 5:
-                return 1;
-            default:
-                return Integer.MIN_VALUE;
-        }
+        return Hexagon.getVDirectYsign(this.originHexDirect);
     }
 
 	/**

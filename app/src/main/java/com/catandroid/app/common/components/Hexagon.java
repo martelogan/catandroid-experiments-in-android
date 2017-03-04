@@ -419,4 +419,54 @@ public class Hexagon {
 		return terrainTypeToResourceMap.get(terrainType);
 	}
 
+	/**
+	 * Get the marginal X sign of vDirect on Hexagon
+	 * @param vDirect
+	 *            the direction of the edge on the hexagon
+	 * @return the marginal X sign of the vDirect
+	 */
+	public static int getVDirectXsign(int vDirect) {
+		switch(vDirect) {
+			case 0:
+				return 1;
+			case 1:
+				return 1;
+			case 2:
+				return 0;
+			case 3:
+				return -1;
+			case 4:
+				return -1;
+			case 5:
+				return 0;
+			default:
+				return Integer.MIN_VALUE;
+		}
+	}
+
+	/**
+	 * Get the marginal Y sign of vDirect on Hexagon
+	 * @param vDirect
+	 *            the direction of the edge on the hexagon
+	 * @return the marginal Y sign of the vDirect
+	 */
+	public static int getVDirectYsign(int vDirect) {
+		switch(vDirect) {
+			case 0:
+				return 1;
+			case 1:
+				return -1;
+			case 2:
+				return -1;
+			case 3:
+				return -1;
+			case 4:
+				return 1;
+			case 5:
+				return 1;
+			default:
+				return Integer.MIN_VALUE;
+		}
+	}
+
 }

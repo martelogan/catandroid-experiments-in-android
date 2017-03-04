@@ -126,6 +126,7 @@ public class Board {
 	public void setActiveGameFragment(ActiveGameFragment activeGameFragment){
 		this.activeGameFragment = activeGameFragment;
 	}
+
 	private void commonInit() {
 		turn = 0;
 		turnNumber = 1;
@@ -546,7 +547,9 @@ public class Board {
 	 */
 	public Hexagon getHexagonById(int hexId) {
 		if (hexId < 0 || hexId >= boardGeometry.getHexCount())
+		{
 			return null;
+		}
 
 		return hexagons[hexId];
 	}
@@ -946,7 +949,7 @@ public class Board {
 		}
 	}
 
-	public void reinitBoardOnComponents(){
+	public void reinitBoardOnComponents() {
 
 		for (Hexagon hexagon : hexagons) {
 			hexagon.setBoard(this);
