@@ -10,6 +10,7 @@ public class Edge {
 	private int lastRoadCountId;
 	private int originHexId;
     private int originHexDirect;
+	private int neighborHexId = -1;
     private int portHexId = -1;
 	private int portHexDirect = -1;
     private int myHarborId = -1;
@@ -300,13 +301,60 @@ public class Edge {
         return Hexagon.getVDirectXsign(this.originHexDirect);
     }
 
-    /**
-     * Get the marginal Y sign of the origin hexagon direction
-     * @return the marginal Y sign of the origin hexagon direction
-     */
-    public int getOriginHexDirectYsign() {
-        return Hexagon.getVDirectYsign(this.originHexDirect);
-    }
+	/**
+	 * Get the marginal Y sign of the origin hexagon direction
+	 * @return the marginal Y sign of the origin hexagon direction
+	 */
+	public int getOriginHexDirectYsign() {
+		return Hexagon.getVDirectYsign(this.originHexDirect);
+	}
+
+	/**
+	 * Set the neighbor hexagon
+	 * @param h
+	 *            the hex to set
+	 * @return
+	 */
+	public void setNeighborHex(Hexagon h) {
+		this.neighborHexId = h.getId();
+	}
+
+	/**
+	 * Set the neighbor hexagon by id
+	 * @param hexId
+	 *            the id of hex to set
+	 * @return
+	 */
+	public void setNeighborHexById(int hexId) {
+		this.neighborHexId = hexId;
+	}
+
+
+	/**
+	 * Get the neighbor hexagon
+	 *
+	 * @return the neighbor hexagon
+	 */
+	public Hexagon getNeighborHex() {
+		return board.getHexagonById(neighborHexId);
+	}
+
+	/**
+	 * Get the neighbor hexagon id
+	 *
+	 * @return the neighbor hexagon id
+	 */
+	public int getNeighborHexId() {
+		return neighborHexId;
+	}
+
+	/**
+	 * Get the neighbor hexagon direction of this edge
+	 * @return the neighbor hexagon direction of this edge
+	 */
+	public int getNeighborHexDirect() {
+		return board.getHexagonById(neighborHexId).findEdgeDirect(this);
+	}
 
 	/**
 	 * Set a harbor on this edge

@@ -18,24 +18,15 @@ import static java.lang.Math.min;
 
 public class BoardGeometry {
 
-	public static final int TILE_SIZE = 256;
-	public static final int BUTTON_SIZE = 128;
-
-	private static final float MAX_PAN = 2.5f;
-
+	// DEFAULT GEOMETRY CONSTANTS (regular board)
     private static HexPoint HEX_SCALE = HexGridLayout.size_default;
-
-	private int BOARD_SIZE;
+	private int BOARD_SIZE = 0;
 	private int ZOOM_SCALE = 250;
-
-	private int width, height;
-	private float cx, cy, zoom;
-	private float minZoom, maxZoom, highZoom;
-
 	private int HEX_COUNT = 61;
 	private int EDGE_COUNT = 210;
 	private int VERTEX_COUNT = 150;
 	private int HARBOR_COUNT = 9;
+	private static final float MAX_PAN = 2.5f;
 
 	/* NOTE: For a perfectly-centered hexagon
 	with centered hexagonal number K, the map
@@ -45,6 +36,15 @@ public class BoardGeometry {
 	In other words, for n >= 1, the n-th centered
 	hexagonal number K has map radius n + 1.*/
 	private int MAP_RADIUS = 4;
+
+	// RESOURCE SIZES
+	public static final int TILE_SIZE = 256;
+	public static final int BUTTON_SIZE = 128;
+
+	// ZOOM PARAMETERS
+	private int width, height;
+	private float cx, cy, zoom;
+	private float minZoom, maxZoom, highZoom;
 
 	// GEOMETRIC OVERLAY
 	private float[] HEXAGONS_X;
@@ -292,56 +292,10 @@ public class BoardGeometry {
         return edgeY + 0.28f * ((float) Math.abs(HEX_SCALE.y)) * (sign);
 	}
 
-    public Edge resolveNeighborHex(HashSet<Edge> portEdges, Hexagon myHex,
-                                          Hexagon myNeighbor, int myV0index, int myV1index) {
-        Vertex myClockwiseV0, myClockwiseV1;
-        int neighborEdgeDirect = AxialHexLocation.complementAxialDirection(myV0index);
-        Edge neighborEdge = myNeighbor.getEdge(neighborEdgeDirect);
-		Hexagon.TerrainType myHexTerrain = myHex.getTerrainType(),
-				neighborHexTerrain = myNeighbor.getTerrainType();
-		boolean myLandNeighborsSea, mySeaNeighborsLand, isPortEdge;
-		myLandNeighborsSea = myHexTerrain != Hexagon.TerrainType.SEA
-				&& neighborHexTerrain == Hexagon.TerrainType.SEA;
-		mySeaNeighborsLand = myHexTerrain == Hexagon.TerrainType.SEA
-				&& neighborHexTerrain != Hexagon.TerrainType.SEA;
-		isPortEdge = (myLandNeighborsSea || mySeaNeighborsLand);
-		if (isPortEdge) {
-			Hexagon portHex = myLandNeighborsSea ? myHex : myNeighbor;
-			neighborEdge.setPortHex(portHex);
-            neighborEdge.setBorderingSea(true);
-		}
-		else {
-			// forfeit neighborEdge candidacy for harbor
-			try {
-				// should fail silently if edge not present
-				portEdges.remove(neighborEdge);
-				neighborEdge.removePortHex();
-			} catch (Exception e) {
-				// Warn exception (in case an intended removal failed)
-				System.out.println("WARNING: failed to remove edge. Exception:\n");
-				e.printStackTrace();
-			}
-		}
-		// axialDirection is reversed to that of edge creator
-        myClockwiseV0 = neighborEdge.getV1Clockwise();
-        myClockwiseV1 = neighborEdge.getV0Clockwise();
-        myHex.setEdge(neighborEdge, myV0index);
-        myHex.setVertex(myClockwiseV0, myV0index);
-        myHex.setVertex(myClockwiseV1, myV1index);
+	// BOARD POPULATION LOGIC
 
-        return neighborEdge;
-    }
-
-    public void placeClockwiseEdge(Edge clockwiseEdge, Vertex clockwiseV0,
-                                          Vertex clockwiseV1, Hexagon curHex, int vDirect) {
-        clockwiseEdge.setVertices(clockwiseV0, clockwiseV1);
-        curHex.setEdge(clockwiseEdge, vDirect);
-        curHex.setVertex(clockwiseV0, vDirect);
-        curHex.setVertex(clockwiseV1, (vDirect + 1) % 6);
-    }
-
-	public void populateBoard(Hexagon[] hexagons, Vertex[] vertices,
-									 Edge[] edges, Harbor[] harbors, HashMap<Long, Hexagon> hexMap)  {
+	void populateBoard(Hexagon[] hexagons, Vertex[] vertices,
+					   Edge[] edges, Harbor[] harbors, HashMap<Long, Hexagon> hexMap)  {
 
 		// edges available to neighbour harbors
 		HashSet<Edge> portEdges = new HashSet<Edge>();
@@ -350,7 +304,7 @@ public class BoardGeometry {
 		Hexagon[] randomHexes = Arrays.copyOf(hexagons, HEX_COUNT);
         Collections.shuffle(Arrays.asList(randomHexes));
 
-		// TODO: remove debugging
+        // check that all hexagons were hashed as expected
 		HashSet<Hexagon> successfullyHashed = new HashSet<Hexagon>();
 
         // variables for hexagon population logic
@@ -374,12 +328,7 @@ public class BoardGeometry {
                 // iterate clockwise from top vertex around hexagon
                 Vertex clockwiseV0 = null, clockwiseV1 = null;
                 for (int vDirect = 0; vDirect < 6; vDirect++) {
-                    //TODO: remove debugging
-                    if (vertexIndex >= 51) {
-                        Log.d("t", "here");
-                    }
                     hadClockwiseNeighbor = false;
-                    hadAntiClockwiseNeighbor = false;
                     // is there a clockwise axialNeighbor w.r.t vDirect?
                     neighborLocation = AxialHexLocation.axialNeighbor(curHexLocation, vDirect);
                     hexLocationHash = HexGridUtils.perfectHash(neighborLocation);
@@ -459,9 +408,68 @@ public class BoardGeometry {
         }
 
 		if (successfullyHashed.size() != HEX_COUNT) {
-			Log.d("WARNING","Some hexes were not hashed!");
+			Log.w("BOARD_GEOMETRY_WARNING","Some hexes were not hashed!");
 		}
 
+        placeHarbors(hexMap, harbors, portEdges);
+
+ 		initCartesianCoordinates(hexagons, vertices, edges);
+
+	}
+
+    // BOARD POPULATION HELPERS
+
+    private Edge resolveNeighborHex(HashSet<Edge> portEdges, Hexagon myHex,
+                                    Hexagon myNeighbor, int myV0index, int myV1index) {
+        Vertex myClockwiseV0, myClockwiseV1;
+        int neighborEdgeDirect = AxialHexLocation.complementAxialDirection(myV0index);
+        Edge neighborEdge = myNeighbor.getEdge(neighborEdgeDirect);
+        neighborEdge.setNeighborHex(myNeighbor);
+        Hexagon.TerrainType myHexTerrain = myHex.getTerrainType(),
+                neighborHexTerrain = myNeighbor.getTerrainType();
+        boolean myLandNeighborsSea, mySeaNeighborsLand, isPortEdge;
+        myLandNeighborsSea = myHexTerrain != Hexagon.TerrainType.SEA
+                && neighborHexTerrain == Hexagon.TerrainType.SEA;
+        mySeaNeighborsLand = myHexTerrain == Hexagon.TerrainType.SEA
+                && neighborHexTerrain != Hexagon.TerrainType.SEA;
+        isPortEdge = (myLandNeighborsSea || mySeaNeighborsLand);
+        if (isPortEdge) {
+            Hexagon portHex = myLandNeighborsSea ? myHex : myNeighbor;
+            neighborEdge.setPortHex(portHex);
+            neighborEdge.setBorderingSea(true);
+        }
+        else {
+            // forfeit neighborEdge candidacy for harbor
+            try {
+                // should fail silently if edge not present
+                portEdges.remove(neighborEdge);
+                neighborEdge.removePortHex();
+            } catch (Exception e) {
+                // Warn exception (in case an intended removal failed)
+                System.out.println("WARNING: failed to remove edge. Exception:\n");
+                e.printStackTrace();
+            }
+        }
+        // axialDirection is reversed to that of edge creator
+        myClockwiseV0 = neighborEdge.getV1Clockwise();
+        myClockwiseV1 = neighborEdge.getV0Clockwise();
+        myHex.setEdge(neighborEdge, myV0index);
+        myHex.setVertex(myClockwiseV0, myV0index);
+        myHex.setVertex(myClockwiseV1, myV1index);
+
+        return neighborEdge;
+    }
+
+    private void placeClockwiseEdge(Edge clockwiseEdge, Vertex clockwiseV0,
+                                    Vertex clockwiseV1, Hexagon curHex, int vDirect) {
+        clockwiseEdge.setVertices(clockwiseV0, clockwiseV1);
+        curHex.setEdge(clockwiseEdge, vDirect);
+        curHex.setVertex(clockwiseV0, vDirect);
+        curHex.setVertex(clockwiseV1, (vDirect + 1) % 6);
+    }
+
+    private void placeHarbors(HashMap<Long, Hexagon> hexMap,
+                              Harbor[] harbors, HashSet<Edge> portEdges) {
 
         // shuffled array of edges
         ArrayList<Edge> randomPortEdges = new ArrayList<Edge>(portEdges);
@@ -469,35 +477,47 @@ public class BoardGeometry {
 
         // associate vertices with harbors
         Harbor harbor;
-        int neighborDirect, forbiddenNeighborEdgeDirect;
+        Edge candidatePortEdge = null;
+        Hexagon candidatePortHex = null, curNeighborHex = null;
+        AxialHexLocation candidatePortHexLocation, neighborLocation;
+        int neighborDirect, forbiddenNeighborEdgeDirect, edgeIndexOnHex;
         HashSet<Edge> forbiddenPortEdges = new HashSet<Edge>();
         for (int i = 0, j = 0; i < harbors.length; i++, j++) {
-            while (j < randomPortEdges.size()) {
-                clockwiseEdge = randomPortEdges.get(j);
-                if (forbiddenPortEdges.contains(clockwiseEdge)) {
+            while (j < randomPortEdges.size()) { // find a candidate port edge
+                candidatePortEdge = randomPortEdges.get(j);
+                if (forbiddenPortEdges.contains(candidatePortEdge)) { // iterate until valid
                     j++;
                     continue;
                 }
-                curHex = clockwiseEdge.getPortHex();
-                curHexLocation = curHex.getCoord();
-                //TODO: modularize
-                if (clockwiseEdge.isBorderingSea()) { // harbor within sea hex
+                candidatePortHex = candidatePortEdge.getPortHex();
+                candidatePortHexLocation = candidatePortHex.getCoord();
+                if (candidatePortEdge.isBorderingSea()) { // harbor within sea hex
+                    // FORBID OVERLAP OF SEA HEX HARBORS
                     neighborLocation =
                             AxialHexLocation.axialNeighbor(
-                                    curHexLocation, clockwiseEdge.getPortHexDirect());
-                    Hexagon seaHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));;
-                    for (int k = 0; k < 6; k++) {
-                        neighborEdge = seaHex.getEdge(k);
-                        if(portEdges.contains(neighborEdge)
-								&& neighborEdge.isBorderingSea()) {
-                            forbiddenPortEdges.add(neighborEdge);
+                                    candidatePortHexLocation, candidatePortEdge.getPortHexDirect());
+                    Hexagon seaHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));
+                    Edge curEdge = null;
+                    for (int k = 0; k < 6; k++) { // remove candidacy of other edges on sea hex
+                        curEdge = seaHex.getEdge(k);
+                        if (portEdges.contains(curEdge)
+                                && curEdge.isBorderingSea()) {
+                            forbiddenPortEdges.add(curEdge);
                         }
                     }
                 } else { // harbor at extremes of game board
+                    if (candidatePortHex.getTerrainType() == Hexagon.TerrainType.SEA) {
+                        // don't allow harbors in the middle of the ocean
+                        forbiddenPortEdges.add(candidatePortEdge);
+                        continue;
+                    }
+
+                    // FORBID OVERLAP OF HARBORS AT EXTREMES OF BOARD
+
                     // add clockwise forbidden edge
-                    neighborDirect = (clockwiseEdge.getOriginHexDirect() + 1) % 6;
+                    neighborDirect = (candidatePortEdge.getOriginHexDirect() + 1) % 6;
                     neighborLocation =
-                            AxialHexLocation.axialNeighbor(curHexLocation, neighborDirect);
+                            AxialHexLocation.axialNeighbor(candidatePortHexLocation, neighborDirect);
                     curNeighborHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));
                     if (curNeighborHex != null) {
                         forbiddenNeighborEdgeDirect =
@@ -505,9 +525,9 @@ public class BoardGeometry {
                         forbiddenPortEdges.add(curNeighborHex.getEdge(forbiddenNeighborEdgeDirect));
                     }
                     // add counter-clockwise forbidden edge
-                    neighborDirect = (((((clockwiseEdge.getOriginHexDirect() - 1)  % 6) + 6) % 6));
+                    neighborDirect = (((((candidatePortEdge.getOriginHexDirect() - 1) % 6) + 6) % 6));
                     neighborLocation =
-                            AxialHexLocation.axialNeighbor(curHexLocation, neighborDirect);
+                            AxialHexLocation.axialNeighbor(candidatePortHexLocation, neighborDirect);
                     curNeighborHex = hexMap.get(HexGridUtils.perfectHash(neighborLocation));
                     if (curNeighborHex != null) {
                         forbiddenNeighborEdgeDirect =
@@ -516,31 +536,27 @@ public class BoardGeometry {
                         forbiddenPortEdges.add(curNeighborHex.getEdge(forbiddenNeighborEdgeDirect));
                     }
                     // track current edge
-                    forbiddenPortEdges.add(clockwiseEdge);
+                    forbiddenPortEdges.add(candidatePortEdge);
                 }
-				break;
+                break;
             }
             if (j > randomPortEdges.size()) {
-                Log.d("ERROR", "insufficient port edges");
+                Log.e("BOARD_GEOMETRY_ERROR", "insufficient port edges");
                 break;
             }
             harbor = harbors[i];
-            edgeIndexOnHex = curHex.findEdgeDirect(clockwiseEdge);
+            edgeIndexOnHex = candidatePortHex.findEdgeDirect(candidatePortEdge);
             harbor.setPosition(Harbor.vdirectToPosition(edgeIndexOnHex));
-            clockwiseEdge.setMyHarbor(harbor);
-            clockwiseEdge.getV0Clockwise().setHarbor(harbor);
-			clockwiseEdge.getV1Clockwise().setHarbor(harbor);
-			HARBOR_EDGES[i] = clockwiseEdge.getId();
-			HARBOR_HEXES[i] = clockwiseEdge.getPortHexId();
+            candidatePortEdge.setMyHarbor(harbor);
+            candidatePortEdge.getV0Clockwise().setHarbor(harbor);
+            candidatePortEdge.getV1Clockwise().setHarbor(harbor);
+            HARBOR_EDGES[i] = candidatePortEdge.getId();
+            HARBOR_HEXES[i] = candidatePortEdge.getPortHexId();
         }
+    }
 
-
- 		initCoordinates(hexagons, vertices, edges);
-
-	}
-
-	public void initCoordinates(Hexagon[] hexagons, Vertex[] vertices,
-									 Edge[] edges) {
+	private void initCartesianCoordinates(Hexagon[] hexagons, Vertex[] vertices,
+                                          Edge[] edges) {
 		HexGridLayout layout = new HexGridLayout(HexGridLayout.flat, HexGridLayout.size_default, HexGridLayout.origin_default);
 		AxialHexLocation axialCoord;
 		float center_X, center_Y;
