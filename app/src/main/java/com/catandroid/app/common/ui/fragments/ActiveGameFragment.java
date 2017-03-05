@@ -84,7 +84,9 @@ public class ActiveGameFragment extends Fragment {
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
-	public void setBoard(Board board){ this.board = board;}
+	public void setBoard(Board board){
+		this.board = board;
+	}
 
 	public interface Listener {
 		void endTurn(String nextParticipantId);
@@ -958,7 +960,8 @@ public class ActiveGameFragment extends Fragment {
 		}
 
 		//changed constructor
-		view = new GameView(this, getActivity(), myParticipantId);
+		view = new GameView(this, getActivity(), myParticipantId, board);
+		view.setBoard(board);
 		renderer = new GameRenderer(view, board.getBoardGeometry());
 		view.setRenderer(renderer);
 		view.requestFocus();
@@ -1046,6 +1049,14 @@ public class ActiveGameFragment extends Fragment {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	public void updateBoardState(){
+		board.reinitBoardOnComponents();
+		view.setBoard(board);
+		board.setActiveGameFragment(this);
+		setup(true);
 	}
 	
 //	@Override

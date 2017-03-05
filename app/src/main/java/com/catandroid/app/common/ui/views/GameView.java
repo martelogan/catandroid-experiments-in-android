@@ -38,11 +38,15 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 
 	String myParticipantId;
 
-	public GameView(ActiveGameFragment manager, Context context, String myParticipantId) {
+	private transient Board board;
+
+	public GameView(ActiveGameFragment manager, Context context, String myParticipantId, Board board) {
 		super(context);
 		
 		game = manager;
 		this.myParticipantId = myParticipantId;
+
+		this.board = board;
 		
 		gesture = new GestureDetector(context, this);
 		pinch = new ScaleGestureDetector(context, this);
@@ -55,6 +59,10 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 			buttons[type.ordinal()] = new UIButton(type, size, size);
 		
 		buttonsPlaced = false;
+	}
+
+	public void setBoard(Board board){
+		this.board = board;
 	}
 
 	@Override
@@ -256,8 +264,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 	}
 
 	private boolean click(int x, int y) {
-		Player player = CatAndroidApp.getInstance().getBoardInstance().getCurrentPlayer();
-		Board board = CatAndroidApp.getInstance().getBoardInstance();
+		Player player = board.getCurrentPlayer();
 		BoardGeometry boardGeometry = renderer.getGeometry();
 		GameRenderer.Action action = renderer.getAction();
 

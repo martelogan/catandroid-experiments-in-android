@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,7 +20,6 @@ import com.catandroid.app.common.components.BoardGeometry;
 import com.catandroid.app.common.logistics.AppSettings;
 import com.catandroid.app.common.logistics.multiplayer.CatandroidTurn;
 import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
-import com.catandroid.app.common.logistics.multiplayer.SkeletonTurn;
 import com.catandroid.app.R;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.players.Player;
@@ -109,6 +107,9 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// Do not retain references to match data once you have
 	// taken an action on the match, such as takeTurn()
 	public CatandroidTurn catandroidTurn;
+
+	//This is the id of the current match that the user has loaded and is actively playing
+	String currentMatchId;
 
 	public static void setup(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++)
@@ -711,6 +712,8 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, match.getMatchId(),
 				catandroidTurn.persist(), gameParticipantIds.get(0));
 
+		currentMatchId = match.getMatchId();
+
 		setGameplayUI();
 
 	}
@@ -827,6 +830,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				activeGameFragment.setBoard(board);
 				board.reinitBoardOnComponents();
 				board.setActiveGameFragment(activeGameFragment);
+				currentMatchId = match.getMatchId();
 				setGameplayUI();
 				break;
 			case TurnBasedMatch.MATCH_TURN_STATUS_INVITED:
@@ -916,6 +920,16 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	@Override
 	public void onTurnBasedMatchReceived(TurnBasedMatch match) {
 		Toast.makeText(this, "A match was updated.", Toast.LENGTH_SHORT).show();
+		//when we are in a game and an update is made to it, we call upda
+		if(match.getMatchId().equals(currentMatchId)){
+			String playerId = Games.Players.getCurrentPlayerId(mGoogleApiClient);
+			String myParticipantId = mMatch.getParticipantId(playerId);
+			catandroidTurn.unpersist(match.getData());
+			activeGameFragment.setBoard(catandroidTurn.currentBoard);
+			activeGameFragment.setmListener(this);
+			activeGameFragment.setMyParticipantId(myParticipantId);
+			activeGameFragment.updateBoardState();
+		}
 
 	}
 

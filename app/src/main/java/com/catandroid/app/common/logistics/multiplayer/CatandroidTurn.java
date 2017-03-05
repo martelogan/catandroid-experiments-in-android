@@ -75,6 +75,8 @@ public class CatandroidTurn {
 
         myBoard = gson.fromJson(st,Board.class);
 
+        currentBoard = myBoard;
+
         return myBoard;
     }
 }
