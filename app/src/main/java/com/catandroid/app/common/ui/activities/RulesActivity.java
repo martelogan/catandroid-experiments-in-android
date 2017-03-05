@@ -17,7 +17,7 @@ public class RulesActivity extends Activity {
 	public void onCreate(Bundle state) {
 		super.onCreate(state);
 
-		setContentView(R.layout.rules);
+		setContentView(R.layout.game_rules);
 		setTitle(R.string.rules_button);
 
 		ActionBar actionBar = getActionBar();
@@ -26,6 +26,7 @@ public class RulesActivity extends Activity {
 
 		String data = null;
 
+		//TODO: add game_rules
 		try {
 			InputStream is = getResources().openRawResource(R.raw.rules);
 
@@ -55,10 +56,10 @@ public class RulesActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		}
+			case android.R.id.home:
+				finish();
+				return true;
+			}
 
 		return super.onOptionsItemSelected(item);
 	}

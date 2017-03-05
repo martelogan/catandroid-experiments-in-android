@@ -165,7 +165,7 @@ public class Board {
 	}
 
 	/**
-	 * Get a reference to the board's geometry
+	 * Get a costs_reference to the board's geometry
 	 *
 	 * @return the board's geometry
 	 */
@@ -187,7 +187,7 @@ public class Board {
 	}
 
 	/**
-	 * Get a reference to the current players
+	 * Get a costs_reference to the current players
 	 * 
 	 * @return the current players
 	 */
@@ -231,16 +231,16 @@ public class Board {
 					continue;
 
 				if (autoDiscard) {
-					// discard randomly
+					// discard_resources randomly
 					for (int j = 0; j < extra; j++)
 						players[i].discard(null);
 				}
 				if (players[i].isBot()) {
-					// instruct the ai to discard
+					// instruct the ai to discard_resources
 					AutomatedPlayer bot = (AutomatedPlayer) players[i];
 					bot.discard(extra);
 				} else if (players[i].isHuman()) {
-					// queue human players to discard
+					// queue human players to discard_resources
 					playersYetToDiscard.add(players[i]);
 				}
 			}
@@ -767,9 +767,9 @@ public class Board {
 	}
 
 	/**
-	 * Check if any players need to discard
+	 * Check if any players need to discard_resources
 	 * 
-	 * @return true if one or more players need to discard
+	 * @return true if one or more players need to discard_resources
 	 */
 	public boolean checkPlayerToDiscard() {
 		return !playersYetToDiscard.empty();
@@ -808,9 +808,9 @@ public class Board {
 		case BUILD:
 			return R.string.phase_build;
 		case PROGRESS_1:
-			return R.string.phase_progress1;
+			return R.string.to_remove_str;
 		case PROGRESS_2:
-			return R.string.phase_progress2;
+			return R.string.to_remove_str;
 		case ROBBER:
 			return R.string.phase_move_robber;
 		case DONE:
@@ -834,9 +834,9 @@ public class Board {
 	 * 
 	 * @return the winning players or null
 	 */
-	public Player getWinner(AppSettings appSettings) {
+	public Player getWinner() {
 		// winner already found or we just want to check what was already found
-		if (winner != null || appSettings == null)
+		if (winner != null)
 		{
 			return winner;
 		}
@@ -848,12 +848,6 @@ public class Board {
 				winner = players[i];
 				break;
 			}
-		}
-
-		// save game stats
-		if (winner != null)
-		{
-			appSettings.addScore(humans, maxPoints, winner.getName(), turnNumber);
 		}
 
 		return winner;
@@ -935,17 +929,17 @@ public class Board {
 	public static int getCardStringResource(Cards card) {
 		switch (card) {
 		case SOLDIER:
-			return R.string.soldier;
+			return R.string.to_remove_str;
 		case PROGRESS:
-			return R.string.progress;
+			return R.string.to_remove_str;
 		case VICTORY:
-			return R.string.victory;
+			return R.string.to_remove_str;
 		case HARVEST:
-			return R.string.harvest;
+			return R.string.to_remove_str;
 		case MONOPOLY:
-			return R.string.monopoly;
+			return R.string.to_remove_str;
 		default:
-			return R.string.nostring;
+			return R.string.empty_string;
 		}
 	}
 

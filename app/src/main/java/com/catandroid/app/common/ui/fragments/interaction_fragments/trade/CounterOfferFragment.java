@@ -50,7 +50,7 @@ public class CounterOfferFragment extends Activity {
 				+ ") considering trade");
 
 //		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.counteroffer);
+		setContentView(R.layout.counter_offer);
 
 		TextView wants = (TextView) findViewById(R.id.trade_player_wants);
 		wants.setText(String.format(getString(R.string.trade_player_wants),

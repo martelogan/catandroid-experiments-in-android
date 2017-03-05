@@ -36,7 +36,7 @@ public class StartScreenActivity extends Activity {
 		Vector<String> labels = new Vector<String>();
 		actions = new Vector<Runnable>();
 
-		if (board != null && board.getWinner(appSettings) == null) {
+		if (board != null && board.getWinner() == null) {
 			//@TODO
 			//ADD RESUME FUNCTIONALITY. HAPPENS WHEN YOU DO BACK ON SCREEN
 			labels.add(getString(R.string.resume_button));
@@ -48,7 +48,7 @@ public class StartScreenActivity extends Activity {
 			});
 		}
 
-		labels.add(getString(R.string.new_button));
+		labels.add(getString(R.string.login_button));
 		actions.add(new Runnable() {
 			@Override
 			public void run() {
@@ -72,8 +72,8 @@ public class StartScreenActivity extends Activity {
 				final Builder aboutDialog = new AlertDialog.Builder(StartScreenActivity.this);
 				aboutDialog.setTitle(R.string.app_name);
 				aboutDialog.setIcon(R.drawable.icon);
-				aboutDialog.setMessage(getString(R.string.about_text) + "\n\n" + getString(R.string.acknowledgements)
-						+ "\n\n" + getString(R.string.translators));
+				aboutDialog.setMessage(getString(R.string.about_text) + "\n\n"
+						+ getString(R.string.acknowledgements));
 				aboutDialog.show();
 			}
 		});

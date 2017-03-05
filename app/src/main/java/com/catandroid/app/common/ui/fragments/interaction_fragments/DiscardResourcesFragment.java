@@ -17,8 +17,8 @@ import com.catandroid.app.common.players.Player;
 
 public class DiscardResourcesFragment extends Fragment {
 
-	public static final String QUANTITY_KEY = "com.settlers.hd.DiscardQuantity";
-	public static final String PLAYER_KEY = "com.settlers.hd.DiscardPlayer";
+	public static final String QUANTITY_KEY = "com.catandroid.app.DiscardQuantity";
+	public static final String PLAYER_KEY = "com.catandroid.app.DiscardPlayer";
 
 	private static final int[] RESOURCES = { R.id.trade_res1, R.id.trade_res2,
 			R.id.trade_res3, R.id.trade_res4, R.id.trade_res5 };
@@ -42,8 +42,8 @@ public class DiscardResourcesFragment extends Fragment {
 		
 		//getActivity().ActivsetFinishOnTouchOutside(false);
 
-		//setContentView(R.layout.discard);
-		final View discardView = inflater.inflate(R.layout.discard, null, false);
+		//setContentView(R.layout.discard_resources);
+		final View discardView = inflater.inflate(R.layout.discard_resources, null, false);
 
 		quantity = 0;
 		player = null;

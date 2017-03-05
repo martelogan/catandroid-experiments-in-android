@@ -49,7 +49,7 @@ public class TradeResponseFragment extends Activity {
 		resourceType = Resource.RESOURCE_TYPES[extras.getInt(TradeRequestFragment.TYPE_KEY)];
 		trade = extras.getIntArray(TradeRequestFragment.OFFER_KEY);
 
-		setContentView(R.layout.accepttrade);
+		setContentView(R.layout.trade_response);
 		setTitle(R.string.trade);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -122,8 +122,8 @@ public class TradeResponseFragment extends Activity {
 
 						Intent intent = new Intent(TradeResponseFragment.this,
 								CounterOfferFragment.class);
-						intent.setClassName("com.settlers.hd",
-								"com.settlers.hd.activities.trade.CounterOfferFragment");
+						intent.setClassName("com.catandroid.app",
+								"com.catandroid.app.activities.trade.CounterOfferFragment");
 						intent.putExtra(TradeRequestFragment.TYPE_KEY, resourceType.ordinal());
 						intent.putExtra(TradeRequestFragment.OFFER_KEY, trade);
 						intent.putExtra(TradeRequestFragment.PLAYER_KEY, player

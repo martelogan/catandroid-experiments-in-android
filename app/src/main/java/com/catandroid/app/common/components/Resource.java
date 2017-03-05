@@ -68,7 +68,7 @@ public class Resource {
             case GOLD:
                 return R.string.gold;
             default:
-                return R.string.nostring;
+                return R.string.empty_string;
         }
     }
 }

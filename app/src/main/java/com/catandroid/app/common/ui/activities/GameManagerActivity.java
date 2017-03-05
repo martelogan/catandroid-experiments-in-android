@@ -22,7 +22,6 @@ import com.catandroid.app.common.logistics.multiplayer.CatandroidTurn;
 import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 import com.catandroid.app.R;
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.players.Player;
 
 //***************
 //SkeletonActivity
@@ -132,9 +131,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 //			human.setChecked(types[i]);
 //		}
 
-		CheckBox mixedTrade = (CheckBox) findViewById(R.id.mixed_trade);
-		mixedTrade.setChecked(mixed);
-
 		CheckBox discardCheck = (CheckBox) findViewById(R.id.auto_discard);
 		discardCheck.setChecked(auto_discard);
 	}
@@ -153,10 +149,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	}
 
 	private void save(AppSettings appSettings) {
-//		for (int i = 0; i < 4; i++) {
-//			appSettings.set(NAME_KEYS[i], names[i]);
-//			appSettings.set(HUMAN_KEYS[i], types[i]);
-//		}
 
 		appSettings.set(MIXED_KEY, mixed);
 		appSettings.set(AUTO_KEY, auto_discard);
@@ -169,7 +161,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		//at this time.
 
 		super.onCreate(state);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.game_manager);
 
 		// Create the Google API Client with access to Plus and Games
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -286,7 +278,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// Displays your inbox. You will get back onActivityResult where
 	// you will need to figure out what you clicked on.
 	public void onCheckGamesClicked(View view) {
-		setContentView(R.layout.localgame);
+		setContentView(R.layout.game_setup_options);
 		findViewById(R.id.setup).setVisibility(View.GONE);
 		Intent intent = Games.TurnBasedMultiplayer.getInboxIntent(mGoogleApiClient);
 		startActivityForResult(intent, RC_LOOK_AT_MATCHES);
@@ -300,7 +292,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		//GAMESETUP LOGIC SCREEN INIT
 		//********************
 
-		setContentView(R.layout.localgame);
+		setContentView(R.layout.game_setup_options);
 
 		load(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
@@ -315,14 +307,20 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		for (int i = 5; i <= 15; i++) {
-			String choice = i + " " + getString(R.string.points_to_win);
+			String choice = i + " " + getString(R.string.victory_points_to_win);
 
 			if (i == 5)
-				choice += " " + getString(R.string.length_quick);
+			{
+				choice += " " + getString(R.string.short_game);
+			}
 			else if (i == 10)
-				choice += " " + getString(R.string.length_standard);
+			{
+				choice += " " + getString(R.string.standard_game);
+			}
 			else if (i == 15)
-				choice += " " + getString(R.string.length_long);
+			{
+				choice += " " + getString(R.string.long_game);
+			}
 
 			pointChoices.add(choice);
 		}
@@ -372,14 +370,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 						numberPlayersToInvite, numberPlayersToInvite, true);
 				startActivityForResult(intent, RC_SELECT_PLAYERS);
 
-			}
-		});
-
-		final Button reset = (Button) findViewById(R.id.reset);
-		reset.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				reset();
-				populate();
 			}
 		});
 
@@ -655,7 +645,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 			names[i] = name;
 
-			boolean ai = false;
+			boolean ai = true;
 
 			if(gameParticipantIds.size() == 3 && ai) {
 				if (ai && (i == 1 || i == 2)) {
@@ -677,9 +667,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		Spinner boardSizeSpinner = (Spinner) findViewById(R.id.option_board_size);
 		int boardSelected = boardSizeSpinner.getSelectedItemPosition();
-		CheckBox mixedTrade = (CheckBox) findViewById(R.id.mixed_trade);
-		mixed = mixedTrade.isChecked();
-		Player.enableMixedTrades(mixed);
 
 		save(((CatAndroidApp) getApplicationContext()).getAppSettingsInstance());
 
@@ -819,7 +806,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 						"This game is over; someone finished it!  You can only finish it now.");
 		}
 
-		// OK, it's active. Check on turn status.
+		// OK, it's active. Check on turn pager_title_strip.
 		switch (turnStatus) {
 			case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
             case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:

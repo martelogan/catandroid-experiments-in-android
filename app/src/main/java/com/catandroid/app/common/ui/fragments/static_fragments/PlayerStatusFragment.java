@@ -51,15 +51,13 @@ public class PlayerStatusFragment extends Fragment {
 		views = new View[numPlayers];
 		
 		for (int i = 0; i < numPlayers; i++) {
-			views[i] = inflater.inflate(R.layout.status_player, null);
+			views[i] = inflater.inflate(R.layout.player_status, null);
 			
 			Player player = board.getPlayer(i);
 
 			boolean showAll = ((myParticipantId).equals(player.getGooglePlayParticipantId())
 					&& player.isHuman()
-					|| board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
-							.getAppSettingsInstance()) != null);
-
+					|| board.getWinner() != null);
 			int points;
 			if (showAll)
 				points = player.getVictoryPoints();
@@ -99,32 +97,32 @@ public class PlayerStatusFragment extends Fragment {
 
 			message += "\n";
 
-			message += getString(R.string.status_road_length) + ": "
+			message += getString(R.string.status_best_road_length) + ": "
 					+ player.getRoadLength() + "\n";
 			if (player == board.getLongestRoadOwner())
-				message += getString(R.string.status_longest_road) + ": "
-						+ "2 " + getString(R.string.status_points) + "\n";
+				message += getString(R.string.status_has_longest_road) + ": "
+						+ "2 " + getString(R.string.status_points_str) + "\n";
 
-			message += getString(R.string.status_army_size) + ": "
+			message += getString(R.string.to_remove_str) + ": "
 					+ player.getArmySize() + "\n";
 			if (player == board.getLargestArmyOwner())
-				message += getString(R.string.status_largest_army) + ": "
-						+ "2 " + getString(R.string.status_points) + "\n";
+				message += getString(R.string.to_remove_str) + ": "
+						+ "2 " + getString(R.string.status_points_str) + "\n";
 
 			message += "\n";
 
 			if (showAll) {
-				message += getString(R.string.status_soldier_cards) + ": "
+				message += getString(R.string.to_remove_str) + ": "
 						+ player.getNumDevCardType(Cards.SOLDIER) + "\n"
 						+ getString(R.string.status_progress_cards) + ": "
 						+ player.getNumDevCardType(Cards.PROGRESS) + "\n"
-						+ getString(R.string.status_victory_cards) + ": "
+						+ getString(R.string.to_remove_str) + ": "
 						+ player.getVictoryCards() + "\n\n";
 			}
 
 			boolean hasHarbor = false;
 			if (player.hasHarbor(null)) {
-				message += "3:1 " + getString(R.string.status_trader) + "\n";
+				message += "3:1 " + getString(R.string.status_harbor) + "\n";
 				hasHarbor = true;
 			}
 
@@ -132,7 +130,7 @@ public class PlayerStatusFragment extends Fragment {
 				if (player.hasHarbor(Resource.RESOURCE_TYPES[j])) {
 					message += getString(Resource
 							.toRString(Resource.RESOURCE_TYPES[j]))
-							+ " " + getString(R.string.status_trader) + "\n";
+							+ " " + getString(R.string.status_harbor) + "\n";
 					hasHarbor = true;
 				}
 			}
@@ -142,9 +140,13 @@ public class PlayerStatusFragment extends Fragment {
 
 			String turn = player.getActionLog();
 			if (player == board.getCurrentPlayer() && turn != "")
+			{
 				message += getString(R.string.status_this_turn) + ":\n" + turn;
+			}
 			else if (turn != "")
+			{
 				message += getString(R.string.status_last_turn) + ":\n" + turn;
+			}
 
 			TextView text = (TextView) views[i].findViewById(R.id.status_text);
 			text.setText(message);
@@ -158,7 +160,7 @@ public class PlayerStatusFragment extends Fragment {
 			progress.setProgress(points);
 		}
 
-		final View view = inflater.inflate(R.layout.status, null, false);
+		final View view = inflater.inflate(R.layout.pager_title_strip, null, false);
 
 		ViewPager viewPager = (ViewPager) view.findViewById(R.id.status);
 		viewPager.setAdapter(new StatusTabAdapter());

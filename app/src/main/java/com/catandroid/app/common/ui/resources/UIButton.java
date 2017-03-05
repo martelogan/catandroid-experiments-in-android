@@ -11,7 +11,6 @@ public class UIButton {
 	}
 
 	private Type type;
-	private int bitmap;
 
 	private int x;
 	private int y;
@@ -52,10 +51,6 @@ public class UIButton {
 		return height;
 	}
 	
-	public int getResource() {
-		return bitmap;
-	}
-	
 	public boolean isPressed() {
 		return pressed;
 	}
@@ -81,7 +76,9 @@ public class UIButton {
 
 	public boolean press(int x, int y) {
 		if (!enabled)
+		{
 			return false;
+		}
 
 		pressed = isWithin(x, y);
 		return pressed;
@@ -89,7 +86,9 @@ public class UIButton {
 
 	public boolean release(int x, int y) {
 		if (!pressed || !enabled)
+		{
 			return false;
+		}
 
 		pressed = false;
 		return isWithin(x, y);

@@ -571,7 +571,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             }
         } while (false);
 
-        // discard 'quantity' resources
+        // discard_resources 'quantity' resources
         for (int q = 0; q < quantity; q++) {
 
             // try to pick the most common resource
@@ -587,7 +587,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             if (mostCommon != null)
                 extra[mostCommon.ordinal()] -= 1;
 
-            // discard the most common resource, or a random resource
+            // discard_resources the most common resource, or a random resource
             super.discard(mostCommon);
         }
     }

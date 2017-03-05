@@ -59,7 +59,7 @@ public class Player {
 	 * Initialize player object
 	 *
 	 * @param board
-	 *            board reference
+	 *            board costs_reference
 	 * @param name
 	 *            player name
 	 * @param type
@@ -279,7 +279,7 @@ public class Player {
 
 		lastVertexPieceId = vertex.getId();
 
-		appendAction(type == Vertex.TOWN ? R.string.player_town
+		appendAction(type == Vertex.TOWN ? R.string.player_settlement
 				: R.string.player_city);
 
 		return true;
@@ -509,7 +509,7 @@ public class Player {
 		}
 
 		appendAction(R.string.player_traded_with, player.getName());
-		appendAction(R.string.player_got_resource, Resource
+		appendAction(R.string.player_received_resource, Resource
 				.toRString(resourceType));
 	}
 
@@ -635,7 +635,7 @@ public class Player {
 		else
 			newCards.add(card);
 
-		appendAction(R.string.player_bought_card);
+		appendAction(R.string.player_received_card);
 
 		return card;
 	}
@@ -735,7 +735,7 @@ public class Player {
 				soldiers += 1;
 				board.checkLargestArmy(this, soldiers);
 				if (!hadLargest && board.getLargestArmyOwner() == this)
-					appendAction(R.string.player_largest_army);
+					appendAction(R.string.to_remove_str);
 				board.startRobberPhase();
 				break;
 			case PROGRESS:
@@ -750,7 +750,7 @@ public class Player {
 		cards[card.ordinal()] -= 1;
 		usedCard = true;
 
-		appendAction(R.string.player_used_card, Board
+		appendAction(R.string.player_played_card, Board
 				.getCardStringResource(card));
 
 		return true;
@@ -762,7 +762,7 @@ public class Player {
 	 * @param resourceType
 	 */
 	public int monopoly(Resource.ResourceType resourceType) {
-		appendAction(R.string.player_monopoly, Resource
+		appendAction(R.string.to_remove_str, Resource
 				.toRString(resourceType));
 
 		int total = 0;
@@ -796,9 +796,9 @@ public class Player {
 		addResources(resourceType1, 1);
 		addResources(resourceType2, 1);
 
-		appendAction(R.string.player_got_resource, Resource
+		appendAction(R.string.player_received_resource, Resource
 				.toRString(resourceType1));
-		appendAction(R.string.player_got_resource, Resource
+		appendAction(R.string.player_received_resource, Resource
 				.toRString(resourceType2));
 	}
 
@@ -1218,9 +1218,9 @@ public class Player {
 			case GREEN:
 				return R.string.green;
 			case ORANGE:
-				return R.string.orange;
+				return R.string.yellow;
 			default:
-				return R.string.nostring;
+				return R.string.empty_string;
 		}
 	}
 

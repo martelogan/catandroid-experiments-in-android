@@ -26,10 +26,10 @@ public class TradeRequestFragment extends Fragment {
 
 	public static final int REQUEST_TRADE_COMPLETED = 0;
 
-	public static final String TYPE_KEY = "com.settlers.hd.TradeType";
-	public static final String OFFER_KEY = "com.settlers.hd.TradeOffer";
-	public static final String PLAYER_KEY = "com.settlers.hd.TradePlayer";
-	public static final String INDEX_KEY = "com.settlers.hd.TradeIndex";
+	public static final String TYPE_KEY = "com.catandroid.app.TradeType";
+	public static final String OFFER_KEY = "com.catandroid.app.TradeOffer";
+	public static final String PLAYER_KEY = "com.catandroid.app.TradePlayer";
+	public static final String INDEX_KEY = "com.catandroid.app.TradeIndex";
 
 	private static final int[] RESOURCES = { R.id.trade_res1, R.id.trade_res2,
 			R.id.trade_res3, R.id.trade_res4, R.id.trade_res5 };
@@ -62,7 +62,7 @@ public class TradeRequestFragment extends Fragment {
 		if (extras != null)
 			selected = extras.getInt(TYPE_KEY);
 
-		//setContentView(R.layout.playertrade);
+		//setContentView(R.layout.trade_request);
 
 		getActivity().setTitle(R.string.trade);
 
@@ -72,7 +72,7 @@ public class TradeRequestFragment extends Fragment {
 			return null;
 		}
 
-		final View tradeView = inflater.inflate(R.layout.playertrade, null, false);
+		final View tradeView = inflater.inflate(R.layout.trade_request, null, false);
 		player = board.getCurrentPlayer();
 
 		Spinner select = (Spinner) tradeView.findViewById(R.id.trade_type);
@@ -210,7 +210,7 @@ public class TradeRequestFragment extends Fragment {
 				//ADD THE LOGIC TO SEND MESSAGE FOR TRADE PROPOSAL
 
 //				Intent intent = new Intent(TradeRequestFragment.this, TradeResponseFragment.class);
-//				intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.trade.TradeResponseFragment");
+//				intent.setClassName("com.catandroid.app", "com.catandroid.app.activities.trade.trade.TradeResponseFragment");
 //				intent.putExtra(TYPE_KEY, selected);
 //				intent.putExtra(OFFER_KEY, trade);
 //
@@ -234,7 +234,7 @@ public class TradeRequestFragment extends Fragment {
 				}
 
 				if (player.trade(resourceType, offer)) {
-					toast(getString(R.string.trade_for_past) + " "
+					toast(getString(R.string.trade_for_prior) + " "
 							+ getString(Resource.toRString(resourceType)));
 					//finish();
 					getActivity().getSupportFragmentManager().popBackStack();

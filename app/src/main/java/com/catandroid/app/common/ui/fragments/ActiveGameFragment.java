@@ -2,7 +2,6 @@ package com.catandroid.app.common.ui.fragments;
 
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Resource;
-import com.catandroid.app.common.logistics.AppSettings;
 import com.catandroid.app.common.ui.fragments.interaction_fragments.DiscardResourcesFragment;
 import com.catandroid.app.R;;
 import com.catandroid.app.common.components.Board;
@@ -52,6 +51,7 @@ import android.widget.Toast;
 public class ActiveGameFragment extends Fragment {
 
 	private static final int MIN_BOT_DELAY = 1000;
+	private static final int DEFAULT_TURN_DELAY = 750;
 
 	private static final int UPDATE_MESSAGE = 1, LOG_MESSAGE = 2, DISCARD_MESSAGE = 3;
 
@@ -108,7 +108,7 @@ public class ActiveGameFragment extends Fragment {
 			done = false;
 
 			while (!done) {
-				if (board.getWinner(null) != null)
+				if (board.getWinner() != null)
 					return;
 
 				if (board.checkPlayerToDiscard()) {
@@ -127,7 +127,7 @@ public class ActiveGameFragment extends Fragment {
 						turnHandler.sendMessage(turn);
 					}
 
-					int delay = AppSettings.getTurnDelay();
+					int delay = DEFAULT_TURN_DELAY;
 					if (delay > 0) {
 						try {
 							Thread.sleep(delay);
@@ -224,7 +224,7 @@ public class ActiveGameFragment extends Fragment {
 				board.setRobber(hexagon.getId());
 				setup(false);
 			} else {
-				popup(getString(R.string.game_robber_fail),
+				popup(getString(R.string.game_cant_move_robber),
 						getString(R.string.game_robber_same));
 			}
 		}
@@ -308,13 +308,13 @@ public class ActiveGameFragment extends Fragment {
 			mListener.endTurn(board.getCurrentPlayer().getGooglePlayParticipantId());
 
 			if (roll == 7) {
-				toast(getString(R.string.game_rolled) + " 7 " + ROLLS[roll1]
+				toast(getString(R.string.game_rolled_str) + " 7 " + ROLLS[roll1]
 						+ ROLLS[roll2] + " "
 						+ getString(R.string.game_move_robber));
 				setup(true);
 				break;
 			} else {
-				toast(getString(R.string.game_rolled) + " " + roll + " "
+				toast(getString(R.string.game_rolled_str) + " " + roll + " "
 						+ ROLLS[roll1] + ROLLS[roll2]);
 			}
 
@@ -333,7 +333,7 @@ public class ActiveGameFragment extends Fragment {
 			}
 			
 			if (board.getCurrentPlayer().getNumRoads() >= Player.MAX_ROADS) {
-				popup(getString(R.string.game_build_fail),
+				popup(getString(R.string.game_cant_build_str),
 						getString(R.string.game_build_road_max));
 				break;
 			}
@@ -357,15 +357,15 @@ public class ActiveGameFragment extends Fragment {
 			}
 			
 			if (board.getCurrentPlayer().getNumTowns() >= Player.MAX_TOWNS) {
-				popup(getString(R.string.game_build_fail),
-						getString(R.string.game_build_town_max));
+				popup(getString(R.string.game_cant_build_str),
+						getString(R.string.game_build_settlements_max));
 				break;
 			}
 
 			renderer.setAction(Action.TOWN);
 			setButtons(Action.TOWN);
 			getActivity().setTitle(board.getCurrentPlayer().getName() + ": "
-					+ getActivity().getString(R.string.game_build_town));
+					+ getActivity().getString(R.string.game_build_settlement));
 			break;
 
 		case CITY:
@@ -380,7 +380,7 @@ public class ActiveGameFragment extends Fragment {
 			}
 
 			if (board.getCurrentPlayer().getNumCities() >= Player.MAX_CITIES) {
-				popup(getString(R.string.game_build_fail),
+				popup(getString(R.string.game_cant_build_str),
 						getString(R.string.game_build_city_max));
 				break;
 			}
@@ -430,7 +430,7 @@ public class ActiveGameFragment extends Fragment {
 			return false;
 
 //		Intent intent = new Intent(this, TradeRequestFragment.class);
-//		intent.setClassName("com.settlers.hd", "com.settlers.hd.activities.trade.TradeRequestFragment");
+//		intent.setClassName("com.catandroid.app", "com.catandroid.app.activities.trade.TradeRequestFragment");
 //		intent.putExtra(TradeRequestFragment.TYPE_KEY, index);
 //		startActivity(intent);
 
@@ -458,15 +458,15 @@ public class ActiveGameFragment extends Fragment {
 			if (player.getNumRoads() == Player.MAX_ROADS)
 				message = getActivity().getString(R.string.game_build_road_max);
 			else
-				message = getString(R.string.game_build_road_fail);
+				message = getString(R.string.game_cant_build_road);
 
 			if (board.isProgressPhase1()) {
-				message += " " + getString(R.string.game_build_prog1_fail);
+				message += " " + getString(R.string.to_remove_str);
 				board.getCurrentPlayer().addCard(Cards.PROGRESS, true);
 				board.nextPhase();
 				board.nextPhase();
 			} else if (board.isProgressPhase2()) {
-				message += " " + getString(R.string.game_build_prog2_fail);
+				message += " " + getString(R.string.to_remove_str);
 				board.nextPhase();
 			}
 
@@ -474,9 +474,9 @@ public class ActiveGameFragment extends Fragment {
 
 		case TOWN:
 			if (player.getNumTowns() == Player.MAX_TOWNS)
-				message = getString(R.string.game_build_town_max);
+				message = getString(R.string.game_build_settlements_max);
 			else
-				message = getString(R.string.game_build_town_fail);
+				message = getString(R.string.game_cant_build_settlement);
 
 			break;
 
@@ -484,7 +484,7 @@ public class ActiveGameFragment extends Fragment {
 			if (player.getNumCities() == Player.MAX_CITIES)
 				message = getString(R.string.game_build_city_max);
 			else
-				message = getString(R.string.game_build_city_fail);
+				message = getString(R.string.game_cant_build_city);
 
 			break;
 			
@@ -492,7 +492,7 @@ public class ActiveGameFragment extends Fragment {
 			return;
 		}
 		
-		popup(getString(R.string.game_build_fail), message);
+		popup(getString(R.string.game_cant_build_str), message);
 		
 		setup(false);
 	}
@@ -512,9 +512,8 @@ public class ActiveGameFragment extends Fragment {
 			steal();
 
 		// display winner
-		boolean hadWinner = board.getWinner(null) != null;
-		Player winner = board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
-				.getAppSettingsInstance());
+		boolean hadWinner = board.getWinner() != null;
+		Player winner = board.getWinner();
 		if (!hadWinner && winner != null) {
 			// declare winner
 			final Builder infoDialog = new AlertDialog.Builder(getActivity());
@@ -522,9 +521,9 @@ public class ActiveGameFragment extends Fragment {
 			infoDialog.setIcon(R.drawable.icon);
 			infoDialog.setMessage(winner.getName() + " "
 					+ getString(R.string.game_won));
-			infoDialog.setNeutralButton(getString(R.string.game_see_board),
+			infoDialog.setNeutralButton(getString(R.string.game_back_to_board),
 					null);
-			infoDialog.setPositiveButton(getString(R.string.game_return_menu),
+			infoDialog.setPositiveButton(getString(R.string.game_return_to_menu),
 					new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -569,7 +568,7 @@ public class ActiveGameFragment extends Fragment {
 		else
 			getActivity().setTitle(player.getName());
 
-		// TODO: remove resources reference
+		// TODO: remove resources costs_reference
 //		resources.setValues(player);
 
 		Log.d("myTag", "end of setup");
@@ -581,7 +580,7 @@ public class ActiveGameFragment extends Fragment {
 		view.addButton(Type.INFO);
 
 		Player player = board.getCurrentPlayer();
-		Player winner = board.getWinner(null);
+		Player winner = board.getWinner();
 		if (winner != null || !player.isHuman() || !board.itsMyTurn(myParticipantId)){
 			// anonymous mode
 		} else if (board.isSetupPhase()) {
@@ -625,7 +624,7 @@ public class ActiveGameFragment extends Fragment {
 		int index = 0;
 
 		if (player.affordCard() && board.isBuild())
-			list[index++] = getString(R.string.game_buy_dev);
+			list[index++] = getString(R.string.to_remove_str);
 
 		for (int i = 0; i < Board.Cards.values().length; i++) {
 			Board.Cards type = Board.Cards.values()[i];
@@ -635,25 +634,25 @@ public class ActiveGameFragment extends Fragment {
 			String quantity = (cards[i] > 1 ? " (" + cards[i] + ")" : "");
 
 			if (type == Cards.SOLDIER)
-				list[index++] = getString(R.string.game_use_soldier) + quantity;
+				list[index++] = getString(R.string.to_remove_str) + quantity;
 			else if (type == Cards.PROGRESS)
-				list[index++] = getString(R.string.game_use_progress)
+				list[index++] = getString(R.string.to_remove_str)
 						+ quantity;
 			else if (type == Cards.HARVEST)
-				list[index++] = getString(R.string.game_use_harvest) + quantity;
+				list[index++] = getString(R.string.to_remove_str) + quantity;
 			else if (type == Cards.MONOPOLY)
-				list[index++] = getString(R.string.game_use_monopoly)
+				list[index++] = getString(R.string.to_remove_str)
 						+ quantity;
 		}
 
-		list[index++] = getString(R.string.game_cancel);
+		list[index++] = getString(R.string.game_cancel_str);
 
 		CharSequence[] items = new CharSequence[index];
 		for (int i = 0; i < index; i++)
 			items[i] = list[i];
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getString(R.string.game_dev_cards));
+		builder.setTitle(getString(R.string.to_remove_str));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				Player player = board.getCurrentPlayer();
@@ -663,13 +662,13 @@ public class ActiveGameFragment extends Fragment {
 					if (item == 0) {
 						Board.Cards card = player.buyCard();
 						if (card != null)
-							toast(getString(R.string.game_bought)
+							toast(getString(R.string.game_purchased_str)
 									+ " "
 									+ getActivity().getString(Board
 											.getCardStringResource(card)) + " "
-									+ getString(R.string.game_card));
+									+ getString(R.string.to_remove_str));
 						else
-							toast(getString(R.string.game_no_cards));
+							toast(getString(R.string.to_remove_str));
 
 						setup(false);
 						return;
@@ -678,6 +677,8 @@ public class ActiveGameFragment extends Fragment {
 					item--;
 				}
 
+
+				//TODO: remove all
 				// try to use a card
 				for (int i = 0; i < Board.Cards.values().length; i++) {
 					Board.Cards type = Board.Cards.values()[i];
@@ -686,16 +687,16 @@ public class ActiveGameFragment extends Fragment {
 					} else if (item == 0 && player.hasCard(type)) {
 						switch (type) {
 						case HARVEST:
-							harvest();
+//							harvest();
 							return;
 							
 						case MONOPOLY:
-							monopoly();
+//							monopoly();
 							return;
 							
 						case SOLDIER:
 							if (player.useCard(type)) {
-								toast(getString(R.string.game_used_soldier));
+								toast(getString(R.string.to_remove_str));
 								setup(true);
 								return;
 							}
@@ -712,7 +713,7 @@ public class ActiveGameFragment extends Fragment {
 								cantBuild(Action.ROAD);
 								return;
 							} else if (player.useCard(type)) {
-								toast(getString(R.string.game_used_progress));
+								toast(getString(R.string.to_remove_str));
 								setup(false);
 								return;
 							}
@@ -722,7 +723,7 @@ public class ActiveGameFragment extends Fragment {
 							break;
 						}
 						
-						toast(getString(R.string.game_card_fail));
+						toast(getString(R.string.to_remove_str));
 					}
 				}
 			}
@@ -731,58 +732,60 @@ public class ActiveGameFragment extends Fragment {
 		builder.create().show();
 	}
 
-	private void monopoly() {
-		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
-		for (int i = 0; i < items.length; i++)
-			items[i] = String.format(getString(R.string.game_monopoly_select),
-					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
+	//TODO: remove
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getString(R.string.game_monopoly_prompt));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Player player = board.getCurrentPlayer();
+//	private void monopoly() {
+//		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
+//		for (int i = 0; i < items.length; i++)
+//			items[i] = String.format(getString(R.string.game_monopoly_select),
+//					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
+//
+//		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//		builder.setTitle(getString(R.string.game_monopoly_prompt));
+//		builder.setItems(items, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				Player player = board.getCurrentPlayer();
+//
+//				if (player.useCard(Board.Cards.MONOPOLY)) {
+//					int total = player.monopoly(Resource.RESOURCE_TYPES[which]);
+//					toast(String.format(getString(R.string.game_used_monopoly),
+//							total));
+//					setup(false);
+//				} else {
+//					toast(getString(R.string.game_card_fail));
+//				}
+//			}
+//		});
+//
+//		builder.create().show();
+//	}
 
-				if (player.useCard(Board.Cards.MONOPOLY)) {
-					int total = player.monopoly(Resource.RESOURCE_TYPES[which]);
-					toast(String.format(getString(R.string.game_used_monopoly),
-							total));
-					setup(false);
-				} else {
-					toast(getString(R.string.game_card_fail));
-				}
-			}
-		});
-
-		builder.create().show();
-	}
-
-	private void harvest() {
-		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
-		for (int i = 0; i < items.length; i++)
-			items[i] = String.format(getString(R.string.game_harvest_select),
-					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getActivity().getString(R.string.game_harvest_prompt));
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Player player = board.getCurrentPlayer();
-
-				if (player.useCard(Board.Cards.HARVEST)) {
-					player.harvest(Resource.RESOURCE_TYPES[which], Resource.RESOURCE_TYPES[which]);
-					toast(getString(R.string.game_used_harvest));
-					setup(false);
-				} else {
-					toast(getString(R.string.game_card_fail));
-				}
-			}
-		});
-
-		builder.create().show();
-	}
+//	private void harvest() {
+//		CharSequence[] items = new CharSequence[Resource.RESOURCE_TYPES.length];
+//		for (int i = 0; i < items.length; i++)
+//			items[i] = String.format(getString(R.string.game_harvest_select),
+//					getActivity().getString(Resource.toRString(Resource.RESOURCE_TYPES[i])));
+//
+//		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//		builder.setTitle(getActivity().getString(R.string.game_harvest_prompt));
+//		builder.setItems(items, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int which) {
+//				Player player = board.getCurrentPlayer();
+//
+//				if (player.useCard(Board.Cards.HARVEST)) {
+//					player.harvest(Resource.RESOURCE_TYPES[which], Resource.RESOURCE_TYPES[which]);
+//					toast(getString(R.string.game_used_harvest));
+//					setup(false);
+//				} else {
+//					toast(getString(R.string.game_card_fail));
+//				}
+//			}
+//		});
+//
+//		builder.create().show();
+//	}
 
 	private void steal() {
 		if (!board.isRobberPhase()) {
@@ -812,16 +815,16 @@ public class ActiveGameFragment extends Fragment {
 			if (player == current || !robbing.adjacentToPlayer(player))
 				continue;
 
-			// addCubic to list of players to steal from
+			// add to list of players to steal from
 			int count = player.getResourceCount();
-			list[index++] = getString(R.string.game_steal_from) + " "
+			list[index++] = getString(R.string.game_steal_from_str) + " "
 					+ player.getName() + " (" + count + " "
-					+ getString(R.string.game_resources) + ")";
+					+ getString(R.string.game_resources_str) + ")";
 		}
 
 		if (index == 0) {
 			// nobody to steal from
-			toast(getString(R.string.game_steal_fail));
+			toast(getString(R.string.game_steal_fail_str));
 
 			board.nextPhase();
 			setup(false);
@@ -838,7 +841,7 @@ public class ActiveGameFragment extends Fragment {
 			items[i] = list[i];
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getString(R.string.game_dev_cards));
+		builder.setTitle(getString(R.string.to_remove_str));
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				steal(item);
@@ -870,12 +873,12 @@ public class ActiveGameFragment extends Fragment {
 				Resource.ResourceType resourceType = board.getCurrentPlayer().steal(player);
 
 				if (resourceType != null)
-					toast(getString(R.string.game_stole) + " "
+					toast(getString(R.string.game_stole_str) + " "
 							+ getActivity().getString(Resource.toRString(resourceType))
-							+ " " + getString(R.string.game_from) + " "
+							+ " " + getString(R.string.game_from_str) + " "
 							+ player.getName());
 				else
-					toast(getString(R.string.game_player_steal_fail) + " "
+					toast(getString(R.string.game_player_couldnt_steal) + " "
 							+ player.getName());
 
 				board.nextPhase();
@@ -897,7 +900,7 @@ public class ActiveGameFragment extends Fragment {
 		infoDialog.setTitle(title);
 		infoDialog.setIcon(R.drawable.icon);
 		infoDialog.setMessage(message);
-		infoDialog.setNeutralButton(getString(R.string.game_ok), null);
+		infoDialog.setNeutralButton(getString(R.string.game_ok_str), null);
 		infoDialog.show();
 	}
 
@@ -932,14 +935,14 @@ public class ActiveGameFragment extends Fragment {
 				message += "\n";
 
 			if (log == null || log == "")
-				message += name + " " + getString(R.string.game_did_nothing)
+				message += name + " " + getString(R.string.game_did_nothing_str)
 						+ "\n";
 			else
 				message += name + "\n" + log + "\n";
 		}
 
 		if (message != "")
-			popup(getString(R.string.game_turn_log), message);
+			popup(getString(R.string.game_turn_summary), message);
 	}
 
 
