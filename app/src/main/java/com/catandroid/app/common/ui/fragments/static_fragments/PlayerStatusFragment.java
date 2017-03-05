@@ -23,14 +23,24 @@ import android.widget.TextView;
 public class PlayerStatusFragment extends Fragment {
 	
 	private View[] views;
+	String myParticipantId;
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	Board board;
+
+	public void setMyPlayerId(String myParticipantId){
+		this.myParticipantId = myParticipantId;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//super.onCreate(state);
 		
 		getActivity().setTitle(getString(R.string.status));
-		
-		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
+
 		if (board == null) {
 			//finish();
 			return null;
@@ -45,10 +55,10 @@ public class PlayerStatusFragment extends Fragment {
 			
 			Player player = board.getPlayer(i);
 
-			boolean showAll = player == board.getCurrentPlayer()
+			boolean showAll = ((myParticipantId).equals(player.getGooglePlayParticipantId())
 					&& player.isHuman()
 					|| board.getWinner(((CatAndroidApp) getActivity().getApplicationContext())
-							.getAppSettingsInstance()) != null;
+							.getAppSettingsInstance()) != null);
 
 			int points;
 			if (showAll)
@@ -60,6 +70,21 @@ public class PlayerStatusFragment extends Fragment {
 
 			message += getString(R.string.status_resources) + ": "
 					+ player.getNumResources() + "\n";
+			if(showAll) {
+				message += getString(R.string.wool) + ": "
+						+ player.getResources(Resource.ResourceType.WOOL) + "\n";
+				message += getString(R.string.lumber) + ": "
+						+ player.getResources(Resource.ResourceType.LUMBER) + "\n";
+				message += getString(R.string.brick) + ": "
+						+ player.getResources(Resource.ResourceType.BRICK) + "\n";
+				message += getString(R.string.ore) + ": "
+						+ player.getResources(Resource.ResourceType.ORE) + "\n";
+				message += getString(R.string.gold) + ": "
+						+ player.getResources(Resource.ResourceType.GOLD) + "\n";
+				message += getString(R.string.grain) + ": "
+						+ player.getResources(Resource.ResourceType.GRAIN) + "\n\n";
+			}
+
 			message += getString(R.string.status_dev_cards) + ": "
 					+ player.getNumDevCards() + "\n";
 

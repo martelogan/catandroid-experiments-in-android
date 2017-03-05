@@ -287,6 +287,8 @@ public class ActiveGameFragment extends Fragment {
 			Log.d("myTag", "about to launch PLAYER INFO");
 
 			PlayerStatusFragment playerStatusFragment = new PlayerStatusFragment();
+			playerStatusFragment.setBoard(board);
+			playerStatusFragment.setMyPlayerId(myParticipantId);
 
 			FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 			FragmentTransaction fragmentTransaction =  fragmentManager.beginTransaction();
@@ -303,6 +305,7 @@ public class ActiveGameFragment extends Fragment {
 			int roll2 = (int) (Math.random() * 6) + 1;
 			int roll = roll1 + roll2;
 			board.getCurrentPlayer().roll(roll);
+			mListener.endTurn(board.getCurrentPlayer().getGooglePlayParticipantId());
 
 			if (roll == 7) {
 				toast(getString(R.string.game_rolled) + " 7 " + ROLLS[roll1]
@@ -339,6 +342,7 @@ public class ActiveGameFragment extends Fragment {
 			setButtons(Action.ROAD);
 			getActivity().setTitle(board.getCurrentPlayer().getName() + ": "
 					+ getActivity().getString(R.string.game_build_road));
+
 			break;
 
 		case TOWN:
@@ -578,8 +582,7 @@ public class ActiveGameFragment extends Fragment {
 
 		Player player = board.getCurrentPlayer();
 		Player winner = board.getWinner(null);
-
-		if (winner != null || !player.isHuman()) {
+		if (winner != null || !player.isHuman() || !board.itsMyTurn(myParticipantId)){
 			// anonymous mode
 		} else if (board.isSetupPhase()) {
 			// no extra buttons in setup phase

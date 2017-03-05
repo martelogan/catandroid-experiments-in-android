@@ -287,6 +287,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// you will need to figure out what you clicked on.
 	public void onCheckGamesClicked(View view) {
 		setContentView(R.layout.localgame);
+		findViewById(R.id.setup).setVisibility(View.GONE);
 		Intent intent = Games.TurnBasedMultiplayer.getInboxIntent(mGoogleApiClient);
 		startActivityForResult(intent, RC_LOOK_AT_MATCHES);
 	}
