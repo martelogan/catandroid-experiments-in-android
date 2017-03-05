@@ -20,10 +20,6 @@ import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 
 public class StartScreenActivity extends Activity {
 
-	private static final String DONATE_URL = "https://www.paypal.com/cgi-bin/"
-			+ "webscr?cmd=_donations&business=isaac.neil@gmail.com&"
-			+ "item_name=Island+CatAndroidApp+donation&no_shipping=1";
-
 	private Vector<Runnable> actions;
 
 	@Override

@@ -1030,7 +1030,7 @@ public class ActiveGameFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 	//http://stackoverflow.com/questions/15653737/oncreateoptionsmenu-inside-fragments
-		inflater.inflate(R.menu.gamemenu, menu);
+		inflater.inflate(R.menu.active_game_menu, menu);
 	}
 
 	@Override
