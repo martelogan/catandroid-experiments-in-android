@@ -66,13 +66,6 @@
                 android:textSize="24sp"
                 android:width="48dip" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/lumber"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus1"
@@ -126,13 +119,6 @@
                 android:textSize="24sp"
                 android:width="48dip" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/wool"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus2"
@@ -186,13 +172,6 @@
                 android:textSize="24sp"
                 android:width="48dip" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/grain"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus3"
@@ -246,13 +225,6 @@
                 android:textSize="24sp"
                 android:width="48dip" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/brick"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus4"
@@ -306,13 +278,6 @@
                 android:textSize="24sp"
                 android:width="48dip" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/ore"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus5"
@@ -331,13 +296,6 @@
             android:text="@string/discard_button" >
         </Button>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/resources"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" >
-        </TextView>
     </LinearLayout>
 
 </ScrollView>

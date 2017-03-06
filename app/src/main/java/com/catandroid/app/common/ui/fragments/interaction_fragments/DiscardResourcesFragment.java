@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.catandroid.app.R;
-import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.players.Player;
@@ -36,6 +35,12 @@ public class DiscardResourcesFragment extends Fragment {
 	private Player player;
 	private int quantity;
 
+	private Board board;
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//super.onCreate(bundle);
@@ -48,7 +53,7 @@ public class DiscardResourcesFragment extends Fragment {
 		quantity = 0;
 		player = null;
 
-		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
+
 		if (board == null) {
 			//finish();
 			return null;

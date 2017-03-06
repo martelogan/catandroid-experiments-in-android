@@ -1,6 +1,5 @@
 package com.catandroid.app.common.ui.fragments;
 
-import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.ui.fragments.interaction_fragments.DiscardResourcesFragment;
 import com.catandroid.app.R;;
@@ -61,6 +60,7 @@ public class ActiveGameFragment extends Fragment {
 	private GameView view;
 	private Board board;
 	private ResourceView resources;
+	private TextureManager texture;
 
 	private Handler turnHandler;
 	private TurnThread turnThread;
@@ -80,7 +80,9 @@ public class ActiveGameFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		getActivity().findViewById(R.id.setup).setVisibility(View.GONE);
+		if(getActivity().findViewById(R.id.setup) != null){
+			getActivity().findViewById(R.id.setup).setVisibility(View.GONE);
+		}
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
@@ -89,7 +91,7 @@ public class ActiveGameFragment extends Fragment {
 	}
 
 	public interface Listener {
-		void endTurn(String nextParticipantId);
+		void endTurn(String nextParticipantId, boolean isWinner);
 	}
 
 	public void setmListener(Listener mListener){
@@ -188,6 +190,7 @@ public class ActiveGameFragment extends Fragment {
 					bundle.putInt(DiscardResourcesFragment.QUANTITY_KEY, extra);
 					DiscardResourcesFragment discardResourcesFragment = new DiscardResourcesFragment();
 					discardResourcesFragment.setArguments(bundle);
+					discardResourcesFragment.setBoard(board);
 
 					FragmentTransaction discardFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
 					discardFragmentTransaction.replace(R.id.fragment_container, discardResourcesFragment,"DISCARD");
@@ -315,7 +318,7 @@ public class ActiveGameFragment extends Fragment {
 			int roll2 = (int) (Math.random() * 6) + 1;
 			int roll = roll1 + roll2;
 			board.getCurrentPlayer().roll(roll);
-			mListener.endTurn(board.getCurrentPlayer().getGooglePlayParticipantId());
+			mListener.endTurn(board.getCurrentPlayer().getGooglePlayParticipantId(), false);
 
 			if (roll == 7) {
 				toast(getString(R.string.game_rolled_str) + " 7 " + ROLLS[roll1]
@@ -408,10 +411,10 @@ public class ActiveGameFragment extends Fragment {
 			break;
 
 		case TRADE:
-//			getActivity().startActivity(new Intent(this, TradeRequestFragment.class));
 
 			FragmentManager tradeFragmentManager = getActivity().getSupportFragmentManager();
 			TradeRequestFragment tradeFragment = new TradeRequestFragment();
+			tradeFragment.setBoard(board);
 			FragmentTransaction tradeFragmentTransaction =  tradeFragmentManager.beginTransaction();
 			tradeFragmentTransaction.replace(R.id.fragment_container, tradeFragment,tradeFragment.getClass().getSimpleName());
 			tradeFragmentTransaction.addToBackStack(tradeFragment.getClass().getSimpleName());
@@ -441,14 +444,11 @@ public class ActiveGameFragment extends Fragment {
 		if (!board.getCurrentPlayer().isHuman() || !board.isBuild())
 			return false;
 
-//		Intent intent = new Intent(this, TradeRequestFragment.class);
-//		intent.setClassName("com.catandroid.app", "com.catandroid.app.activities.trade.TradeRequestFragment");
-//		intent.putExtra(TradeRequestFragment.TYPE_KEY, index);
-//		startActivity(intent);
 
 		Bundle bundle = new Bundle();
 		bundle.putInt(TradeRequestFragment.TYPE_KEY, index);
 		TradeRequestFragment tradeFragment = new TradeRequestFragment();
+		tradeFragment.setBoard(board);
 		tradeFragment.setArguments(bundle);
 
 		FragmentTransaction tradeFragmentTransaction =  getActivity().getSupportFragmentManager().beginTransaction();
@@ -460,7 +460,6 @@ public class ActiveGameFragment extends Fragment {
 	}
 
 	private void cantBuild(Action action) {
-		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		Player player = board.getCurrentPlayer();
 
 		String message = "";
@@ -510,8 +509,6 @@ public class ActiveGameFragment extends Fragment {
 	}
 
 	private void setup(boolean setZoom) {
-		CatAndroidApp app = (CatAndroidApp) getActivity().getApplicationContext();
-		TextureManager texture = app.getTextureManagerInstance();
 		Player player = board.getCurrentPlayer();
 
 		renderer.setState(board, (player.isHuman() && board.itsMyTurn(myParticipantId))  ? player : null, texture, board.getLastDiceRollNumber());
@@ -565,7 +562,7 @@ public class ActiveGameFragment extends Fragment {
 		int color = TextureManager.getColor(board.getCurrentPlayer().getColor());
 		color = TextureManager.darken(color, 0.35);
 		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setBackgroundDrawable(new ColorDrawable(color));
 
@@ -998,19 +995,10 @@ public class ActiveGameFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		fa = (FragmentActivity) super.getActivity();
 
-		CatAndroidApp app = (CatAndroidApp) getActivity().getApplicationContext();
-
 		RelativeLayout frame = new RelativeLayout(getActivity());
-
-//		View v=inflater.inflate(R.layout.hotel_search,container,false);
-//
-//		relativeLayout=((RelativeLayout) v.findViewById(R.id.rootlayout));
-
-		TextureManager texture = app.getTextureManagerInstance();
 
 		if (texture == null) {
 			texture = new TextureManager(getActivity().getResources());
-			app.setTextureManagerInstance(texture);
 		}
 
 		//changed constructor
@@ -1023,35 +1011,11 @@ public class ActiveGameFragment extends Fragment {
 				LinearLayout.LayoutParams.MATCH_PARENT, 1));
 		frame.addView(view);
 
-		// TODO: remove/replace all references to resources
-//		boolean horizontal = getActivity().getCountPerResource().getDisplayMetrics().widthPixels
-//				< getActivity().getCountPerResource().getDisplayMetrics().heightPixels;
-//		resources = new ResourceView(getActivity());
-//		resources.setOrientation(horizontal ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
-//		RelativeLayout.LayoutParams params;
-//		if (horizontal)
-//			params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-//		else
-//			params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-//		params.addRule(horizontal ? RelativeLayout.ALIGN_PARENT_BOTTOM : RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-//		frame.addView(resources, params);
-
-		board = app.getBoardInstance();
-
-//
-//		if (board == null) {
-//			finish();
-//			return;
-//		}
 
 		((ViewGroup)view.getParent()).removeView(view);
 
 		turnHandler = new UpdateHandler();
 
-//		//return frame;
-//		getActivity().setContentView(frame);
-
-		//return frame;
 		return view;
 	}
 
@@ -1112,11 +1076,5 @@ public class ActiveGameFragment extends Fragment {
 		board.setActiveGameFragment(this);
 		setup(true);
 	}
-	
-//	@Override
-//	public void onBackPressed() {
-//		//finish();
-//		// must ask the activity to close this StartScreenActivity Fragment
-//		fa.getSupportFragmentManager().popBackStack();
-//	}
+
 }

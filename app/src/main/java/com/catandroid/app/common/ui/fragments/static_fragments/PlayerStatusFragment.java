@@ -4,7 +4,6 @@ import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 import com.catandroid.app.R;
-import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 
 import android.os.Bundle;
@@ -157,7 +156,7 @@ public class PlayerStatusFragment extends Fragment {
 		
 		PagerTitleStrip titleStrip = (PagerTitleStrip) view.findViewById(R.id.status_title_strip);
 		titleStrip.setBackgroundColor(TextureManager.darken(TextureManager.getColor(
-				CatAndroidApp.getInstance().getBoardInstance().getPlayer(board.getCurrentPlayer().getPlayerNumber()).getColor()), 0.35));
+				board.getPlayer(board.getCurrentPlayer().getPlayerNumber()).getColor()), 0.35));
 		
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
@@ -170,7 +169,7 @@ public class PlayerStatusFragment extends Fragment {
 
 			@Override
 			public void onPageSelected(int position) {
-				int color = TextureManager.getColor(CatAndroidApp.getInstance().getBoardInstance().getPlayer(position).getColor());
+				int color = TextureManager.getColor(board.getPlayer(position).getColor());
 				color = TextureManager.darken(color, 0.35);
 				
 				PagerTitleStrip titleStrip = (PagerTitleStrip) view.findViewById(R.id.status_title_strip);
@@ -207,7 +206,7 @@ public class PlayerStatusFragment extends Fragment {
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return CatAndroidApp.getInstance().getBoardInstance().getPlayer(position).getName();
+			return board.getPlayer(position).getName();
 		}
 	}
 }

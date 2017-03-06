@@ -65,14 +65,6 @@
                 android:textSize="18sp"
                 android:width="40dip" />
 
-            <TextView
-                android:id="@+id/resource1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/lumber"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus1"
@@ -127,14 +119,6 @@
                 android:textSize="18sp"
                 android:width="40dip" />
 
-            <TextView
-                android:id="@+id/resource2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/wool"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus2"
@@ -189,15 +173,6 @@
                 android:textSize="18sp"
                 android:width="40dip" />
 
-            <TextView
-                android:id="@+id/resource3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/grain"
-                android:textSize="18sp" />
-
             <Button
                 android:id="@+id/trade_plus3"
                 android:layout_width="wrap_content"
@@ -250,15 +225,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:width="40dip" />
-
-            <TextView
-                android:id="@+id/resource4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/brick"
-                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/trade_plus4"
@@ -313,15 +279,6 @@
                 android:textSize="18sp"
                 android:width="40dip" />
 
-            <TextView
-                android:id="@+id/resource5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/ore"
-                android:textSize="18sp" />
-
             <Button
                 android:id="@+id/trade_plus5"
                 android:layout_width="wrap_content"
@@ -342,7 +299,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="false"
-                style="@android:attr/buttonBarButtonStyle"
                 android:text="@string/trade_bank" >
             </Button>
 
@@ -352,18 +308,58 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="false"
-                style="@android:attr/buttonBarButtonStyle"
                 android:text="@string/trade_propose" >
             </Button>
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/bankratio"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/resources"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" >
-        </TextView>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/bankratio"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/resource1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/lumber"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/resource2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/wool"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/resource3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/grain"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/resource4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/brick"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/resource5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/ore"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </ScrollView>

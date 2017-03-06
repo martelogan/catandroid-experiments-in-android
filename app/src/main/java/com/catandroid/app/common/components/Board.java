@@ -350,7 +350,7 @@ public class Board {
 					turnChanged = true;
 					phase = Phase.SETUP_SETTLEMENT;
 					if(players[turn].isHuman()) {
-						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn), false);
 					}
 				} else {
 					phase = Phase.SETUP_CITY;
@@ -365,7 +365,7 @@ public class Board {
 					turnChanged = true;
 					phase = Phase.SETUP_CITY;
 					if(players[turn].isHuman()) {
-						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+						activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn), false);
 					}
 				} else {
 					phase = Phase.PRODUCTION;
@@ -385,7 +385,7 @@ public class Board {
 				players[turn].beginTurn();
 				lastDiceRollNumber = 0;
                 if(players[turn].isHuman()) {
-                    activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
+                    activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn),false);
                 }
 				break;
 			case PROGRESS_CARD_1:
@@ -755,8 +755,12 @@ public class Board {
 		// check for winner
 		for (int i = 0; i < numPlayers; i++) {
 			if (players[i].getVictoryPoints() >= maxPoints) {
-				phase = Phase.DONE;
 				winner = players[i];
+				if(phase != phase.DONE){
+					//we need to tell google the game is done
+					activeGameFragment.mListener.endTurn(winner.getGooglePlayParticipantId(),true);
+				}
+				phase = Phase.DONE;
 				break;
 			}
 		}

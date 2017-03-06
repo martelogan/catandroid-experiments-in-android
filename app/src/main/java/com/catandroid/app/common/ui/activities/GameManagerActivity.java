@@ -1,11 +1,14 @@
 package com.catandroid.app.common.ui.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -39,6 +42,7 @@ import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
 import com.google.android.gms.games.multiplayer.Participant;
+import com.google.android.gms.games.multiplayer.ParticipantResult;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.turnbased.OnTurnBasedMatchUpdateReceivedListener;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
@@ -47,6 +51,7 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameManagerActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -115,34 +120,14 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			appSettings.set(HUMAN_KEYS[i], DEFAULT_HUMANS[i]);
 	}
 
-	private void reset() {
-//		for (int i = 0; i < 4; i++) {
-//			names[i] = getString(DEFAULT_NAMES[i]);
-//			types[i] = DEFAULT_HUMANS[i];
-//		}
-	}
 
 	private void populate() {
-//		for (int i = 0; i < 3; i++) {
-//			EditText name = (EditText) findViewById(TEXT[i]);
-//			name.setText(names[i]);
-//
-//			CheckBox human = (CheckBox) findViewById(CHECK[i]);
-//			human.setChecked(types[i]);
-//		}
 
 		CheckBox discardCheck = (CheckBox) findViewById(R.id.auto_discard);
 		discardCheck.setChecked(auto_discard);
 	}
 
 	private void load(AppSettings appSettings) {
-//		for (int i = 0; i < 4; i++) {
-//			names[i] = appSettings.get(NAME_KEYS[i]);
-//			if (names[i] == null || names[i] == "")
-//				names[i] = getString(DEFAULT_NAMES[i]);
-//
-//			types[i] = appSettings.getBool(HUMAN_KEYS[i]);
-//		}
 
 		mixed = appSettings.getBool(MIXED_KEY);
 		auto_discard = appSettings.getBool(AUTO_KEY);
@@ -202,7 +187,22 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				Log.d("myTag", "THERE WAS SOMETHING IN THE FRAGSTACK");
 				getSupportFragmentManager().popBackStack();
 			} else {
-				super.onBackPressed();
+				catandroidTurn.currentBoard = null;
+				ActionBar actionBar = getActionBar();
+				actionBar.setDisplayHomeAsUpEnabled(false);
+				actionBar.setDisplayShowCustomEnabled(false);
+				setTitle("CatAndroid");
+				View item = findViewById(R.id.reference);
+				if(item != null){
+					item.setVisibility(View.GONE);
+				}
+
+
+				setContentView(R.layout.game_manager);
+				setViewVisibility();
+				// Setup signin and signout buttons
+				findViewById(R.id.sign_out_button).setOnClickListener(this);
+				findViewById(R.id.sign_in_button).setOnClickListener(this);
 			}
 		}
 	}
@@ -224,7 +224,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 					Log.d(TAG, "Warning: accessing TurnBasedMatch when not connected");
 				}
 
-				updateMatch(mTurnBasedMatch);
+				//updateMatch(mTurnBasedMatch);
 				return;
 			}
 		}
@@ -279,9 +279,11 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// you will need to figure out what you clicked on.
 	public void onCheckGamesClicked(View view) {
 		setContentView(R.layout.game_setup_options);
+		showSpinner();
 		findViewById(R.id.setup).setVisibility(View.GONE);
 		Intent intent = Games.TurnBasedMultiplayer.getInboxIntent(mGoogleApiClient);
 		startActivityForResult(intent, RC_LOOK_AT_MATCHES);
+
 	}
 
 	// Open the create-game UI. You will get back an onActivityResult
@@ -365,6 +367,8 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				names = new String[numberPlayersTotal];
 				types = new boolean[numberPlayersTotal];
 
+				showSpinner();
+
 				//LAUNCH THE MULTIPLAYER SELECTION AND SUBSEQUENTLY LAUNCH GAME THHROUGH onActivityResult
 				Intent intent = Games.TurnBasedMultiplayer.getSelectOpponentsIntent(mGoogleApiClient,
 						numberPlayersToInvite, numberPlayersToInvite, true);
@@ -377,71 +381,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 
-	// In-game controls
-
-	// Cancel the game. Should possibly wait until the game is canceled before
-	// giving up on the view.
-	public void onCancelClicked(View view) {
-		showSpinner();
-		Games.TurnBasedMultiplayer.cancelMatch(mGoogleApiClient, mMatch.getMatchId())
-				.setResultCallback(new ResultCallback<TurnBasedMultiplayer.CancelMatchResult>() {
-					@Override
-					public void onResult(TurnBasedMultiplayer.CancelMatchResult result) {
-						processResult(result);
-					}
-				});
-		isDoingTurn = false;
-		setViewVisibility();
-	}
-
-	// Leave the game during your turn. Note that there is a separate
-	// Games.TurnBasedMultiplayer.leaveMatch() if you want to leave NOT on your turn.
-	public void onLeaveClicked(View view) {
-		showSpinner();
-		String nextParticipantId = getNextParticipantId();
-
-		Games.TurnBasedMultiplayer.leaveMatchDuringTurn(mGoogleApiClient, mMatch.getMatchId(),
-				nextParticipantId).setResultCallback(
-				new ResultCallback<TurnBasedMultiplayer.LeaveMatchResult>() {
-					@Override
-					public void onResult(TurnBasedMultiplayer.LeaveMatchResult result) {
-						processResult(result);
-					}
-				});
-		setViewVisibility();
-	}
-
-	// Finish the game. Sometimes, this is your only choice.
-	public void onFinishClicked(View view) {
-		showSpinner();
-		Games.TurnBasedMultiplayer.finishMatch(mGoogleApiClient, mMatch.getMatchId())
-				.setResultCallback(new ResultCallback<TurnBasedMultiplayer.UpdateMatchResult>() {
-					@Override
-					public void onResult(TurnBasedMultiplayer.UpdateMatchResult result) {
-						processResult(result);
-					}
-				});
-
-		isDoingTurn = false;
-		setViewVisibility();
-	}
-
-
-	// Upload your new gamestate, then take a turn, and pass it on to the next
-	// player.
-	public void onDoneClicked(View view) {
-		showSpinner();
-
-		String nextParticipantId = getNextParticipantId();
-		// Create the next turn
-
-		showSpinner();
-
-
-
-		catandroidTurn = null;
-	}
-
 	// Sign-in, Sign out behavior
 
 	// Update the visibility based on what state we're in.
@@ -452,7 +391,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			findViewById(R.id.login_layout).setVisibility(View.VISIBLE);
 			findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
 			findViewById(R.id.matchup_layout).setVisibility(View.GONE);
-			findViewById(R.id.gameplay_layout).setVisibility(View.GONE);
 
 			if (mAlertDialog != null) {
 				mAlertDialog.dismiss();
@@ -466,10 +404,9 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		if (isDoingTurn) {
 			findViewById(R.id.matchup_layout).setVisibility(View.GONE);
-			findViewById(R.id.gameplay_layout).setVisibility(View.VISIBLE);
 		} else {
 			findViewById(R.id.matchup_layout).setVisibility(View.VISIBLE);
-			findViewById(R.id.gameplay_layout).setVisibility(View.GONE);
+			setTitle("CatAndroid");
 		}
 	}
 
@@ -477,13 +414,13 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	public void setGameplayUI() {
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
+		dismissSpinner();
 
 		//Start the fragment
-		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_container,activeGameFragment)
-				.addToBackStack(null)
 				.commit();
+
 	}
 
 	// Helpful dialogs
@@ -560,6 +497,8 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			}
 		} else if (request == RC_LOOK_AT_MATCHES) {
 			// Returning from the 'Select Match' dialog
+			setContentView(R.layout.game_manager);
+			setViewVisibility();
 
 			if (response != Activity.RESULT_OK) {
 				// user canceled
@@ -623,6 +562,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 	// game, saving our initial state.
 	public void startMatch(TurnBasedMatch match) {
 
+
 		//fetch multiplayer parameters
 		catandroidTurn = new CatandroidTurn();
 
@@ -676,7 +616,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		CheckBox discardCheck = (CheckBox) findViewById(R.id.auto_discard);
 		boolean autoDiscard = discardCheck.isChecked();
 
-		CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 
 		BoardGeometry boardGeometry = new BoardGeometry(boardSelected);
 
@@ -693,7 +632,6 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 		Gson gson = new Gson();
 		String serializedBoard = gson.toJson(board);
-		app.setBoardInstance(board);
 
 		catandroidTurn.currentBoard = board;
 
@@ -720,49 +658,28 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		isDoingTurn = false;
 	}
 
-	/**
-	 * Get the next participant. In this function, we assume that we are
-	 * round-robin, with all known players going before all automatch players.
-	 * This is not a requirement; players can go in any order. However, you can
-	 * take turns in any order.
-	 *
-	 * @return participantId of next player, or null if automatching
-	 */
-	public String getNextParticipantId() {
-
-		String playerId = Games.Players.getCurrentPlayerId(mGoogleApiClient);
-		String myParticipantId = mMatch.getParticipantId(playerId);
-
-		ArrayList<String> participantIds = mMatch.getParticipantIds();
-
-		int desiredIndex = -1;
-
-		for (int i = 0; i < participantIds.size(); i++) {
-			if (participantIds.get(i).equals(myParticipantId)) {
-				desiredIndex = i + 1;
-			}
-		}
-
-		if (desiredIndex < participantIds.size()) {
-			return participantIds.get(desiredIndex);
-		}
-
-		if (mMatch.getAvailableAutoMatchSlots() <= 0) {
-			// You've run out of automatch slots, so we start over.
-			return participantIds.get(0);
-		} else {
-			// You have not yet fully automatched, so null will find a new
-			// person to play against.
-			return null;
-		}
-	}
 
 	//Listener that we use to call endTurn from within the gameFragment.
 	@Override
-	public void endTurn(String nextParticipantId) {
+	public void endTurn(String nextParticipantId, boolean isWinner) {
+		if(isWinner){
+			//set winner list
+			int winnerIndex = mMatch.getParticipantIds().indexOf(nextParticipantId);
+			int numberPlayers = mMatch.getParticipantIds().size();
+			ArrayList<ParticipantResult> results = new ArrayList<>();
+			for(int i = 0; i < numberPlayers; i++){
+				if(i == winnerIndex){
+					results.add(new ParticipantResult(mMatch.getParticipantIds().get(i), ParticipantResult.MATCH_RESULT_LOSS, ParticipantResult.PLACING_UNINITIALIZED));
+				} else {
+					results.add(new ParticipantResult(mMatch.getParticipantIds().get(i), ParticipantResult.MATCH_RESULT_WIN, ParticipantResult.PLACING_UNINITIALIZED));
+				}
+			}
+			Games.TurnBasedMultiplayer.finishMatch(mGoogleApiClient, mMatch.getMatchId(),catandroidTurn.persist(),results);
 
-		Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, mMatch.getMatchId(),
-				catandroidTurn.persist(), nextParticipantId);
+		} else {
+			Games.TurnBasedMultiplayer.takeTurn(mGoogleApiClient, mMatch.getMatchId(),
+					catandroidTurn.persist(), nextParticipantId);
+		}
 	}
 
 	// This is the main function that gets called when players choose a match
@@ -811,9 +728,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 			case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
             case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
 				//fetch the board state from unpersist and set board
-				CatAndroidApp app = (CatAndroidApp) getApplicationContext();
 				Board board = CatandroidTurn.unpersist(mMatch.getData());
-				app.setBoardInstance(board);
 				catandroidTurn.currentBoard = board;
 				activeGameFragment.setBoard(board);
 				board.reinitBoardOnComponents();

@@ -10,9 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.catandroid.app.common.components.Resource;
-import com.catandroid.app.common.ui.fragments.interaction_fragments.trade.TradeRequestFragment;
 import com.catandroid.app.R;
-import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.players.Player;
 
 public class ResourceView extends LinearLayout {
@@ -55,16 +53,6 @@ public class ResourceView extends LinearLayout {
 			row.addView(image);
 			row.addView(text);
 
-			row.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					if (CatAndroidApp.getInstance().getBoardInstance().isBuild()) {
-						Intent intent = new Intent(ResourceView.this.context, TradeRequestFragment.class);
-						intent.putExtra(TradeRequestFragment.TYPE_KEY, resource);
-						ResourceView.this.context.startActivity(intent);
-					}
-				}
-			});
 
 			addView(row);
 		}

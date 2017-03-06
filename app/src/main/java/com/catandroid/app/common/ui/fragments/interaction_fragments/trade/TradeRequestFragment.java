@@ -51,10 +51,14 @@ public class TradeRequestFragment extends Fragment {
 
 	private Player player;
 	private int selected;
+	private Board board;
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//super.onCreate(bundle);
 
 		selected = 0;
 
@@ -62,11 +66,9 @@ public class TradeRequestFragment extends Fragment {
 		if (extras != null)
 			selected = extras.getInt(TYPE_KEY);
 
-		//setContentView(R.layout.trade_request);
 
 		getActivity().setTitle(R.string.trade);
 
-		Board board = ((CatAndroidApp) getActivity().getApplicationContext()).getBoardInstance();
 		if (board == null) {
 			//finish();
 			return null;

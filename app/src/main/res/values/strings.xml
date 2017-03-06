@@ -42,6 +42,7 @@
 
 	<!-- Trade screen -->
 	<string name="trade">Trade</string>
+	<string name="bankratio"><u>Bank Trade Ratio</u></string>
 	<string name="trade_bank">Trade with the bank</string>
 	<string name="trade_requesting">Requesting</string>
 	<string name="trade_offering">Offering</string>
