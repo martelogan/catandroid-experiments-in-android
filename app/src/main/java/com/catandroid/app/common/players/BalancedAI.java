@@ -3,9 +3,9 @@ package com.catandroid.app.common.players;
 import java.util.Vector;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
+import com.catandroid.app.common.components.ProgressCard;
 import com.catandroid.app.common.components.Resource.ResourceType;
 import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.components.Vertex;
@@ -38,11 +38,15 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
                 if (v1.canBuild(this, Vertex.TOWN)
                         || v2.canBuild(this, Vertex.TOWN))
+                {
                     canSettle = true;
+                }
 
                 if (v1.canBuild(this, Vertex.CITY)
                         || v2.canBuild(this, Vertex.CITY))
+                {
                     canCity = true;
+                }
             }
 
             // don't uselessly expand roads until player has 4 towns/cities
@@ -81,7 +85,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                         for (int j = 0; j < 3; j++) {
                             Edge edge = vertex.getEdge(j);
                             if (edge == null || edge.hasRoad())
+                            {
                                 continue;
+                            }
 
                             Vertex other = edge.getAdjacent(vertex);
                             if (!other.hasBuilding() && other.couldBuild()
@@ -92,7 +98,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                         }
 
                         if (builtRoad)
+                        {
                             break;
+                        }
                     }
                 }
 
@@ -102,7 +110,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                         Vertex lastRoadEnd = board.getVertexById(reachingIds.get(reachingIds.size() - 1));
                         Edge edge = lastRoadEnd.getEdge(i);
                         if (edge != null && build(edge))
+                        {
                             builtRoad = true;
+                        }
                     }
                 }
 
@@ -118,41 +128,21 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                             Edge edge2 = v2.getEdge(j);
 
                             if (build(edge1) || build(edge2))
+                            {
                                 done = false;
+                            }
                         }
                     }
                 }
             }
 
-            // buy a card if we can afford it
-            if (affordCard()) {
-                if (buyCard() != null)
-                    done = false;
-            }
-
             // trade in order to buy something
             if (done) {
-                // harvest card
-                if (canUseCard() && useCard(Cards.HARVEST)) {
-                    Resource.ResourceType pick = pickResourceType();
-                    harvest(pick, pick);
-                    done = false;
-                }
 
-                // monopoly card
-                else if (canUseCard() && useCard(Cards.MONOPOLY)) {
-                    Resource.ResourceType pick = pickResourceType();
-                    monopoly(pick);
-                    done = false;
-                }
-
-                // progress card
-                else if (canUseCard() && useCard(Cards.PROGRESS)) {
-                    done = false;
-                }
+                //TODO: consider progress card options here
 
                 // trade road road resources
-                else if (considerRoad && !affordRoad() && tradeFor(ROAD_COST)) {
+                if (considerRoad && !affordRoad() && tradeFor(ROAD_COST)) {
                     if (affordRoad())
                         done = false;
                 }
@@ -167,13 +157,6 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                 else if (canCity && !affordCity() && !settlementPriority
                         && tradeFor(CITY_COST)) {
                     if (affordCity())
-                        done = false;
-                }
-
-                // trade for card resources
-                else if (!affordCard() && !settlementPriority
-                        && tradeFor(CARD_COST)) {
-                    if (affordCard())
                         done = false;
                 }
             }
@@ -200,9 +183,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
     @Override
     public void productionPhase() {
-        // use soldier card before rolling if the robber is on useful resource
-        if (board.getCurRobberHex().adjacentToPlayer(this) && hasCard(Cards.SOLDIER))
-            useCard(Cards.SOLDIER);
+        //TODO: implement any pre-roll behaviour
     }
 
     @Override
@@ -260,7 +241,6 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         return index;
     }
 
-    //TODO: does this work?
     @Override
     public int setupCity(Vertex[] vertices) {
         int highest = 0;
@@ -297,9 +277,13 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             boolean canSteal = false;
             for (int j = 0; j < players.size(); j++) {
                 if (players.get(j) == this)
+                {
                     value = 1;
+                }
                 else if (players.get(j).getResourceCount() > 0)
+                {
                     canSteal = true;
+                }
             }
 
             if (canSteal && value > highest) {
@@ -316,7 +300,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         // steal from the first player that has resources
         for (int i = 0; i < players.length; i++) {
             if (players[i].getResourceCount() > 0)
+            {
                 return i;
+            }
         }
 
         return 0;
@@ -324,7 +310,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
     protected Vertex pickTown() {
         if (!affordTown())
+        {
             return null;
+        }
 
         Vertex best = null;
         int highest = 0;
@@ -372,11 +360,15 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
                 Edge edge1 = v1.getEdge(j);
                 if (canBuild(edge1))
+                {
                     return edge1;
+                }
 
                 Edge edge2 = v2.getEdge(j);
                 if (canBuild(edge2))
+                {
                     return edge2;
+                }
             }
         }
 
@@ -398,7 +390,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         for (int i = 0; i < 3; i++) {
             Hexagon hexagon = vertex.getHexagon(i);
             if (hexagon != null)
+            {
                 value += hexagonValue(hexagon, factors);
+            }
         }
 
         return value;
@@ -435,7 +429,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                     boolean accept = true;
                     for (int l = 0; l < offer.length; l++) {
                         if (offer[l] > 0 && want[l] > 0 || have[l] < offer[l])
+                        {
                             accept = false;
+                        }
                     }
 
                     // accept the first good offer
@@ -443,7 +439,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                         // adjust balance
                         need[i] -= 1;
                         for (int l = 0; l < have.length; l++)
+                        {
                             have[l] -= offer[l];
+                        }
 
                         // addCubic to list of trades
                         resourceTypes.add(Resource.RESOURCE_TYPES[i]);
@@ -456,14 +454,20 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
         // check if the trades cover everything needed
         for (int i = 0; i < need.length; i++)
+        {
             if (need[i] > 0)
+            {
                 return false;
+            }
+        }
 
         // run the trades
         for (int i = 0; i < trades.size(); i++) {
             // abort on first failing trade
             if (!trade(resourceTypes.get(i), trades.get(i)))
+            {
                 return false;
+            }
         }
 
         return true;
@@ -471,12 +475,16 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
     private void addList(int[] a, int[] b) {
         for (int i = 0; i < a.length; i++)
+        {
             a[i] += b[i];
+        }
     }
 
     private void subtractList(int[] a, int[] b) {
         for (int i = 0; i < a.length; i++)
+        {
             a[i] += b[i];
+        }
     }
 
     private int compareList(int[] a, int[] b) {
@@ -484,13 +492,19 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
         for (int i = 0; i < a.length; i++) {
             if (a[i] < b[i])
+            {
                 return -1;
+            }
             else if (a[i] > b[i])
+            {
                 greater = true;
+            }
         }
 
         if (greater)
+        {
             return 1;
+        }
 
         return 0;
     }
@@ -499,16 +513,20 @@ public class BalancedAI extends Player implements AutomatedPlayer {
     public int[] offerTrade(Player player, Resource.ResourceType resourceType, int[] offer) {
         // don't try to trade for a resource we don't have
         if (getResources(resourceType) <= 0)
+        {
             return null;
+        }
 
         // don't trade with players who may be about to win
         int points = player.getPublicVictoryPoints();
         int max = board.getMaxPoints();
         if (max - points <= 1)
+        {
             return null;
+        }
 
         // get a resource list
-        int[] extra = getResources();
+        int[] extra = getCountPerResource();
 
         // deduct anything that we can already build
         do {
@@ -518,9 +536,6 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             } else if (affordTown()) {
                 subtractList(extra, TOWN_COST);
                 continue;
-            } else if (affordCard()) {
-                subtractList(extra, CARD_COST);
-                continue;
             } else if (affordRoad()) {
                 subtractList(extra, ROAD_COST);
                 continue;
@@ -529,7 +544,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
         // don't trade if that resource is needed for something we can build
         if (extra[resourceType.ordinal()] <= 0)
+        {
             return null;
+        }
 
         // addCubic in the offer
         addList(extra, offer);
@@ -539,7 +556,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                 || (compareList(extra, TOWN_COST) >= 0)
                 || (compareList(extra, CITY_COST) >= 0)
                 || (compareList(extra, CARD_COST) >= 0))
+        {
             return offer;
+        }
 
         return null;
     }
@@ -547,7 +566,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
     @Override
     public void discard(int quantity) {
         // get a resource list
-        int[] extra = getResources();
+        int[] extra = getCountPerResource();
         int count = getResourceCount() - quantity;
 
         // deduct anything that we can already build
@@ -559,10 +578,6 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             } else if (affordTown() && count >= 4) {
                 subtractList(extra, TOWN_COST);
                 count -= 4;
-                continue;
-            } else if (affordCard() && count >= 3) {
-                subtractList(extra, CARD_COST);
-                count -= 3;
                 continue;
             } else if (affordRoad() && count >= 2) {
                 subtractList(extra, ROAD_COST);
@@ -585,7 +600,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             }
 
             if (mostCommon != null)
+            {
                 extra[mostCommon.ordinal()] -= 1;
+            }
 
             // discard_resources the most common resource, or a random resource
             super.discard(mostCommon);

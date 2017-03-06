@@ -2,15 +2,16 @@ package com.catandroid.app.common.ui.resources;
 
 public class UIButton {
 
-	public enum Type {
-		INFO, TRADE, ROLL, ROAD, TOWN, CITY, DEVCARD, CANCEL, ENDTURN
+	public enum ButtonType {
+		PLAYER_STATUS, TRADE, DICE_ROLL, BUILD_ROAD, BUILD_SETTLEMENT,
+		BUILD_CITY, PROGRESS_CARD, CANCEL, END_TURN
 	}
 	
-	public enum Background {
+	public enum ButtonBackground {
 		BACKDROP, PRESSED, ACTIVATED
 	}
 
-	private Type type;
+	private ButtonType buttonType;
 
 	private int x;
 	private int y;
@@ -19,8 +20,8 @@ public class UIButton {
 	private boolean pressed;
 	private boolean enabled;
 
-	public UIButton(Type type, int width, int height) {
-		this.type = type;
+	public UIButton(ButtonType buttonType, int width, int height) {
+		this.buttonType = buttonType;
 		this.x = 0;
 		this.y = 0;
 		this.width = width;
@@ -55,8 +56,8 @@ public class UIButton {
 		return pressed;
 	}
 
-	public Type getType() {
-		return type;
+	public ButtonType getButtonType() {
+		return buttonType;
 	}
 
 	public void setEnabled(boolean enabled) {

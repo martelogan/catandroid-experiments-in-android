@@ -98,8 +98,7 @@
 	<string name="status">Status</string>
 	<string name="status_turn">Turn</string>
 	<string name="status_resources">Resources</string>
-	<string name="status_dev_cards">Development cards</string>
-	<string name="status_towns">Towns (1 point)</string>
+	<string name="status_settlements">Settlements (1 point)</string>
 	<string name="status_cities">Cities (2 points)</string>
 	<string name="status_roads">Total roads</string>
 	<string name="status_best_road_length">Your longest road length</string>
@@ -136,7 +135,7 @@
 	<string name="button_cancel">Cancel</string>
 
     <!-- Prompt strings -->
-    <string name="phase_first_town">Place first town</string>
+    <string name="phase_first_settlement">Place first settlement</string>
     <string name="phase_first_road">Place first road</string>
     <string name="phase_first_city">Place first city</string>
     <string name="phase_second_road">Place second road</string>
@@ -156,7 +155,7 @@
 	<string name="game_cant_build_str">Can\'t build</string>
 	<string name="game_cant_move_robber">Can\'t move robber</string>
 	<string name="game_robber_same">You must move the robber to a new location</string>
-    <string name="game_build_settlements_max">Reached the maximum number of towns.</string>
+    <string name="game_build_settlements_max">Reached the maximum number of settlements.</string>
 	<string name="game_build_city_max">Reached the maximum number of cities.</string>
 	<string name="game_build_road_max">Reached the maximum number of roads.</string>
 	<string name="game_cant_build_settlement">No available settlement locations.</string>
@@ -170,6 +169,7 @@
 	<string name="game_ok_str">OK</string>
 	<string name="game_cancel_str">Cancel</string>
 	<string name="game_resources_str">resources</string>
+	<string name="game_steal_title">Pick a victim</string>
     <string name="game_steal_from_str">Steal from</string>
 	<string name="game_steal_fail_str">Nobody to steal from</string>
 	<string name="game_stole_str">Stole</string>

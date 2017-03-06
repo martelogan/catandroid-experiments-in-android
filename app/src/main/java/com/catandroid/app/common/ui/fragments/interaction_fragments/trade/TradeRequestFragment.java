@@ -261,7 +261,7 @@ public class TradeRequestFragment extends Fragment {
 		}
 
 		Button tradeButton = (Button) tradeView.findViewById(R.id.trade_bank);
-		if (!Player.canTradeMixed() && types != 1)
+		if (types != 1)
 			tradeButton.setEnabled(false);
 		else
 			tradeButton.setEnabled(player.canTrade(resourceType, offer));

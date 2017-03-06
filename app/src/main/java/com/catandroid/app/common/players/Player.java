@@ -5,9 +5,10 @@ import java.util.Vector;
 import android.content.Context;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Board.Cards;
+import com.catandroid.app.common.components.ProgressCard.ProgressCardType;
 import com.catandroid.app.common.components.Edge;
 import com.catandroid.app.common.components.Hexagon;
+import com.catandroid.app.common.components.ProgressCard;
 import com.catandroid.app.common.components.Resource.ResourceType;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
@@ -17,9 +18,8 @@ import com.catandroid.app.common.components.Vertex;
 public class Player {
 
 	private static boolean FREE_BUILD = false;
-	private static boolean mixedTrade = false;
 
-	public static final int MAX_TOWNS = 5;
+	public static final int MAX_SETTLEMENTS = 5;
 	public static final int MAX_CITIES = 4;
 	public static final int MAX_ROADS = 15;
 
@@ -34,10 +34,10 @@ public class Player {
 	private String name;
 	protected int towns;
 	protected int cities;
-	private int soldiers, victory, tradeValue, roadLength;
-	private int[] resources, cards;
+	private int knightsCount, privateVictoryPointsCount, tradeValue, roadLength;
+	private int[] countPerResource, countPerProgressCard;
 	private boolean[] harbors;
-	private Vector<Cards> newCards;
+	private Vector<ProgressCardType> newCards;
 	private boolean usedCard;
 	private int type, lastVertexPieceId;
 	private String actionLog;
@@ -48,7 +48,7 @@ public class Player {
 	protected transient Board board;
 
 	public enum Color {
-		RED, BLUE, GREEN, ORANGE, SELECT, NONE
+		RED, BLUE, GREEN, YELLOW, SELECT, NONE
 	}
 
 	public static final int PLAYER_HUMAN = 0;
@@ -75,29 +75,32 @@ public class Player {
 
 		towns = 0;
 		cities = 0;
-		soldiers = 0;
+		knightsCount = 0;
 		roadLength = 0;
-		victory = 0;
+		privateVictoryPointsCount = 0;
 		tradeValue = 4;
 		usedCard = false;
 		actionLog = "";
 		lastVertexPieceId = -1;
 
-		newCards = new Vector<Cards>();
+		newCards = new Vector<ProgressCardType>();
 
 		settlementIds = new Vector<Integer>();
 		reachingIds = new Vector<Integer>();
 		roads = new Vector<Edge>();
 
-		// initialise number of each kind of development card
-		cards = new int[Board.Cards.values().length];
-		for (int i = 0; i < cards.length; i++)
-			cards[i] = 0;
+		// initialise number of each kind of progress card
+		//TODO: track player's hand
+//		countPerProgressCard = new int[ProgressCard.ProgressCardType.values().length];
+//		for (int i = 0; i < countPerProgressCard.length; i++)
+//		{
+//			countPerProgressCard[i] = 0;
+//		}
 
-		resources = new int[Resource.RESOURCE_TYPES.length];
+		countPerResource = new int[Resource.RESOURCE_TYPES.length];
 		harbors = new boolean[Resource.ResourceType.values().length];
-		for (int i = 0; i < resources.length; i++) {
-			resources[i] = 0;
+		for (int i = 0; i < countPerResource.length; i++) {
+			countPerResource[i] = 0;
 			harbors[i] = false;
 		}
 	}
@@ -147,12 +150,15 @@ public class Player {
 	 * Function called at the end of the build phase
 	 */
 	public void endTurn() {
-		// addCubic new cards to the set of usable cards
-		for (int i = 0; i < newCards.size(); i++)
-			cards[newCards.get(i).ordinal()] += 1;
-
-		newCards.clear();
-		usedCard = false;
+		//TODO: track player's hand
+//		// add new progress cards to the set of usable cards
+//		for (int i = 0; i < newCards.size(); i++)
+//		{
+//			countPerProgressCard[newCards.get(i).ordinal()] += 1;
+//		}
+//
+//		newCards.clear();
+//		usedCard = false;
 
 		appendAction(R.string.player_ended_turn);
 	}
@@ -166,15 +172,21 @@ public class Player {
 	 */
 	public boolean build(Edge edge) {
 		if (edge == null || !canBuild(edge))
+		{
 			return false;
+		}
 
 		// check resources
 		boolean free = board.isSetupPhase() || board.isProgressPhase();
 		if (!free && !affordRoad())
+		{
 			return false;
+		}
 
 		if (!edge.build(this))
+		{
 			return false;
+		}
 
 		if (!free) {
 			useResources(Resource.ResourceType.BRICK, 1);
@@ -187,7 +199,9 @@ public class Player {
 		board.checkLongestRoad();
 
 		if (!hadLongest && board.getLongestRoadOwner() == this)
+		{
 			appendAction(R.string.player_longest_road);
+		}
 
 		roads.add(edge);
 
@@ -224,10 +238,14 @@ public class Player {
 		// check resources based on type we want to build
 		if (type == Vertex.TOWN) {
 			if (!setup && !affordTown())
+			{
 				return false;
+			}
 		} else if (type == Vertex.CITY) {
 			if (!setup && !affordCity())
+			{
 				return false;
+			}
 		} else {
 			// invalid type
 			return false;
@@ -313,13 +331,13 @@ public class Player {
 	}
 
 	/**
-	 * Can you build on this vertex? We'll see
+	 * Can you build on this vertex?
 	 *
 	 * @param vertex
 	 * @return
 	 */
 	public boolean canBuild(Vertex vertex, int type) {
-		if (type == Vertex.TOWN && towns >= MAX_TOWNS)
+		if (type == Vertex.TOWN && towns >= MAX_SETTLEMENTS)
 		{
 			return false;
 		}
@@ -332,7 +350,7 @@ public class Player {
 	}
 
 	/**
-	 * Returns the player's particpant playerNumber
+	 * Returns the player's participant id
 	 *
 	 * @return googlePlayParticipantId
 	 */
@@ -347,8 +365,8 @@ public class Player {
 	 */
 	public int getResourceCount() {
 		int sum = 0;
-		for (int i = 0; i < resources.length; i++)
-			sum += resources[i];
+		for (int i = 0; i < countPerResource.length; i++)
+			sum += countPerResource[i];
 		return sum;
 	}
 
@@ -361,7 +379,7 @@ public class Player {
 	 *            number of that resource to add
 	 */
 	public void addResources(Resource.ResourceType resourceType, int count) {
-		resources[resourceType.ordinal()] += count;
+		countPerResource[resourceType.ordinal()] += count;
 	}
 
 	/**
@@ -372,7 +390,7 @@ public class Player {
 	 * @return the number of resources
 	 */
 	public int getResources(Resource.ResourceType resourceType) {
-		return resources[resourceType.ordinal()];
+		return countPerResource[resourceType.ordinal()];
 	}
 
 	/**
@@ -380,10 +398,10 @@ public class Player {
 	 *
 	 * @return an editable copy of the player's resource list
 	 */
-	public int[] getResources() {
-		int[] list = new int[resources.length];
-		for (int i = 0; i < resources.length; i++) {
-			list[i] = resources[i];
+	public int[] getCountPerResource() {
+		int[] list = new int[countPerResource.length];
+		for (int i = 0; i < countPerResource.length; i++) {
+			list[i] = countPerResource[i];
 		}
 
 		return list;
@@ -398,7 +416,7 @@ public class Player {
 	 *            the number to use
 	 */
 	public void useResources(Resource.ResourceType resourceType, int count) {
-		resources[resourceType.ordinal()] -= count;
+		countPerResource[resourceType.ordinal()] -= count;
 	}
 
 	/**
@@ -413,13 +431,13 @@ public class Player {
 
 		// pick random card
 		int select = (int) (Math.random() * count);
-		for (int i = 0; i < resources.length; i++) {
-			if (select < resources[i]) {
+		for (int i = 0; i < countPerResource.length; i++) {
+			if (select < countPerResource[i]) {
 				useResources(Resource.ResourceType.values()[i], 1);
 				return Resource.ResourceType.values()[i];
 			}
 
-			select -= resources[i];
+			select -= countPerResource[i];
 		}
 
 		return null;
@@ -468,7 +486,7 @@ public class Player {
 		if (choice == null) {
 			while (true) {
 				int pick = (int) (Math.random() * Resource.RESOURCE_TYPES.length);
-				if (resources[pick] > 0) {
+				if (countPerResource[pick] > 0) {
 					choice = Resource.RESOURCE_TYPES[pick];
 					break;
 				}
@@ -497,7 +515,9 @@ public class Player {
 
 		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
 			if (trade[i] <= 0)
+			{
 				continue;
+			}
 
 			useResources(Resource.RESOURCE_TYPES[i], trade[i]);
 			player.addResources(Resource.RESOURCE_TYPES[i], trade[i]);
@@ -548,7 +568,7 @@ public class Player {
 	 * @return true if the player can build a town
 	 */
 	public boolean affordTown() {
-		return (FREE_BUILD || towns < MAX_TOWNS
+		return (FREE_BUILD || towns < MAX_SETTLEMENTS
 				&& getResources(Resource.ResourceType.BRICK) >= 1
 				&& getResources(Resource.ResourceType.LUMBER) >= 1
 				&& getResources(Resource.ResourceType.GRAIN) >= 1
@@ -566,246 +586,210 @@ public class Player {
 	}
 
 	/**
-	 * Determine if the player can buy a card
+	 * Get the number of privateVictoryPointsCount points that are evident to other players
 	 *
-	 * @return true if the player can buy a card
-	 */
-	public boolean affordCard() {
-		return (FREE_BUILD || getResources(Resource.ResourceType.WOOL) >= 1
-				&& getResources(Resource.ResourceType.GRAIN) >= 1 && getResources(Resource.ResourceType.ORE) >= 1);
-	}
-
-	/**
-	 * Get the number of victory points that are evident to other players
-	 *
-	 * @return the number of victory points
+	 * @return the number of privateVictoryPointsCount points
 	 */
 	public int getPublicVictoryPoints() {
 		int points = towns + 2 * cities;
 
+		//TODO: add other public vps
 		if (board.hasLongestRoad(this))
+		{
 			points += 2;
-
-		if (board.hasLargestArmy(this))
-			points += 2;
+		}
 
 		return points;
 	}
 
 	/**
-	 * Return player's current total victory points
+	 * Return player's current total privateVictoryPointsCount points
 	 *
-	 * @return the number of victory points
+	 * @return the number of privateVictoryPointsCount points
 	 */
 	public int getVictoryPoints() {
-		return getPublicVictoryPoints() + victory;
+		return getPublicVictoryPoints() + privateVictoryPointsCount;
 	}
 
-	/**
-	 * Buy a card
-	 *
-	 * @return the card type
-	 */
-	public Board.Cards buyCard() {
-		return buyCard(board.getDevelopmentCard());
-	}
+//TODO: see how we can use this similar code for progress cards
+
+//	/**
+//	 * Get the player's progress cards
+//	 *
+//	 * @return an array with the number of each type of card
+//	 */
+//	public int[] getCards() {
+//		return cards;
+//	}
+//
+//	/**
+//	 * Get the number of a given progress card type that a player has
+//	 *
+//	 * @param card
+//	 *            the card type
+//	 * @return the number of that card type including new cards
+//	 */
+//	public int getNumProgressCardType(ProgressCardType card) {
+//		int count = 0;
+//		for (int i = 0; i < newCards.size(); i++) {
+//			if (newCards.get(i) == card)
+//			{
+//				count += 1;
+//			}
+//		}
+//
+//		return cards[card.ordinal()] + count;
+//	}
+//
+//	/**
+//	 * Get the number of privateVictoryPointsCount point cards
+//	 *
+//	 * @return the number of privateVictoryPointsCount point cards the player has
+//	 */
+//	public int getVictoryCards() {
+//		return privateVictoryPointsCount;
+//	}
+//
+//	/**
+//	 * Determine if the player has a card to use
+//	 *
+//	 * @return true if the player is allowed to use a card
+//	 */
+//	public boolean canUseCard() {
+//		if (usedCard)
+//			return false;
+//
+//		for (int i = 0; i < cards.length; i++) {
+//			if (cards[i] > 0)
+//			{
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
+//
+//	/**
+//	 * Add a development card of the given type
+//	 *
+//	 * @param card
+//	 *            the card type
+//	 */
+//	public void addCard(ProgressCardType card, boolean canUse) {
+//		if (canUse) {
+//			cards[card.ordinal()] += 1;
+//			usedCard = false;
+//		} else {
+//			newCards.add(card);
+//		}
+//	}
+//
+//	/**
+//	 * Determine if the player has a particular card
+//	 *
+//	 * @param card
+//	 *            the card type to check for
+//	 * @return true if the player has this card type
+//	 */
+//	public boolean hasCard(ProgressCardType card) {
+//		return (cards[card.ordinal()] > 0);
+//	}
+//
+//	/**
+//	 * Use a card
+//	 *
+//	 * @param card
+//	 *            the card type to use
+//	 * @return true if the card was used successfully
+//	 */
+//	public boolean useCard(ProgressCardType card) {
+//		if (!hasCard(card) || usedCard)
+//			return false;
+//
+//		switch (card) {
+//			case PROGRESS:
+//				board.startProgressPhase1();
+//				break;
+//			case VICTORY:
+//				return false;
+//			default:
+//				break;
+//		}
+//
+//		cards[card.ordinal()] -= 1;
+//		usedCard = true;
+//
+//		appendAction(R.string.player_played_card, ProgressCard
+//				.getCardStringResource(card));
+//
+//		return true;
+//	}
+
+//	/**
+//	 * Steal all resources of a given resourceType from the other players
+//	 *
+//	 * @param resourceType
+//	 */
+//	public int monopoly(Resource.ResourceType resourceType) {
+//		appendAction(R.string.to_remove_str, Resource
+//				.toRString(resourceType));
+//
+//		int total = 0;
+//
+//		for (int i = 0; i < board.getNumPlayers(); i++) {
+//			Player player = board.getPlayer(i);
+//			int count = player.getResources(resourceType);
+//
+//			if (player == this || count <= 0)
+//				continue;
+//
+//			player.useResources(resourceType, count);
+//			addResources(resourceType, count);
+//			total += count;
+//
+//			appendAction(R.string.player_stole_from, player.getName());
+//		}
+//
+//		return total;
+//	}
+//
+//	/**
+//	 * Get 2 free resources
+//	 *
+//	 * @param resourceType1
+//	 *            first resource type
+//	 * @param resourceType2
+//	 *            second resource type
+//	 */
+//	public void harvest(Resource.ResourceType resourceType1, ResourceType resourceType2) {
+//		addResources(resourceType1, 1);
+//		addResources(resourceType2, 1);
+//
+//		appendAction(R.string.player_received_resource, Resource
+//				.toRString(resourceType1));
+//		appendAction(R.string.player_received_resource, Resource
+//				.toRString(resourceType2));
+//	}
+//
+// 	/**
+//	 * Get the number of development cards the player has
+//	 *
+//	 * @return the number of development cards the player has
+//	 */
+//	public int getNumProgressCards() {
+//		int count = 0;
+//		for (int i = 0; i < cards.length; i++)
+//		{
+//			count += cards[i];
+//		}
+//
+//		return count + newCards.size();
+//	}
 
 	/**
-	 * Buy a predetermined card
+	 * Get the number of resources that are required to trade for 1 resource
 	 *
-	 * @param card
-	 *            the type of card to buy
-	 * @return the type of card bought
-	 */
-	public Board.Cards buyCard(Board.Cards card) {
-		if (!affordCard())
-			return null;
-
-		// out of cards
-		if (card == null)
-			return null;
-
-		// deduct resources
-		useResources(Resource.ResourceType.WOOL, 1);
-		useResources(Resource.ResourceType.GRAIN, 1);
-		useResources(Resource.ResourceType.ORE, 1);
-
-		if (card == Cards.VICTORY)
-			victory += 1;
-		else
-			newCards.add(card);
-
-		appendAction(R.string.player_received_card);
-
-		return card;
-	}
-
-	/**
-	 * Get the player's development cards
-	 *
-	 * @return an array with the number of each type of card
-	 */
-	public int[] getCards() {
-		return cards;
-	}
-
-	/**
-	 * Get the number of a given development card type that a player has
-	 *
-	 * @param card
-	 *            the card type
-	 * @return the number of that card type including new cards
-	 */
-	public int getNumDevCardType(Cards card) {
-		int count = 0;
-		for (int i = 0; i < newCards.size(); i++) {
-			if (newCards.get(i) == card)
-				count += 1;
-		}
-
-		return cards[card.ordinal()] + count;
-	}
-
-	/**
-	 * Get the number of victory point cards
-	 *
-	 * @return the number of victory point cards the player has
-	 */
-	public int getVictoryCards() {
-		return victory;
-	}
-
-	/**
-	 * Determine if the player has a card to use
-	 *
-	 * @return true if the player is allowed to use a card
-	 */
-	public boolean canUseCard() {
-		if (usedCard)
-			return false;
-
-		for (int i = 0; i < cards.length; i++) {
-			if (cards[i] > 0)
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Add a development card of the given type
-	 *
-	 * @param card
-	 *            the card type
-	 */
-	public void addCard(Cards card, boolean canUse) {
-		if (canUse) {
-			cards[card.ordinal()] += 1;
-			usedCard = false;
-		} else {
-			newCards.add(card);
-		}
-	}
-
-	/**
-	 * Determine if the player has a particular card
-	 *
-	 * @param card
-	 *            the card type to check for
-	 * @return true if the player has this card type
-	 */
-	public boolean hasCard(Cards card) {
-		return (cards[card.ordinal()] > 0);
-	}
-
-	/**
-	 * Use a card
-	 *
-	 * @param card
-	 *            the card type to use
-	 * @return true if the card was used successfully
-	 */
-	public boolean useCard(Cards card) {
-		if (!hasCard(card) || usedCard)
-			return false;
-
-		switch (card) {
-			case SOLDIER:
-				boolean hadLargest = (board.getLargestArmyOwner() == this);
-				soldiers += 1;
-				board.checkLargestArmy(this, soldiers);
-				if (!hadLargest && board.getLargestArmyOwner() == this)
-					appendAction(R.string.to_remove_str);
-				board.startRobberPhase();
-				break;
-			case PROGRESS:
-				board.startProgressPhase1();
-				break;
-			case VICTORY:
-				return false;
-			default:
-				break;
-		}
-
-		cards[card.ordinal()] -= 1;
-		usedCard = true;
-
-		appendAction(R.string.player_played_card, Board
-				.getCardStringResource(card));
-
-		return true;
-	}
-
-	/**
-	 * Steal all resources of a given resourceType from the other players
-	 *
-	 * @param resourceType
-	 */
-	public int monopoly(Resource.ResourceType resourceType) {
-		appendAction(R.string.to_remove_str, Resource
-				.toRString(resourceType));
-
-		int total = 0;
-
-		for (int i = 0; i < board.getNumPlayers(); i++) {
-			Player player = board.getPlayer(i);
-			int count = player.getResources(resourceType);
-
-			if (player == this || count <= 0)
-				continue;
-
-			player.useResources(resourceType, count);
-			addResources(resourceType, count);
-			total += count;
-
-			appendAction(R.string.player_stole_from, player.getName());
-		}
-
-		return total;
-	}
-
-	/**
-	 * Get 2 free resources
-	 *
-	 * @param resourceType1
-	 *            first resource type
-	 * @param resourceType2
-	 *            second resource type
-	 */
-	public void harvest(Resource.ResourceType resourceType1, ResourceType resourceType2) {
-		addResources(resourceType1, 1);
-		addResources(resourceType2, 1);
-
-		appendAction(R.string.player_received_resource, Resource
-				.toRString(resourceType1));
-		appendAction(R.string.player_received_resource, Resource
-				.toRString(resourceType2));
-	}
-
-	/**
-	 * Get the number of cards that are required to trade for 1 resource
-	 *
-	 * @return the number of resources cards needed
+	 * @return the number of resources needed
 	 */
 	public int getTradeValue() {
 		return tradeValue;
@@ -841,7 +825,9 @@ public class Player {
 
 		// specific harbor
 		if (resourceType != null)
+		{
 			harbors[resourceType.ordinal()] = true;
+		}
 	}
 
 	/**
@@ -860,12 +846,16 @@ public class Player {
 			// check for specific 2:1 harbor
 			if (hasHarbor(Resource.RESOURCE_TYPES[i])
 					&& getResources(Resource.RESOURCE_TYPES[i]) >= 2 && trade[i] >= 2)
+			{
 				return true;
+			}
 
 			// deduct from number of resource cards needed
 			int number = getResources(Resource.RESOURCE_TYPES[i]);
 			if (number >= trade[i])
+			{
 				value += trade[i];
+			}
 		}
 
 		return (value >= tradeValue);
@@ -883,7 +873,9 @@ public class Player {
 	public boolean trade(Resource.ResourceType resourceType, int[] trade) {
 		// validate trade
 		if (!canTrade(resourceType, trade))
+		{
 			return false;
+		}
 
 		// check for 2:1 harbor
 		for (int i = 0; i < trade.length; i++) {
@@ -941,59 +933,33 @@ public class Player {
 		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
 			if (Resource.RESOURCE_TYPES[i] == want
 					|| !hasHarbor(Resource.RESOURCE_TYPES[i]))
+			{
 				continue;
+			}
 
 			int[] trade = new int[Resource.RESOURCE_TYPES.length];
 			trade[i] = 2;
 
 			if (canTrade(want, trade))
+			{
 				offers.add(trade);
+			}
 		}
 
 		// generate 3:1 or 4:1 trades
-		if (!mixedTrade) {
-			for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
-				if (Resource.RESOURCE_TYPES[i] == want
-						|| hasHarbor(Resource.RESOURCE_TYPES[i]))
-					continue;
-
-				int[] trade = new int[Resource.RESOURCE_TYPES.length];
-				trade[i] = tradeValue;
-
-				if (canTrade(want, trade))
-					offers.add(trade);
+		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++) {
+			if (Resource.RESOURCE_TYPES[i] == want
+					|| hasHarbor(Resource.RESOURCE_TYPES[i]))
+			{
+				continue;
 			}
 
-			return offers;
-		}
+			int[] trade = new int[Resource.RESOURCE_TYPES.length];
+			trade[i] = tradeValue;
 
-		// generate all combinations of valid mixed-type trades
-		int max = getTradeValue();
-		for (int i = 0; i <= max; i++) {
-			for (int j = 0; j <= max - i; j++) {
-				for (int k = 0; k <= max - i - j; k++) {
-					for (int l = 0; l <= max - i - j - k; l++) {
-						int[] trade = new int[Resource.RESOURCE_TYPES.length];
-						trade[4] = i;
-						trade[3] = j;
-						trade[2] = k;
-						trade[1] = l;
-						trade[0] = max - i - j - k - l;
-
-						// ignore trades involving the desired resource
-						if (trade[want.ordinal()] != 0)
-							continue;
-
-						boolean good = true;
-						for (int m = 0; m < Resource.RESOURCE_TYPES.length; m++) {
-							if (hasHarbor(Resource.RESOURCE_TYPES[m]) && trade[m] >= 2)
-								good = false;
-						}
-
-						if (good && canTrade(want, trade))
-							offers.add(trade);
-					}
-				}
+			if (canTrade(want, trade))
+			{
+				offers.add(trade);
 			}
 		}
 
@@ -1075,34 +1041,12 @@ public class Player {
 	}
 
 	/**
-	 * Get the number of soldiers in the player's army
+	 * Get the player's settlements count
 	 *
-	 * @return the number of soldier cards used
+	 * @return the number of settlements owned by the player
 	 */
-	public int getArmySize() {
-		return soldiers;
-	}
-
-	/**
-	 * Get the number of towns
-	 *
-	 * @return the number of towns the player has
-	 */
-	public int getNumTowns() {
+	public int getNumSettlements() {
 		return towns;
-	}
-
-	/**
-	 * Get the number of development cards the player has
-	 *
-	 * @return the number of development cards the player has
-	 */
-	public int getNumDevCards() {
-		int count = 0;
-		for (int i = 0; i < cards.length; i++)
-			count += cards[i];
-
-		return count + newCards.size();
 	}
 
 	/**
@@ -1112,8 +1056,8 @@ public class Player {
 	 */
 	public int getNumResources() {
 		int count = 0;
-		for (int i = 0; i < resources.length; i++)
-			count += resources[i];
+		for (int i = 0; i < countPerResource.length; i++)
+			count += countPerResource[i];
 
 		return count;
 	}
@@ -1144,12 +1088,18 @@ public class Player {
 	 */
 	private void appendAction(String action) {
 		if (board.isSetupPhase())
+		{
 			return;
+		}
 
 		if (actionLog == "")
+		{
 			actionLog += "→ " + action;
+		}
 		else
+		{
 			actionLog += "\n" + "→ " + action;
+		}
 
 	}
 
@@ -1217,29 +1167,10 @@ public class Player {
 				return R.string.blue;
 			case GREEN:
 				return R.string.green;
-			case ORANGE:
+			case YELLOW:
 				return R.string.yellow;
 			default:
 				return R.string.empty_string;
 		}
-	}
-
-	/**
-	 * Enabled mixed trades
-	 *
-	 * @param mixed
-	 *            whether mixed trades should be allowed
-	 */
-	public static void enableMixedTrades(boolean mixed) {
-		mixedTrade = mixed;
-	}
-
-	/**
-	 * Determine if mixed trades are allowed
-	 *
-	 * @return true if mixed trades are allowed
-	 */
-	public static boolean canTradeMixed() {
-		return mixedTrade;
 	}
 }

@@ -1,7 +1,6 @@
 package com.catandroid.app.common.components;
 
 import com.catandroid.app.R;
-import com.catandroid.app.common.logistics.AppSettings;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.BalancedAI;
 import com.catandroid.app.common.players.Player;
@@ -18,11 +17,7 @@ public class Board {
 
 	private ArrayList<String> gameParticipantIds;
 
-	public enum Cards {
-		SOLDIER, PROGRESS, HARVEST, MONOPOLY, VICTORY
-	}
-
-	public final static int[] COUNT_PER_DICE_SUM = { 0, 0, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2 };
+    public final static int[] COUNT_PER_DICE_SUM = { 0, 0, 2, 3, 3, 3, 3, 0, 3, 3, 3, 3, 2 };
 
 	private final HashMap<Hexagon.TerrainType, Integer> terrainTypeToCountMap;
 	private HashMap<Hexagon.TerrainType, Integer> initTerrainTypeToCountMap(int boardSize)
@@ -55,15 +50,9 @@ public class Board {
 		return count;
 	}
 
-	private static final int NUM_SOLDIER = 14;
-	private static final int NUM_PROGRESS = 2;
-	private static final int NUM_HARVEST = 2;
-	private static final int NUM_MONOPOLY = 2;
-	private static final int NUM_VICTORY = 5;
-
 	private enum Phase {
 		SETUP_SETTLEMENT, SETUP_FIRST_R, SETUP_CITY, SETUP_SECOND_R,
-		PRODUCTION, BUILD, PROGRESS_1, PROGRESS_2, ROBBER, DONE
+		PRODUCTION, BUILD, PROGRESS_CARD_1, PROGRESS_CARD_2, ROBBER, DONE
 	}
 
 	private Phase phase, returnPhase;
@@ -74,15 +63,14 @@ public class Board {
 	private Player[] players;
 	private int numPlayers;
 	private Harbor[] harbors;
-	private int[] cards;
 	private Stack<Player> playersYetToDiscard;
 	private BoardGeometry boardGeometry;
 	private HashMap<Long, Hexagon> hexMap;
 
 	private Hexagon curRobberHex, prevRobberHex;
 	private int turn, turnNumber, roadCountId, longestRoad,
-			largestArmy, maxPoints, humans, lastDiceRollNumber;
-	private Player longestRoadOwner, largestArmyOwner, winner;
+			maxPoints, lastDiceRollNumber;
+	private Player longestRoadOwner, winner;
 
 	private boolean autoDiscard;
 
@@ -112,7 +100,6 @@ public class Board {
 			Player.Color color = Player.Color.values()[i];
 
 			if (human[i]) {
-				humans += 1;
 				String participantId = gameParticipantIds.get(i);
 				players[i] = new Player(this, i, participantId, color, names[i],
 						Player.PLAYER_HUMAN);
@@ -133,22 +120,12 @@ public class Board {
 		phase = Phase.SETUP_SETTLEMENT;
 		roadCountId = 0;
 		longestRoad = 4;
-		largestArmy = 2;
 		longestRoadOwner = null;
-		largestArmyOwner = null;
 		hexagons = null;
 		winner = null;
 
 		playersYetToDiscard = new Stack<Player>();
 		hexMap = new HashMap<Long, Hexagon>();
-
-		// initialize development cards
-		cards = new int[Cards.values().length];
-		cards[Cards.SOLDIER.ordinal()] = NUM_SOLDIER;
-		cards[Cards.PROGRESS.ordinal()] = NUM_PROGRESS;
-		cards[Cards.VICTORY.ordinal()] = NUM_VICTORY;
-		cards[Cards.HARVEST.ordinal()] = NUM_HARVEST;
-		cards[Cards.MONOPOLY.ordinal()] = NUM_MONOPOLY;
 
 		// randomly initialize hexagons
 		hexagons = ComponentUtils.initRandomHexes(this);
@@ -159,9 +136,8 @@ public class Board {
 		// populate board map with starting parameters
 		boardGeometry.populateBoard(hexagons, vertices, edges, harbors, hexMap);
 
-		// TODO: remove hard-coding / replace this function
-		// assign executeDiceRoll numbers randomly
-		ComponentUtils.assignRoles(hexagons);
+		// assign number tokens randomly
+		ComponentUtils.assignRandomNumTokens(hexagons);
 	}
 
 	/**
@@ -245,7 +221,7 @@ public class Board {
 				}
 			}
 
-			// enter robberIndex phase
+			// enter robberphase
 			startRobberPhase();
 		} else {
 			// distribute resources
@@ -259,9 +235,9 @@ public class Board {
 	}
 
 	/**
-	 * Get the last executeDiceRoll
+	 * Get the last dice roll
 	 * 
-	 * @return the last executeDiceRoll, or 0
+	 * @return the last dice roll, or 0
 	 */
 	public int getLastDiceRollNumber() {
 		if (isSetupPhase() || isProgressPhase())
@@ -273,7 +249,7 @@ public class Board {
 	}
 
 	/**
-	 * Run the AI's robberIndex methods
+	 * Run the AI's robber methods
 	 * 
 	 * @param current
 	 *            current ai players
@@ -336,9 +312,9 @@ public class Board {
 				current.buildPhase();
 				break;
 
-			case PROGRESS_1:
+			case PROGRESS_CARD_1:
 				current.progressRoad(edges);
-			case PROGRESS_2:
+			case PROGRESS_CARD_2:
 				current.progressRoad(edges);
 				phase = returnPhase;
 				return;
@@ -412,10 +388,10 @@ public class Board {
                     activeGameFragment.mListener.endTurn(gameParticipantIds.get(turn));
                 }
 				break;
-			case PROGRESS_1:
-				phase = Phase.PROGRESS_2;
+			case PROGRESS_CARD_1:
+				phase = Phase.PROGRESS_CARD_2;
 				break;
-			case PROGRESS_2:
+			case PROGRESS_CARD_2:
 				phase = returnPhase;
 				break;
 			case ROBBER:
@@ -433,7 +409,7 @@ public class Board {
 	 */
 	public void startProgressPhase1() {
 		returnPhase = phase;
-		phase = Phase.PROGRESS_1;
+		phase = Phase.PROGRESS_CARD_1;
 		runTurn();
 	}
 
@@ -490,37 +466,37 @@ public class Board {
 	}
 
 	public boolean isProgressPhase() {
-		return (phase == Phase.PROGRESS_1 || phase == Phase.PROGRESS_2);
+		return (phase == Phase.PROGRESS_CARD_1 || phase == Phase.PROGRESS_CARD_2);
 	}
 
 	public boolean isProgressPhase1() {
-		return (phase == Phase.PROGRESS_1);
+		return (phase == Phase.PROGRESS_CARD_1);
 	}
 
 	public boolean isProgressPhase2() {
-		return (phase == Phase.PROGRESS_2);
+		return (phase == Phase.PROGRESS_CARD_2);
 	}
 
 	/**
-	 * Get the dice executeDiceRoll value for a hexagons
+	 * Get the dice number token value for a hexagons
 	 * 
-	 * @param index
-	 *            the index of the hexagons
-	 * @return the executeDiceRoll value
+	 * @param id
+	 *            the id of the hexagons
+	 * @return the number token value
 	 */
-	public int getLastRoll(int index) {
-		return hexagons[index].getNumberTokenAsInt();
+	public int getNumberTokenByHexId(int id) {
+		return hexagons[id].getNumberTokenAsInt();
 	}
 
 	/**
 	 * Get the resource produced by a particular hexagon
 	 * 
-	 * @param index
-	 *            the index of the hexagon
+	 * @param id
+	 *            the id of the hexagon
 	 * @return the resource produced by that hexagon
 	 */
-	public Resource getResource(int index) {
-		return hexagons[index].getResource();
+	public Resource getResourceByHexId(int id) {
+		return hexagons[id].getResource();
 	}
 
 	/**
@@ -613,36 +589,13 @@ public class Board {
 	}
 
 	/**
-	 * Get a development card
-	 * 
-	 * @return the type of development card or null if that stack is empty
+	 * Get a progress card
+	 *
+	 * @return the type of progress card or null if that stack is empty
 	 */
-	public Cards getDevelopmentCard() {
-		int soldiers = cards[Cards.SOLDIER.ordinal()];
-		int progress = cards[Cards.PROGRESS.ordinal()];
-		int victory = cards[Cards.VICTORY.ordinal()];
-		int harvest = cards[Cards.HARVEST.ordinal()];
-		int monopoly = cards[Cards.MONOPOLY.ordinal()];
-		int number = soldiers + progress + victory + harvest + monopoly;
-
-		if (number == 0)
-			return null;
-
-		int pick = (int) (Math.random() * number);
-
-		Cards card;
-		if (pick < soldiers)
-			card = Cards.SOLDIER;
-		else if (pick < soldiers + progress)
-			card = Cards.PROGRESS;
-		else if (pick < soldiers + progress + victory)
-			card = Cards.VICTORY;
-		else if (pick < soldiers + progress + victory + harvest)
-			card = Cards.HARVEST;
-		else
-			card = Cards.MONOPOLY;
-
-		cards[card.ordinal()] -= 1;
+	public ProgressCard.ProgressCardType getRandomProgressCard() {
+		//TODO: implement progress cards
+		ProgressCard.ProgressCardType card =null;
 		return card;
 	}
 
@@ -723,50 +676,6 @@ public class Board {
 	}
 
 	/**
-	 * Update the largest army if the given size is larger than the current size
-	 * 
-	 * @param player
-	 *            the players owning the army
-	 * @param size
-	 *            the number of soldiers
-	 */
-	public void checkLargestArmy(Player player, int size) {
-		if (size > largestArmy) {
-			largestArmyOwner = player;
-			largestArmy = size;
-		}
-	}
-
-	/**
-	 * Determine if players has the largest army
-	 * 
-	 * @param player
-	 *            the players
-	 * @return true if players has the largest army
-	 */
-	public boolean hasLargestArmy(Player player) {
-		return (largestArmyOwner != null && player == largestArmyOwner);
-	}
-
-	/**
-	 * Get the size of the largest army
-	 * 
-	 * @return the size of the largest army
-	 */
-	public int getLargestArmy() {
-		return largestArmy;
-	}
-
-	/**
-	 * Get the owner of the largest army
-	 * 
-	 * @return the players with the largest army
-	 */
-	public Player getLargestArmyOwner() {
-		return largestArmyOwner;
-	}
-
-	/**
 	 * Check if any players need to discard_resources
 	 * 
 	 * @return true if one or more players need to discard_resources
@@ -796,7 +705,7 @@ public class Board {
 	public int getPhaseResource() {
 		switch (phase) {
 		case SETUP_SETTLEMENT:
-			return R.string.phase_first_town;
+			return R.string.phase_first_settlement;
 		case SETUP_FIRST_R:
 			return R.string.phase_first_road;
 		case SETUP_CITY:
@@ -807,10 +716,12 @@ public class Board {
 			return R.string.phase_roll_production;
 		case BUILD:
 			return R.string.phase_build;
-		case PROGRESS_1:
-			return R.string.to_remove_str;
-		case PROGRESS_2:
-			return R.string.to_remove_str;
+		case PROGRESS_CARD_1:
+			// TODO: progress card step 1
+			return 0;
+		case PROGRESS_CARD_2:
+			// TODO: progress card step 2
+			return 0;
 		case ROBBER:
 			return R.string.phase_move_robber;
 		case DONE:
@@ -919,31 +830,7 @@ public class Board {
 		return true;
 	}
 
-	/**
-	 * Get the string resource for a card type
-	 * 
-	 * @param card
-	 *            the card type
-	 * @return the string resource
-	 */
-	public static int getCardStringResource(Cards card) {
-		switch (card) {
-		case SOLDIER:
-			return R.string.to_remove_str;
-		case PROGRESS:
-			return R.string.to_remove_str;
-		case VICTORY:
-			return R.string.to_remove_str;
-		case HARVEST:
-			return R.string.to_remove_str;
-		case MONOPOLY:
-			return R.string.to_remove_str;
-		default:
-			return R.string.empty_string;
-		}
-	}
-
-	public void reinitBoardOnComponents() {
+    public void reinitBoardOnComponents() {
 
 		for (Hexagon hexagon : hexagons) {
 			hexagon.setBoard(this);

@@ -36,7 +36,9 @@ public class RulesActivity extends Activity {
 			while (true) {
 				int read = is.read(buffer);
 				if (read == -1)
+				{
 					break;
+				}
 
 				baos.write(buffer, 0, read);
 			}

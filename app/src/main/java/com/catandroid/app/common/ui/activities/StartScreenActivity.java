@@ -76,7 +76,9 @@ public class StartScreenActivity extends Activity {
 
 		String[] values = new String[labels.size()];
 		for (int i = 0; i < values.length; i++)
+		{
 			values[i] = labels.get(i);
+		}
 
 		int padding = (int) (10 * getResources().getDisplayMetrics().density);
 

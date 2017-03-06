@@ -26,7 +26,8 @@ import com.catandroid.app.common.players.Player;
 public class TextureManager {
 
 	private enum Type {
-		NONE, BACKGROUND, SHORE, TILE, ROBBER, LIGHT, HARBOR, RESOURCE, NUMBER_TOKEN, ROAD, TOWN, CITY, ORNAMENT, BUTTONBG, BUTTON
+		NONE, BACKGROUND, SHORE, TILE, ROBBER, LIGHT,
+		HARBOR, RESOURCE, NUMBER_TOKEN, ROAD, TOWN, CITY, ORNAMENT, BUTTONBG, BUTTON
 	}
 
 	public enum Location {
@@ -96,27 +97,27 @@ public class TextureManager {
 		add(Type.ROBBER, 0, R.drawable.tile_robber, res);
 
 		// load button textures
-		add(Type.BUTTONBG, UIButton.Background.BACKDROP.ordinal(),
+		add(Type.BUTTONBG, UIButton.ButtonBackground.BACKDROP.ordinal(),
 				R.drawable.button_backdrop, res);
-		add(Type.BUTTONBG, UIButton.Background.PRESSED.ordinal(),
+		add(Type.BUTTONBG, UIButton.ButtonBackground.PRESSED.ordinal(),
 				R.drawable.button_press, res);
-		add(Type.BUTTON, UIButton.Type.INFO.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.PLAYER_STATUS.ordinal(),
 				R.drawable.button_status, res);
-		add(Type.BUTTON, UIButton.Type.ROLL.ordinal(), R.drawable.button_roll,
+		add(Type.BUTTON, UIButton.ButtonType.DICE_ROLL.ordinal(), R.drawable.button_roll,
 				res);
-		add(Type.BUTTON, UIButton.Type.ROAD.ordinal(), R.drawable.button_road,
+		add(Type.BUTTON, UIButton.ButtonType.BUILD_ROAD.ordinal(), R.drawable.button_road,
 				res);
-		add(Type.BUTTON, UIButton.Type.TOWN.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.BUILD_SETTLEMENT.ordinal(),
 				R.drawable.button_settlement, res);
-		add(Type.BUTTON, UIButton.Type.CITY.ordinal(), R.drawable.button_city,
+		add(Type.BUTTON, UIButton.ButtonType.BUILD_CITY.ordinal(), R.drawable.button_city,
 				res);
-		add(Type.BUTTON, UIButton.Type.DEVCARD.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.PROGRESS_CARD.ordinal(),
 				R.drawable.button_development_cards, res);
-		add(Type.BUTTON, UIButton.Type.TRADE.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.TRADE.ordinal(),
 				R.drawable.button_trade, res);
-		add(Type.BUTTON, UIButton.Type.ENDTURN.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.END_TURN.ordinal(),
 				R.drawable.button_endturn, res);
-		add(Type.BUTTON, UIButton.Type.CANCEL.ordinal(),
+		add(Type.BUTTON, UIButton.ButtonType.CANCEL.ordinal(),
 				R.drawable.button_cancel, res);
 
 		add(Type.ROAD, 0, R.drawable.road, res);
@@ -130,7 +131,7 @@ public class TextureManager {
 				R.drawable.settlement_blue, res);
 		add(Type.TOWN, Player.Color.GREEN.ordinal(),
 				R.drawable.settlement_green, res);
-		add(Type.TOWN, Player.Color.ORANGE.ordinal(),
+		add(Type.TOWN, Player.Color.YELLOW.ordinal(),
 				R.drawable.settlement_yellow, res);
 
 		// load large city textures
@@ -139,7 +140,7 @@ public class TextureManager {
 		add(Type.CITY, Player.Color.RED.ordinal(), R.drawable.city_red, res);
 		add(Type.CITY, Player.Color.BLUE.ordinal(), R.drawable.city_blue, res);
 		add(Type.CITY, Player.Color.GREEN.ordinal(), R.drawable.city_green, res);
-		add(Type.CITY, Player.Color.ORANGE.ordinal(), R.drawable.city_yellow,
+		add(Type.CITY, Player.Color.YELLOW.ordinal(), R.drawable.city_yellow,
 				res);
 
 		// load large resource icons
@@ -170,11 +171,11 @@ public class TextureManager {
 				R.drawable.harbor_southwest, res);
 
 		// load corner ornaments
-//		add(Type.ORNAMENT, Location.BOTTOM_LEFT.ordinal(),
+//		add(ButtonType.ORNAMENT, Location.BOTTOM_LEFT.ordinal(),
 //				R.drawable.bl_corner, res);
-//		add(Type.ORNAMENT, Location.TOP_LEFT.ordinal(), R.drawable.tl_corner,
+//		add(ButtonType.ORNAMENT, Location.TOP_LEFT.ordinal(), R.drawable.tl_corner,
 //				res);
-//		add(Type.ORNAMENT, Location.TOP_RIGHT.ordinal(), R.drawable.tr_corner,
+//		add(ButtonType.ORNAMENT, Location.TOP_RIGHT.ordinal(), R.drawable.tr_corner,
 //				res);
 	}
 
@@ -186,7 +187,7 @@ public class TextureManager {
 			return Color.rgb(0x37, 0x57, 0xB3);
 		case GREEN:
 			return Color.rgb(0x13, 0xA6, 0x19);
-		case ORANGE:
+		case YELLOW:
 			return Color.rgb(0xE9, 0xD3, 0x03);
 		default:
 			return Color.rgb(0x87, 0x87, 0x87);
@@ -220,15 +221,15 @@ public class TextureManager {
 		gl.glTranslatef(button.getX(), button.getY(), 10);
 		gl.glScalef(button.getWidth() * factor, button.getHeight() * factor, 1);
 		
-		square.get(hash(Type.BUTTONBG, UIButton.Background.BACKDROP.ordinal())).render(gl);
+		square.get(hash(Type.BUTTONBG, UIButton.ButtonBackground.BACKDROP.ordinal())).render(gl);
 		
 		if (button.isPressed())
-			square.get(hash(Type.BUTTONBG, UIButton.Background.PRESSED.ordinal())).render(gl);
+			square.get(hash(Type.BUTTONBG, UIButton.ButtonBackground.PRESSED.ordinal())).render(gl);
 
-		square.get(hash(Type.BUTTON, button.getType().ordinal())).render(gl);
+		square.get(hash(Type.BUTTON, button.getButtonType().ordinal())).render(gl);
 
 //		if (!button.isEnabled())
-//			square.get(hash(ResourceType.BUTTONBG, UIButton.Background.ACTIVATED.ordinal())).render(gl);
+//			square.get(hash(ResourceType.BUTTONBG, UIButton.ButtonBackground.ACTIVATED.ordinal())).render(gl);
 		
 		gl.glPopMatrix();
 	}
@@ -394,8 +395,8 @@ public class TextureManager {
 		}
 	}
 
-	public Bitmap get(UIButton.Type type) {
-		return get(Type.BUTTON, type.ordinal());
+	public Bitmap get(UIButton.ButtonType buttonType) {
+		return get(Type.BUTTON, buttonType.ordinal());
 	}
 
 	public Bitmap get(Resource.ResourceType resourceType) {

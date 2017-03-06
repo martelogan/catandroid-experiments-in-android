@@ -79,7 +79,7 @@ public class ResourceView extends LinearLayout {
 		setVisibility(View.VISIBLE);
 		setBackgroundColor(Color.argb(200, 0, 0, 0));
 
-		int[] resources = player.getResources();
+		int[] resources = player.getCountPerResource();
 		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++)
 			views[i].setText(String.valueOf(resources[i]));
 	}

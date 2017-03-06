@@ -146,12 +146,12 @@ public class ComponentUtils
     }
 
     /**
-     * Assign executeDiceRoll numbers to the hexagons randomly
+     * Randomly assign number tokens to the hexagons
      *
      * @param hexagons
      *            the hexagon array
      */
-    public static void assignRoles(Hexagon[] hexagons) {
+    public static void assignRandomNumTokens(Hexagon[] hexagons) {
 
         int [] countPerDiceSum = Board.COUNT_PER_DICE_SUM;
         int hexCount = hexagons.length;

@@ -4,12 +4,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.BoardGeometry;
-import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.ui.fragments.ActiveGameFragment;
 import com.catandroid.app.common.ui.graphics_controllers.GameRenderer;
 import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 import com.catandroid.app.common.ui.resources.UIButton;
-import com.catandroid.app.common.ui.resources.UIButton.Type;
+import com.catandroid.app.common.ui.resources.UIButton.ButtonType;
 import com.catandroid.app.common.players.Player;
 
 import android.content.Context;
@@ -53,10 +52,10 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 		
 		setSystemUiVisibility(getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
-		buttons = new UIButton[UIButton.Type.values().length];
+		buttons = new UIButton[ButtonType.values().length];
 		int size = (int) (0.5 * BoardGeometry.BUTTON_SIZE * getResources().getDisplayMetrics().density);
-		for (UIButton.Type type : UIButton.Type.values())
-			buttons[type.ordinal()] = new UIButton(type, size, size);
+		for (ButtonType buttonType : ButtonType.values())
+			buttons[buttonType.ordinal()] = new UIButton(buttonType, size, size);
 		
 		buttonsPlaced = false;
 	}
@@ -192,8 +191,8 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 		super.onDraw(canvas);
 	}
 
-	public void addButton(Type type) {
-		buttons[type.ordinal()].setEnabled(true);
+	public void addButton(ButtonType buttonType) {
+		buttons[buttonType.ordinal()].setEnabled(true);
 		buttonsPlaced = false;
 	}
 
@@ -218,9 +217,9 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 			int endheight = button.getHeight() / 2;
 
 			// set position
-			UIButton.Type type = button.getType();
-			if (type == UIButton.Type.CANCEL || type == UIButton.Type.ROLL
-					|| type == UIButton.Type.ENDTURN) {
+			ButtonType buttonType = button.getButtonType();
+			if (buttonType == ButtonType.CANCEL || buttonType == UIButton.ButtonType.DICE_ROLL
+					|| buttonType == ButtonType.END_TURN) {
 				// set position to far right/bottom
 				if (width < height)
 					button.setPosition(endwidth,
@@ -320,7 +319,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 			if (button.release(x, height - y)) {
 				released = true;
 				if (activate)
-					game.buttonPress(button.getType());
+					game.buttonPress(button.getButtonType());
 			}
 		}
 

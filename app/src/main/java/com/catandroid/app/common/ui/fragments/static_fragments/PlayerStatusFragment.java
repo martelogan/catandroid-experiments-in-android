@@ -1,7 +1,6 @@
 package com.catandroid.app.common.ui.fragments.static_fragments;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Board.Cards;
 import com.catandroid.app.common.components.Resource;
 import com.catandroid.app.common.ui.graphics_controllers.TextureManager;
 import com.catandroid.app.R;
@@ -83,13 +82,13 @@ public class PlayerStatusFragment extends Fragment {
 						+ player.getResources(Resource.ResourceType.GRAIN) + "\n\n";
 			}
 
-			message += getString(R.string.status_dev_cards) + ": "
-					+ player.getNumDevCards() + "\n";
+			//TODO: count of progress cards
+//			message += getString(R.string.status_progress_cards) + ": "
 
 			message += "\n";
 
-			message += getString(R.string.status_towns) + ": "
-					+ player.getNumTowns() + " / " + Player.MAX_TOWNS + "\n";
+			message += getString(R.string.status_settlements) + ": "
+					+ player.getNumSettlements() + " / " + Player.MAX_SETTLEMENTS + "\n";
 			message += getString(R.string.status_cities) + ": "
 					+ player.getNumCities() + " / " + Player.MAX_CITIES + "\n";
 			message += getString(R.string.status_roads) + ": "
@@ -103,22 +102,12 @@ public class PlayerStatusFragment extends Fragment {
 				message += getString(R.string.status_has_longest_road) + ": "
 						+ "2 " + getString(R.string.status_points_str) + "\n";
 
-			message += getString(R.string.to_remove_str) + ": "
-					+ player.getArmySize() + "\n";
-			if (player == board.getLargestArmyOwner())
-				message += getString(R.string.to_remove_str) + ": "
-						+ "2 " + getString(R.string.status_points_str) + "\n";
-
 			message += "\n";
 
-			if (showAll) {
-				message += getString(R.string.to_remove_str) + ": "
-						+ player.getNumDevCardType(Cards.SOLDIER) + "\n"
-						+ getString(R.string.status_progress_cards) + ": "
-						+ player.getNumDevCardType(Cards.PROGRESS) + "\n"
-						+ getString(R.string.to_remove_str) + ": "
-						+ player.getVictoryCards() + "\n\n";
-			}
+
+			//TODO: show progress cards?
+//			if (showAll) {
+//			}
 
 			boolean hasHarbor = false;
 			if (player.hasHarbor(null)) {
