@@ -1,6 +1,13 @@
 package com.catandroid.app.common.components;
 
 import com.catandroid.app.R;
+import com.catandroid.app.common.components.board_pieces.ProgressCard;
+import com.catandroid.app.common.components.board_pieces.Resource;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Harbor;
+import com.catandroid.app.common.components.board_positions.Hexagon;
+import com.catandroid.app.common.components.board_positions.Vertex;
+import com.catandroid.app.common.components.utilities.BoardUtils;
 import com.catandroid.app.common.players.AutomatedPlayer;
 import com.catandroid.app.common.players.BalancedAI;
 import com.catandroid.app.common.players.Player;
@@ -94,7 +101,7 @@ public class Board {
 
 		this.autoDiscard = autoDiscard;
 
-		// initialise players
+		// initialize players
 		players = new Player[numPlayers];
 		for (int i = 0; i < numPlayers; i++) {
 			Player.Color color = Player.Color.values()[i];
@@ -128,16 +135,16 @@ public class Board {
 		hexMap = new HashMap<Long, Hexagon>();
 
 		// randomly initialize hexagons
-		hexagons = ComponentUtils.initRandomHexes(this);
-		harbors = ComponentUtils.initRandomHarbors(this, boardGeometry.getHarborCount());
-		vertices = ComponentUtils.generateVertices(this, boardGeometry.getVertexCount());
-		edges = ComponentUtils.generateEdges(this, boardGeometry.getEdgeCount());
+		hexagons = BoardUtils.initRandomHexes(this);
+		harbors = BoardUtils.initRandomHarbors(this, boardGeometry.getHarborCount());
+		vertices = BoardUtils.generateVertices(this, boardGeometry.getVertexCount());
+		edges = BoardUtils.generateEdges(this, boardGeometry.getEdgeCount());
 
 		// populate board map with starting parameters
 		boardGeometry.populateBoard(hexagons, vertices, edges, harbors, hexMap);
 
 		// assign number tokens randomly
-		ComponentUtils.assignRandomNumTokens(hexagons);
+		BoardUtils.assignRandomNumTokens(hexagons);
 	}
 
 	/**
@@ -292,41 +299,41 @@ public class Board {
 			AutomatedPlayer current = (AutomatedPlayer) players[turn];
 			switch (phase) {
 
-			case SETUP_SETTLEMENT:
-				current.setupTown(vertices);
-				break;
-			case SETUP_CITY:
-				current.setupCity(vertices);
-				break;
-			case SETUP_FIRST_R:
-			case SETUP_SECOND_R:
-				current.setupRoad(edges);
-				break;
+				case SETUP_SETTLEMENT:
+					current.setupSettlement(vertices);
+					break;
+				case SETUP_CITY:
+					current.setupCity(vertices);
+					break;
+				case SETUP_FIRST_R:
+				case SETUP_SECOND_R:
+					current.setupRoad(edges);
+					break;
 
-			case PRODUCTION:
-				current.productionPhase();
-				players[turn].roll();
-				break;
+				case PRODUCTION:
+					current.productionPhase();
+					players[turn].roll();
+					break;
 
-			case BUILD:
-				current.buildPhase();
-				break;
+				case BUILD:
+					current.buildPhase();
+					break;
 
-			case PROGRESS_CARD_1:
-				current.progressRoad(edges);
-			case PROGRESS_CARD_2:
-				current.progressRoad(edges);
-				phase = returnPhase;
-				return;
+				case PROGRESS_CARD_1:
+					current.progressRoad(edges);
+				case PROGRESS_CARD_2:
+					current.progressRoad(edges);
+					phase = returnPhase;
+					return;
 
-			case ROBBER:
-				startAIRobberPhase(current);
-				return;
+				case ROBBER:
+					startAIRobberPhase(current);
+					return;
 
-			case DONE:
-				return;
+				case DONE:
+					return;
 
-			}
+				}
 
 			nextPhase();
 		}
@@ -437,7 +444,7 @@ public class Board {
 				|| phase == Phase.SETUP_CITY || phase == Phase.SETUP_SECOND_R);
 	}
 
-	public boolean isSetupTown() {
+	public boolean isSetupSettlement() {
 		return (phase == Phase.SETUP_SETTLEMENT);
 	}
 
@@ -600,6 +607,67 @@ public class Board {
 	}
 
 	/**
+	 * Get the hexagons with the robberIndex
+	 *
+	 * @return the hexagons with the robberIndex
+	 */
+	public Hexagon getCurRobberHex() {
+		return curRobberHex;
+	}
+
+	/**
+	 * If the robber is being moved, return the last hexagons where it last
+	 * resided, or otherwise the current location
+	 *
+	 * @return the last location of the robber
+	 */
+	public Hexagon getPrevRobberHex() {
+		int hexCount = this.boardGeometry.getHexCount();
+		int curRobberId = this.curRobberHex != null ? this.curRobberHex.getId() : -1;
+		int prevRobberId = this.prevRobberHex != null ? this.prevRobberHex.getId() : -1;
+		if (this.phase == Phase.ROBBER && prevRobberId >= 0 && prevRobberId < hexCount)
+			return this.prevRobberHex;
+		else if (curRobberId >= 0 && curRobberId < hexCount) {
+			return this.curRobberHex;
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Set the current robber hexagon
+	 *
+	 * @param curRobberHex
+	 *            current robber hexagon
+	 * @return true iff the currebt robber hex was set
+	 */
+	public boolean setCurRobberHex(Hexagon curRobberHex) {
+		if (this.curRobberHex != null) {
+			this.curRobberHex.removeRobber();
+		}
+		this.curRobberHex = curRobberHex;
+		this.curRobberHex.setRobber();
+		return true;
+	}
+
+	/**
+	 * Set the index for the robber
+	 *
+	 * @param robberIndex
+	 *            id of the hexagon with the robber
+	 * @return true if the robber was placed
+	 */
+	public boolean setRobber(int robberIndex) {
+		if (this.curRobberHex != null) {
+			this.curRobberHex.removeRobber();
+		}
+		this.curRobberHex = this.hexagons[robberIndex];
+		this.curRobberHex.setRobber();
+		return true;
+	}
+
+	/**
 	 * Get the number of points required to win
 	 * 
 	 * @return the number of points required to win
@@ -704,31 +772,36 @@ public class Board {
 	 */
 	public int getPhaseResource() {
 		switch (phase) {
-		case SETUP_SETTLEMENT:
-			return R.string.phase_first_settlement;
-		case SETUP_FIRST_R:
-			return R.string.phase_first_road;
-		case SETUP_CITY:
-			return R.string.phase_first_city;
-		case SETUP_SECOND_R:
-			return R.string.phase_second_road;
-		case PRODUCTION:
-			return R.string.phase_roll_production;
-		case BUILD:
-			return R.string.phase_build;
-		case PROGRESS_CARD_1:
-			// TODO: progress card step 1
-			return 0;
-		case PROGRESS_CARD_2:
-			// TODO: progress card step 2
-			return 0;
-		case ROBBER:
-			return R.string.phase_move_robber;
-		case DONE:
-			return R.string.phase_game_over;
-		}
+			case SETUP_SETTLEMENT:
+				return R.string.phase_first_settlement;
+			case SETUP_FIRST_R:
+				return R.string.phase_first_road;
+			case SETUP_CITY:
+				return R.string.phase_first_city;
+			case SETUP_SECOND_R:
+				return R.string.phase_second_road;
+			case PRODUCTION:
+				return R.string.phase_your_turn;
+			case BUILD:
+				return R.string.phase_build;
+			case PROGRESS_CARD_1:
+				// TODO: progress card step 1
+				return 0;
+			case PROGRESS_CARD_2:
+				// TODO: progress card step 2
+				return 0;
+			case ROBBER:
+				return R.string.phase_move_robber;
+			case DONE:
+				return R.string.phase_game_over;
+			}
 
 		return 0;
+	}
+
+	public boolean itsMyTurn(String myParticipantId){
+		String s = this.getCurrentPlayer().getGooglePlayParticipantId();
+		return (this.getCurrentPlayer().getGooglePlayParticipantId().equals(myParticipantId));
 	}
 
 	/**
@@ -768,73 +841,7 @@ public class Board {
 		return winner;
 	}
 
-	/**
-	 * Get the hexagons with the robberIndex
-	 * 
-	 * @return the hexagons with the robberIndex
-	 */
-	public Hexagon getCurRobberHex() {
-		return curRobberHex;
-	}
-
-	/**
-	 * If the robber is being moved, return the last hexagons where it last
-	 * resided, or otherwise the current location
-	 * 
-	 * @return the last location of the robber
-	 */
-	public Hexagon getPrevRobberHex() {
-		int hexCount = this.boardGeometry.getHexCount();
-		int curRobberId = this.curRobberHex != null ? this.curRobberHex.getId() : -1;
-		int prevRobberId = this.prevRobberHex != null ? this.prevRobberHex.getId() : -1;
-		if (this.phase == Phase.ROBBER && prevRobberId >= 0 && prevRobberId < hexCount)
-			return this.prevRobberHex;
-		else if (curRobberId >= 0 && curRobberId < hexCount) {
-			return this.curRobberHex;
-		}
-		else {
-			return null;
-		}
-	}
-
-	public boolean itsMyTurn(String myParticipantId){
-		String s = this.getCurrentPlayer().getGooglePlayParticipantId();
-		return (this.getCurrentPlayer().getGooglePlayParticipantId().equals(myParticipantId));
-	}
-
-	/**
-	 * Set the current robber hexagon
-	 *
-	 * @param curRobberHex
-	 *            current robber hexagon
-	 * @return true iff the currebt robber hex was set
-	 */
-	public boolean setCurRobberHex(Hexagon curRobberHex) {
-		if (this.curRobberHex != null) {
-			this.curRobberHex.removeRobber();
-		}
-		this.curRobberHex = curRobberHex;
-		this.curRobberHex.setRobber();
-		return true;
-	}
-
-	/**
-	 * Set the index for the robber
-	 * 
-	 * @param robberIndex
-	 *            id of the hexagon with the robber
-	 * @return true if the robber was placed
-	 */
-	public boolean setRobber(int robberIndex) {
-		if (this.curRobberHex != null) {
-			this.curRobberHex.removeRobber();
-		}
-		this.curRobberHex = this.hexagons[robberIndex];
-		this.curRobberHex.setRobber();
-		return true;
-	}
-
-    public void reinitBoardOnComponents() {
+    public void reinitBoardOnDependents() {
 
 		for (Hexagon hexagon : hexagons) {
 			hexagon.setBoard(this);

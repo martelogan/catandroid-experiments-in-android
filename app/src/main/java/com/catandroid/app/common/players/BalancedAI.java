@@ -3,12 +3,11 @@ package com.catandroid.app.common.players;
 import java.util.Vector;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.Edge;
-import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.components.ProgressCard;
-import com.catandroid.app.common.components.Resource.ResourceType;
-import com.catandroid.app.common.components.Resource;
-import com.catandroid.app.common.components.Vertex;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Hexagon;
+import com.catandroid.app.common.components.board_pieces.Resource.ResourceType;
+import com.catandroid.app.common.components.board_pieces.Resource;
+import com.catandroid.app.common.components.board_positions.Vertex;
 
 public class BalancedAI extends Player implements AutomatedPlayer {
 
@@ -25,19 +24,19 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             done = true;
 
             boolean hasLongest = board.getLongestRoadOwner() == this;
-            boolean settlementPriority = towns + cities < 4;
+            boolean settlementPriority = settlements + cities < 4;
             boolean roadContender = board.getLongestRoad() - getRoadLength() <= 3;
 
             boolean canSettle = false;
             boolean canCity = false;
 
-            // check if we have a location to build a town or city
+            // check if we have a location to build a settlement or city
             for (int i = 0; i < roads.size(); i++) {
                 Vertex v1 = roads.get(i).getV0Clockwise();
                 Vertex v2 = roads.get(i).getV1Clockwise();
 
-                if (v1.canBuild(this, Vertex.TOWN)
-                        || v2.canBuild(this, Vertex.TOWN))
+                if (v1.canBuild(this, Vertex.SETTLEMENT)
+                        || v2.canBuild(this, Vertex.SETTLEMENT))
                 {
                     canSettle = true;
                 }
@@ -49,14 +48,14 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                 }
             }
 
-            // don't uselessly expand roads until player has 4 towns/cities
+            // don't uselessly expand roads until player has 4 settlements/cities
             boolean considerRoad = getNumRoads() < MAX_ROADS
                     && (!canSettle || (!hasLongest && roadContender && !settlementPriority));
 
-            // try to build a town
-            if (canSettle && affordTown()) {
-                Vertex pick = pickTown();
-                if (pick != null && build(pick, Vertex.TOWN))
+            // try to build a settlement
+            if (canSettle && affordSettlement()) {
+                Vertex pick = pickSettlement();
+                if (pick != null && build(pick, Vertex.SETTLEMENT))
                 {
                     done = false;
                 }
@@ -66,7 +65,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             if (canCity && affordCity()) {
                 for (int i = 0; i < settlementIds.size(); i++) {
                     Vertex settlement = board.getVertexById(settlementIds.get(i));
-                    if (settlement.getBuilding() == Vertex.TOWN
+                    if (settlement.getBuilding() == Vertex.SETTLEMENT
                             && build(settlement, Vertex.CITY))
                     {
                         done = false;
@@ -147,9 +146,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                         done = false;
                 }
 
-                // trade for town resources
-                else if (canSettle && !affordTown() && tradeFor(TOWN_COST)) {
-                    if (affordTown())
+                // trade for settlement resources
+                else if (canSettle && !affordSettlement() && tradeFor(SETTLEMENT_COST)) {
+                    if (affordSettlement())
                         done = false;
                 }
 
@@ -219,7 +218,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
     }
 
     @Override
-    public int setupTown(Vertex[] vertices) {
+    public int setupSettlement(Vertex[] vertices) {
         int highest = 0;
         int index = 0;
 
@@ -230,13 +229,13 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             }
 
             int score = vertexValue(vertices[i], preference);
-            if (score > highest && canBuild(vertices[i], Vertex.TOWN)) {
+            if (score > highest && canBuild(vertices[i], Vertex.SETTLEMENT)) {
                 highest = score;
                 index = i;
             }
         }
 
-        build(vertices[index], Vertex.TOWN);
+        build(vertices[index], Vertex.SETTLEMENT);
         reachingIds.add(index);
         return index;
     }
@@ -308,8 +307,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
         return 0;
     }
 
-    protected Vertex pickTown() {
-        if (!affordTown())
+    protected Vertex pickSettlement() {
+        if (!affordSettlement())
         {
             return null;
         }
@@ -321,9 +320,9 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             Vertex v1 = roads.get(i).getV0Clockwise();
             Vertex v2 = roads.get(i).getV1Clockwise();
 
-            int value1 = v1.canBuild(this, Vertex.TOWN) ? vertexValue(v1,
+            int value1 = v1.canBuild(this, Vertex.SETTLEMENT) ? vertexValue(v1,
                     preference) : 0;
-            int value2 = v2.canBuild(this, Vertex.TOWN) ? vertexValue(v2,
+            int value2 = v2.canBuild(this, Vertex.SETTLEMENT) ? vertexValue(v2,
                     preference) : 0;
 
             if (value1 > value2 && value1 > highest) {
@@ -533,8 +532,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
             if (affordCity()) {
                 subtractList(extra, CITY_COST);
                 continue;
-            } else if (affordTown()) {
-                subtractList(extra, TOWN_COST);
+            } else if (affordSettlement()) {
+                subtractList(extra, SETTLEMENT_COST);
                 continue;
             } else if (affordRoad()) {
                 subtractList(extra, ROAD_COST);
@@ -553,7 +552,7 @@ public class BalancedAI extends Player implements AutomatedPlayer {
 
         // see if we can build anything new
         if ((compareList(extra, ROAD_COST) >= 0)
-                || (compareList(extra, TOWN_COST) >= 0)
+                || (compareList(extra, SETTLEMENT_COST) >= 0)
                 || (compareList(extra, CITY_COST) >= 0)
                 || (compareList(extra, CARD_COST) >= 0))
         {
@@ -575,8 +574,8 @@ public class BalancedAI extends Player implements AutomatedPlayer {
                 subtractList(extra, CITY_COST);
                 count -= 5;
                 continue;
-            } else if (affordTown() && count >= 4) {
-                subtractList(extra, TOWN_COST);
+            } else if (affordSettlement() && count >= 4) {
+                subtractList(extra, SETTLEMENT_COST);
                 count -= 4;
                 continue;
             } else if (affordRoad() && count >= 2) {

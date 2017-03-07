@@ -18,6 +18,9 @@ import com.catandroid.app.R;;
 
 public class AppSettings extends SQLiteOpenHelper {
 
+	private SQLiteDatabase db;
+	private SQLiteStatement settingInsert;
+
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "catAndroid_settings.db";
 	private static final String SETTINGS_TABLE = "settings";
@@ -25,9 +28,6 @@ public class AppSettings extends SQLiteOpenHelper {
 			+ SETTINGS_TABLE + " (name,value) VALUES (?,?)";
 
 	private static final String[] QUERY_VALUE = { "value" };
-
-	private SQLiteDatabase db;
-	private SQLiteStatement settingInsert;
 
 	public AppSettings(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,22 +37,33 @@ public class AppSettings extends SQLiteOpenHelper {
 		getWritableDatabase();
 	}
 
-	private void set(SQLiteDatabase db, String attribute, String value) {
-		if (db.isReadOnly())
-		{
-			return;
-		}
-
-		if (settingInsert == null)
-		{
-			settingInsert = db.compileStatement(SETTINGS_INSERT);
-		}
-
-		settingInsert.bindString(1, attribute);
-		settingInsert.bindString(2, value);
-		settingInsert.executeInsert();
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+		this.db = db;
 	}
-	
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		this.db = db;
+		Log.d(this.getClass().getName(), "need to initialize database");
+
+		// create key/value pair table
+		db.execSQL("CREATE TABLE " + SETTINGS_TABLE
+				+ " (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "name TEXT, value TEXT)");
+
+		// addCubic default options and players
+		GameManagerActivity.setup(this);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		this.db = db;
+		Log.d(this.getClass().getName(), "database upgrade from version "
+				+ oldVersion + " to " + newVersion);
+	}
+
 	public void set(String attribute, String value) {
 		set(db, attribute, value);
 	}
@@ -95,31 +106,20 @@ public class AppSettings extends SQLiteOpenHelper {
 	public boolean getBool(String attribute) {
 		return Boolean.parseBoolean(get(attribute));
 	}
-	
-	@Override
-	public void onOpen(SQLiteDatabase db) {
-		super.onOpen(db);
-		this.db = db;
-	}
 
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		this.db = db;
-		Log.d(this.getClass().getName(), "need to initialize database");
+	private void set(SQLiteDatabase db, String attribute, String value) {
+		if (db.isReadOnly())
+		{
+			return;
+		}
 
-		// create key/value pair table
-		db.execSQL("CREATE TABLE " + SETTINGS_TABLE
-				+ " (id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "name TEXT, value TEXT)");
+		if (settingInsert == null)
+		{
+			settingInsert = db.compileStatement(SETTINGS_INSERT);
+		}
 
-		// addCubic default options and players
-		GameManagerActivity.setup(this);
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		this.db = db;
-		Log.d(this.getClass().getName(), "database upgrade from version "
-				+ oldVersion + " to " + newVersion);
+		settingInsert.bindString(1, attribute);
+		settingInsert.bindString(2, value);
+		settingInsert.executeInsert();
 	}
 }

@@ -53,7 +53,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 		setSystemUiVisibility(getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
 		buttons = new UIButton[ButtonType.values().length];
-		int size = (int) (0.5 * BoardGeometry.BUTTON_SIZE * getResources().getDisplayMetrics().density);
+		int size = (int) (0.5 * BoardGeometry.BUTTON_PNG_SCALE * getResources().getDisplayMetrics().density);
 		for (ButtonType buttonType : ButtonType.values())
 			buttons[buttonType.ordinal()] = new UIButton(buttonType, size, size);
 		
@@ -258,7 +258,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 	public void drawButtons(TextureManager texture, GL10 gl) {
 		for (UIButton button : buttons) {
 			if (button.isEnabled())
-				texture.draw(button, gl);
+				texture.drawButton(button, gl);
 		}
 	}
 
@@ -273,30 +273,30 @@ public class GameView extends GLSurfaceView implements OnGestureListener,
 		int select = -1;
 
 		switch (action) {
-		case NONE:
-			return false;
+			case NONE:
+				return false;
 
-		case ROBBER:
-			// select a hexagon
-			select = boardGeometry.getNearestHexagon(x, y);
-			break;
+			case ROBBER:
+				// select a hexagon
+				select = boardGeometry.getNearestHexagon(x, y);
+				break;
 
-		case TOWN:
-		case CITY:
-			// select a vertex
-			select = boardGeometry.getNearestVertex(x, y);
-			break;
+			case SETTLEMENT:
+			case CITY:
+				// select a vertex
+				select = boardGeometry.getNearestVertex(x, y);
+				break;
 
-		case ROAD:
-			// select an edge
-			select = boardGeometry.getNearestEdge(x, y);
-			break;
-		}
+			case ROAD:
+				// select an edge
+				select = boardGeometry.getNearestEdge(x, y);
+				break;
+			}
 
-		if (select >= 0) {
-			game.select(action, select);
-			return true;
-		}
+			if (select >= 0) {
+				game.select(action, select);
+				return true;
+			}
 
 		return false;
 	}

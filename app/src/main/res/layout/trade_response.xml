@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/lumber"
-                android:src="@drawable/res_lumber_medium" >
+                android:src="@drawable/resource_lumber_medium" >
             </ImageView>
 
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/wool"
-                android:src="@drawable/res_wool_medium" >
+                android:src="@drawable/resource_wool_medium" >
             </ImageView>
 
             <TextView
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/grain"
-                android:src="@drawable/res_grain_medium" >
+                android:src="@drawable/resource_grain_medium" >
             </ImageView>
 
             <TextView
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/brick"
-                android:src="@drawable/res_brick_medium" >
+                android:src="@drawable/resource_brick_medium" >
             </ImageView>
 
             <TextView
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/ore"
-                android:src="@drawable/res_ore_medium" >
+                android:src="@drawable/resource_ore_medium" >
             </ImageView>
 
             <TextView

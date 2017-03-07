@@ -8,17 +8,12 @@ public class UIButton {
 	}
 	
 	public enum ButtonBackground {
-		BACKDROP, PRESSED, ACTIVATED
+		DEFAULT, PRESSED, ACTIVATED
 	}
 
+	private int x, y, width, height;
+	private boolean pressed, enabled;
 	private ButtonType buttonType;
-
-	private int x;
-	private int y;
-	private int width;
-	private int height;
-	private boolean pressed;
-	private boolean enabled;
 
 	public UIButton(ButtonType buttonType, int width, int height) {
 		this.buttonType = buttonType;
@@ -29,6 +24,33 @@ public class UIButton {
 
 		pressed = false;
 		enabled = false;
+	}
+
+	public boolean press(int x, int y) {
+		if (!enabled)
+		{
+			return false;
+		}
+
+		pressed = isWithin(x, y);
+		return pressed;
+	}
+
+	public boolean release(int x, int y) {
+		if (!pressed || !enabled)
+		{
+			return false;
+		}
+
+		pressed = false;
+		return isWithin(x, y);
+	}
+
+	public boolean isWithin(int x, int y) {
+		x += width / 2;
+		y += height / 2;
+		return (x > this.x && x < this.x + width && y > this.y && y < this.y
+				+ height);
 	}
 
 	public int getX() {
@@ -51,7 +73,7 @@ public class UIButton {
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public boolean isPressed() {
 		return pressed;
 	}
@@ -66,32 +88,5 @@ public class UIButton {
 
 	public boolean isEnabled() {
 		return enabled;
-	}
-
-	public boolean isWithin(int x, int y) {
-		x += width / 2;
-		y += height / 2;
-		return (x > this.x && x < this.x + width && y > this.y && y < this.y
-				+ height);
-	}
-
-	public boolean press(int x, int y) {
-		if (!enabled)
-		{
-			return false;
-		}
-
-		pressed = isWithin(x, y);
-		return pressed;
-	}
-
-	public boolean release(int x, int y) {
-		if (!pressed || !enabled)
-		{
-			return false;
-		}
-
-		pressed = false;
-		return isWithin(x, y);
 	}
 }

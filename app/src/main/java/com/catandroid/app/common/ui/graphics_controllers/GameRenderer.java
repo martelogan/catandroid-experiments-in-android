@@ -9,8 +9,8 @@ import android.util.Log;
 
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.common.components.BoardGeometry;
-import com.catandroid.app.common.components.Edge;
-import com.catandroid.app.common.components.Vertex;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Vertex;
 import com.catandroid.app.common.players.Player;
 import com.catandroid.app.common.ui.views.GameView;
 import com.catandroid.app.common.ui.resources.Square;
@@ -18,7 +18,7 @@ import com.catandroid.app.common.ui.resources.Square;
 public class GameRenderer implements Renderer {
 
 	public enum Action {
-		NONE, TOWN, CITY, ROAD, ROBBER
+		NONE, SETTLEMENT, CITY, ROAD, ROBBER
 	}
 
 	private TextureManager texture;
@@ -41,20 +41,6 @@ public class GameRenderer implements Renderer {
 
 	private Square background;
 	private GameView view;
-
-	public GameRenderer(GameView gameView) {
-		view = gameView;
-		
-		if (boardGeometry == null) {
-			boardGeometry = new BoardGeometry();
-			this.HEX_COUNT = boardGeometry.getHexCount();
-			this.VERTEX_COUNT = boardGeometry.getVertexCount();
-			this.EDGE_COUNT = boardGeometry.getEdgeCount();
-			this.HARBOR_COUNT = boardGeometry.getHarborCount();
-		}
-
-		action = Action.NONE;
-	}
 
 	public GameRenderer(GameView gameView, BoardGeometry boardGeometry) {
 		view = gameView;
@@ -102,22 +88,6 @@ public class GameRenderer implements Renderer {
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		this.width = width;
-		this.height = height;
-		
-		boardGeometry.setCurFocus(width, height);
-
-		float aspect = (float) width / (float) height;
-		if (width > height)
-			background = new Square(backgroundColors, 0, 0, 0, 2 * aspect, 2);
-		else
-			background = new Square(backgroundColors, 0, 0, 0, 2, 2 / aspect);
-
-		gl.glViewport(0, 0, width, height);
-	}
-
-	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -136,6 +106,22 @@ public class GameRenderer implements Renderer {
 	}
 
 	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		this.width = width;
+		this.height = height;
+
+		boardGeometry.setCurFocus(width, height);
+
+		float aspect = (float) width / (float) height;
+		if (width > height)
+			background = new Square(backgroundColors, 0, 0, 0, 2 * aspect, 2);
+		else
+			background = new Square(backgroundColors, 0, 0, 0, 2, 2 / aspect);
+
+		gl.glViewport(0, 0, width, height);
+	}
+
+	@Override
 	public void onDrawFrame(GL10 gl) {
 		try {
 			gl.glColor4f(1, 1, 1, 1);
@@ -145,9 +131,13 @@ public class GameRenderer implements Renderer {
 			gl.glLoadIdentity();
 			float aspect = (float) width / (float) height;
 			if (width > height)
-                gl.glOrthof(-aspect, aspect, -1, 1, 0.1f, 40f);
+			{
+				gl.glOrthof(-aspect, aspect, -1, 1, 0.1f, 40f);
+			}
             else
-                gl.glOrthof(-1, 1, -1 / aspect, 1 / aspect, 0.1f, 40f);
+			{
+				gl.glOrthof(-1, 1, -1 / aspect, 1 / aspect, 0.1f, 40f);
+			}
 
 			gl.glMatrixMode(GL10.GL_MODELVIEW);
 			gl.glLoadIdentity();
@@ -162,26 +152,28 @@ public class GameRenderer implements Renderer {
 
 			// draw the hexangons with backdrop
 			for (int i = 0; i < HEX_COUNT; i++)
-                texture.draw1(board.getHexagonById(i), gl, boardGeometry);
+			{
+				texture.drawHexTerrain(board.getHexagonById(i), gl, boardGeometry);
+			}
 
 			// draw the executeDiceRoll numbers, robber, and highlighting
 			for (int i = 0; i < HEX_COUNT; i++)
 			{
-				texture.draw2(board.getHexagonById(i), gl, boardGeometry);
+				texture.drawRobber(board.getHexagonById(i), gl, boardGeometry);
 			}
 			for (int i = 0; i < HEX_COUNT; i++)
 			{
-				texture.draw3(board.getHexagonById(i), gl, boardGeometry, lastRoll);
+				texture.drawActiveHex(board.getHexagonById(i), gl, boardGeometry, lastRoll);
 			}
 			for (int i = 0; i < HEX_COUNT; i++)
 			{
-				texture.draw4(board.getHexagonById(i), gl, boardGeometry);
+				texture.drawNumTokenOnHex(board.getHexagonById(i), gl, boardGeometry);
 			}
 
 			// draw harbors
 			for (int i = 0; i < HARBOR_COUNT; i++)
 			{
-				texture.draw(board.getHarborById(i), gl, boardGeometry);
+				texture.drawHarbor(board.getHarborById(i), gl, boardGeometry);
 			}
 
 			// draw edges
@@ -191,18 +183,20 @@ public class GameRenderer implements Renderer {
                         && player.canBuild(edge);
 
                 if (build || edge.getOwnerPlayer() != null)
-                    texture.draw(edge, build, gl, boardGeometry);
+				{
+					texture.drawEdge(edge, build, gl, boardGeometry);
+				}
             }
 
 			// draw vertices
 			for (int i = 0; i < VERTEX_COUNT; i++) {
                 Vertex vertex = board.getVertexById(i);
-                boolean town = player != null && action == Action.TOWN
-                        && player.canBuild(vertex, Vertex.TOWN);
+                boolean settlement = player != null && action == Action.SETTLEMENT
+                        && player.canBuild(vertex, Vertex.SETTLEMENT);
                 boolean city = player != null && action == Action.CITY
                         && player.canBuild(vertex, Vertex.CITY);
 
-                texture.draw(vertex, town, city, gl, boardGeometry);
+                texture.drawVertex(vertex, settlement, city, gl, boardGeometry);
             }
 
 			gl.glMatrixMode(GL10.GL_PROJECTION);

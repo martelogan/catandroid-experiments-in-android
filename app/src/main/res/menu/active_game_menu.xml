@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/reference"
-        android:icon="@drawable/ic_action_about"
+        android:icon="@drawable/ic_action_costs"
         android:title="@string/reference"
         android:showAsAction="ifRoom|withText">
     </item>

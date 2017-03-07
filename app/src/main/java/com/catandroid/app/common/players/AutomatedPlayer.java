@@ -1,21 +1,21 @@
 package com.catandroid.app.common.players;
 
-import com.catandroid.app.common.components.Edge;
-import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.components.Resource;
-import com.catandroid.app.common.components.Vertex;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Hexagon;
+import com.catandroid.app.common.components.board_pieces.Resource;
+import com.catandroid.app.common.components.board_positions.Vertex;
 
 public interface AutomatedPlayer {
 
 	/**
-	 * Select the location to build a town; Note: you must build there before
+	 * Select the location to build a settlement; Note: you must build there before
 	 * returning
 	 * 
 	 * @param vertices
 	 *            the vertex list
 	 * @return the index of the vertex you built on
 	 */
-	int setupTown(Vertex[] vertices);
+	int setupSettlement(Vertex[] vertices);
 
 	/**
 	 * Select the location to build a city; Note: you must build there before

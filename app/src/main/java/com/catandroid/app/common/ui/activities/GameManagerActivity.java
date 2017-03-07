@@ -3,12 +3,10 @@ package com.catandroid.app.common.ui.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.content.pm.ActivityInfo;
 
 import com.catandroid.app.CatAndroidApp;
 import com.catandroid.app.common.components.BoardGeometry;
@@ -51,7 +50,6 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMultiplayer;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameManagerActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -60,9 +58,8 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 	private String[] names;
 	private boolean[] types;
-	private boolean mixed = false, auto_discard = false;
+	private boolean auto_discard = false;
 
-	private static final String MIXED_KEY = "mixed_trade";
 	private static final String AUTO_KEY = "auto_discard";
 
 	private static final String[] HUMAN_KEYS = { "player_human1",
@@ -117,7 +114,9 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 	public static void setup(AppSettings appSettings) {
 		for (int i = 0; i < 4; i++)
+		{
 			appSettings.set(HUMAN_KEYS[i], DEFAULT_HUMANS[i]);
+		}
 	}
 
 
@@ -129,13 +128,11 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 
 	private void load(AppSettings appSettings) {
 
-		mixed = appSettings.getBool(MIXED_KEY);
 		auto_discard = appSettings.getBool(AUTO_KEY);
 	}
 
 	private void save(AppSettings appSettings) {
 
-		appSettings.set(MIXED_KEY, mixed);
 		appSettings.set(AUTO_KEY, auto_discard);
 	}
 
@@ -146,6 +143,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 		//at this time.
 
 		super.onCreate(state);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.game_manager);
 
 		// Create the Google API Client with access to Plus and Games
@@ -731,7 +729,7 @@ public class GameManagerActivity extends FragmentActivity implements GoogleApiCl
 				Board board = CatandroidTurn.unpersist(mMatch.getData());
 				catandroidTurn.currentBoard = board;
 				activeGameFragment.setBoard(board);
-				board.reinitBoardOnComponents();
+				board.reinitBoardOnDependents();
 				board.setActiveGameFragment(activeGameFragment);
 				currentMatchId = match.getMatchId();
 				setGameplayUI();

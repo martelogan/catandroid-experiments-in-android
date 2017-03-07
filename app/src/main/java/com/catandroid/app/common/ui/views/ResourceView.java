@@ -1,7 +1,6 @@
 package com.catandroid.app.common.ui.views;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -9,14 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.catandroid.app.common.components.Resource;
+import com.catandroid.app.common.components.board_pieces.Resource;
 import com.catandroid.app.R;
 import com.catandroid.app.common.players.Player;
 
 public class ResourceView extends LinearLayout {
 
-	private static final int[] RESOURCES = { R.drawable.res_lumber_medium, R.drawable.res_wool_medium,
-			R.drawable.res_grain_medium, R.drawable.res_brick_medium, R.drawable.res_ore_medium, };
+	private static final int[] RESOURCES = { R.drawable.resource_lumber_medium, R.drawable.resource_wool_medium,
+			R.drawable.resource_grain_medium, R.drawable.resource_brick_medium, R.drawable.resource_ore_medium, };
 
 	private TextView[] views;
 
@@ -69,6 +68,8 @@ public class ResourceView extends LinearLayout {
 
 		int[] resources = player.getCountPerResource();
 		for (int i = 0; i < Resource.RESOURCE_TYPES.length; i++)
+		{
 			views[i].setText(String.valueOf(resources[i]));
+		}
 	}
 }

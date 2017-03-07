@@ -67,7 +67,7 @@ public class StartScreenActivity extends Activity {
 			public void run() {
 				final Builder aboutDialog = new AlertDialog.Builder(StartScreenActivity.this);
 				aboutDialog.setTitle(R.string.app_name);
-				aboutDialog.setIcon(R.drawable.icon);
+				aboutDialog.setIcon(R.drawable.logo);
 				aboutDialog.setMessage(getString(R.string.about_text) + "\n\n"
 						+ getString(R.string.acknowledgements));
 				aboutDialog.show();

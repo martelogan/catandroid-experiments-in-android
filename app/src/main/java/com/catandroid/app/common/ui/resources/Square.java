@@ -14,10 +14,10 @@ public class Square {
 
 	private FloatBuffer vertexBuffer, textureBuffer, colorBuffer;
 	private ShortBuffer indexBuffer;
-	private int resource;
+	private int graphicalResource;
 
-	public Square(int resource, float x, float y, float depth, float width, float height) {
-		this.resource = resource;
+	public Square(int graphicalResource, float x, float y, float depth, float width, float height) {
+		this.graphicalResource = graphicalResource;
 		colorBuffer = null;
 
 		float left = x - width / 2;
@@ -85,20 +85,28 @@ public class Square {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		
 		if (colorBuffer != null)
+		{
 			gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		}
 
 		if (textureBuffer != null)
+		{
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
 
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, resource);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, graphicalResource);
 
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		
 		if (colorBuffer != null)
+		{
 			gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+		}
 		
 		if (textureBuffer != null)
+		{
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		}
 
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length,
 				GL10.GL_UNSIGNED_SHORT, indexBuffer);

@@ -18,8 +18,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.catandroid.app.common.components.Board;
 import com.catandroid.app.R;
-import com.catandroid.app.CatAndroidApp;
-import com.catandroid.app.common.components.Resource;
+import com.catandroid.app.common.components.board_pieces.Resource;
 import com.catandroid.app.common.players.Player;
 
 public class TradeRequestFragment extends Fragment {

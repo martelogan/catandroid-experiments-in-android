@@ -5,15 +5,14 @@ import java.util.Vector;
 import android.content.Context;
 
 import com.catandroid.app.common.components.Board;
-import com.catandroid.app.common.components.ProgressCard.ProgressCardType;
-import com.catandroid.app.common.components.Edge;
-import com.catandroid.app.common.components.Hexagon;
-import com.catandroid.app.common.components.ProgressCard;
-import com.catandroid.app.common.components.Resource.ResourceType;
+import com.catandroid.app.common.components.board_pieces.ProgressCard.ProgressCardType;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Hexagon;
+import com.catandroid.app.common.components.board_pieces.Resource.ResourceType;
 import com.catandroid.app.R;
 import com.catandroid.app.CatAndroidApp;
-import com.catandroid.app.common.components.Resource;
-import com.catandroid.app.common.components.Vertex;
+import com.catandroid.app.common.components.board_pieces.Resource;
+import com.catandroid.app.common.components.board_positions.Vertex;
 
 public class Player {
 
@@ -24,7 +23,7 @@ public class Player {
 	public static final int MAX_ROADS = 15;
 
 	public static final int[] ROAD_COST = { 1, 0, 0, 1, 0, 0 };
-	public static final int[] TOWN_COST = { 1, 1, 1, 1, 0, 0 };
+	public static final int[] SETTLEMENT_COST = { 1, 1, 1, 1, 0, 0 };
 	public static final int[] CITY_COST = { 0, 0, 2, 0, 3, 0 };
 	public static final int[] CARD_COST = { 0, 1, 1, 0, 1, 0 };
 
@@ -32,7 +31,7 @@ public class Player {
 	private int playerNumber;
 	private Color color;
 	private String name;
-	protected int towns;
+	protected int settlements;
 	protected int cities;
 	private int knightsCount, privateVictoryPointsCount, tradeValue, roadLength;
 	private int[] countPerResource, countPerProgressCard;
@@ -73,7 +72,7 @@ public class Player {
 		this.type = type;
 		this.playerNumber = playerNumber;
 
-		towns = 0;
+		settlements = 0;
 		cities = 0;
 		knightsCount = 0;
 		roadLength = 0;
@@ -236,8 +235,8 @@ public class Player {
 		boolean setup = board.isSetupPhase();
 
 		// check resources based on type we want to build
-		if (type == Vertex.TOWN) {
-			if (!setup && !affordTown())
+		if (type == Vertex.SETTLEMENT) {
+			if (!setup && !affordSettlement())
 			{
 				return false;
 			}
@@ -257,21 +256,21 @@ public class Player {
 		}
 
 		// deduct resources based on type
-		if (vertex.getBuilding() == Vertex.TOWN) {
+		if (vertex.getBuilding() == Vertex.SETTLEMENT) {
 			if (!setup) {
 				useResources(Resource.ResourceType.BRICK, 1);
 				useResources(Resource.ResourceType.LUMBER, 1);
 				useResources(Resource.ResourceType.GRAIN, 1);
 				useResources(Resource.ResourceType.WOOL, 1);
 			}
-			towns += 1;
+			settlements += 1;
 			settlementIds.add(vertex.getId());
 			board.checkLongestRoad();
-		} else {
+		} else { // city
 			if (!setup) {
 				useResources(Resource.ResourceType.GRAIN, 2);
 				useResources(Resource.ResourceType.ORE, 3);
-				towns -= 1;
+				settlements -= 1;
 			}
 			else {
 				settlementIds.add(vertex.getId());
@@ -279,8 +278,12 @@ public class Player {
 			cities += 1;
 		}
 
-		// TODO: does town vs. city matter?
-		// collect resources for second town during setup
+		appendAction(type == Vertex.SETTLEMENT ? R.string.player_settlement
+				: R.string.player_city);
+
+		// TODO: does settlement vs. city matter?
+		// collect resources for city during setup
+		Resource.ResourceType resourceType;
 		if (board.isSetupPhase2()) {
 			for (int i = 0; i < 3; i++) {
 				Hexagon curHex = vertex.getHexagon(i);
@@ -289,16 +292,17 @@ public class Player {
 					terrainType = curHex.getTerrainType();
 					if (terrainType != Hexagon.TerrainType.DESERT
 							&& terrainType != Hexagon.TerrainType.SEA) {
-						addResources(curHex.getResourceType(), 1);
+						// collect resource for hex adjacent to city
+						resourceType = curHex.getResourceType();
+						addResources(resourceType, 2);
+						appendAction(R.string.player_received_x_resources,
+								Integer.toString(2) + " " + Resource.toRString(resourceType));
 					}
 				}
 			}
 		}
 
 		lastVertexPieceId = vertex.getId();
-
-		appendAction(type == Vertex.TOWN ? R.string.player_settlement
-				: R.string.player_city);
 
 		return true;
 	}
@@ -321,7 +325,7 @@ public class Player {
 			else {
 				v = board.getVertexById(lastVertexPieceId);
 			}
-			// check if the edge is adjacent to the last town built
+			// check if the edge is adjacent to the last settlement built
 			if (v != edge.getV0Clockwise() &&
 					v != edge.getV1Clockwise())
 				return false;
@@ -337,7 +341,7 @@ public class Player {
 	 * @return
 	 */
 	public boolean canBuild(Vertex vertex, int type) {
-		if (type == Vertex.TOWN && towns >= MAX_SETTLEMENTS)
+		if (type == Vertex.SETTLEMENT && settlements >= MAX_SETTLEMENTS)
 		{
 			return false;
 		}
@@ -563,12 +567,12 @@ public class Player {
 	}
 
 	/**
-	 * Determine if a player can build a town
+	 * Determine if a player can build a settlement
 	 *
-	 * @return true if the player can build a town
+	 * @return true if the player can build a settlement
 	 */
-	public boolean affordTown() {
-		return (FREE_BUILD || towns < MAX_SETTLEMENTS
+	public boolean affordSettlement() {
+		return (FREE_BUILD || settlements < MAX_SETTLEMENTS
 				&& getResources(Resource.ResourceType.BRICK) >= 1
 				&& getResources(Resource.ResourceType.LUMBER) >= 1
 				&& getResources(Resource.ResourceType.GRAIN) >= 1
@@ -591,7 +595,7 @@ public class Player {
 	 * @return the number of privateVictoryPointsCount points
 	 */
 	public int getPublicVictoryPoints() {
-		int points = towns + 2 * cities;
+		int points = settlements + 2 * cities;
 
 		//TODO: add other public vps
 		if (board.hasLongestRoad(this))
@@ -1046,7 +1050,7 @@ public class Player {
 	 * @return the number of settlements owned by the player
 	 */
 	public int getNumSettlements() {
-		return towns;
+		return settlements;
 	}
 
 	/**

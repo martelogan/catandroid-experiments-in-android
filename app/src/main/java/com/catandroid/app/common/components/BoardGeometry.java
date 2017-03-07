@@ -2,10 +2,14 @@ package com.catandroid.app.common.components;
 
 import android.util.Log;
 
-import com.catandroid.app.common.components.hexGridUtils.AxialHexLocation;
-import com.catandroid.app.common.components.hexGridUtils.HexGridLayout;
-import com.catandroid.app.common.components.hexGridUtils.HexGridUtils;
-import com.catandroid.app.common.components.hexGridUtils.HexPoint;
+import com.catandroid.app.common.components.board_positions.Edge;
+import com.catandroid.app.common.components.board_positions.Harbor;
+import com.catandroid.app.common.components.board_positions.Hexagon;
+import com.catandroid.app.common.components.board_positions.Vertex;
+import com.catandroid.app.common.components.utilities.hex_grid_utils.AxialHexLocation;
+import com.catandroid.app.common.components.utilities.hex_grid_utils.HexGridLayout;
+import com.catandroid.app.common.components.utilities.hex_grid_utils.HexGridUtils;
+import com.catandroid.app.common.components.utilities.hex_grid_utils.HexPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,14 +23,9 @@ import static java.lang.Math.min;
 public class BoardGeometry {
 
 	// DEFAULT GEOMETRY CONSTANTS (regular board)
-    private static HexPoint HEX_SCALE = HexGridLayout.size_default;
-	private int BOARD_SIZE = 0;
-	private int ZOOM_SCALE = 250;
-	private int HEX_COUNT = 61;
-	private int EDGE_COUNT = 210;
-	private int VERTEX_COUNT = 150;
-	private int HARBOR_COUNT = 9;
-	private static final float MAX_PAN = 2.5f;
+    private static HexPoint HEX_POINT_SCALE = HexGridLayout.size_default;
+	private int BOARD_SIZE = 0, ZOOM_SCALE = 250, HEX_COUNT = 61,
+			EDGE_COUNT = 210, VERTEX_COUNT = 150, HARBOR_COUNT = 9;
 
 	/* NOTE: For a perfectly-centered hexagon
 	with centered hexagonal number K, the map
@@ -37,38 +36,20 @@ public class BoardGeometry {
 	hexagonal number K has map radius n + 1.*/
 	private int MAP_RADIUS = 4;
 
-	// RESOURCE SIZES
-	public static final int TILE_SIZE = 256;
-	public static final int BUTTON_SIZE = 128;
-
 	// ZOOM PARAMETERS
 	private int width, height;
 	private float cx, cy, zoom;
 	private float minZoom, maxZoom, highZoom;
 
 	// GEOMETRIC OVERLAY
-	private float[] HEXAGONS_X;
-	private float[] HEXAGONS_Y;
-	private float[] VERTICES_X;
-	private float[] VERTICES_Y;
-	private float[] EDGES_X;
-	private float[] EDGES_Y;
-	private int[] HARBOR_EDGES;
-	private int[] HARBOR_HEXES;
+	private float[] HEXAGONS_X, HEXAGONS_Y, VERTICES_X, VERTICES_Y,
+			EDGES_X, EDGES_Y;
+	private int[] HARBOR_EDGE_IDS, HARBOR_HEX_IDS;
 
-	public BoardGeometry() {
-		cx = cy = 0;
-		width = height = 480;
-		zoom = minZoom = maxZoom = highZoom = 1;
-		HEXAGONS_X = new float[HEX_COUNT];
-		HEXAGONS_Y = new float[HEX_COUNT];
-		VERTICES_X = new float[VERTEX_COUNT];
-		VERTICES_Y =  new float[VERTEX_COUNT];
-		EDGES_X = new float[EDGE_COUNT];
-		EDGES_Y = new float[EDGE_COUNT];
-		HARBOR_EDGES = new int[HARBOR_COUNT];
-		HARBOR_HEXES = new int[HARBOR_COUNT];
-	}
+	// GRAPHICAL RESOURCE SIZES
+	private static final float MAX_PAN = 2.5f;
+	public static final int HEX_PNG_SCALE = 256;
+	public static final int BUTTON_PNG_SCALE = 128;
 
 	public BoardGeometry(int boardSize) {
 		cx = cy = 0;
@@ -97,8 +78,8 @@ public class BoardGeometry {
 		VERTICES_Y =  new float[VERTEX_COUNT];
 		EDGES_X = new float[EDGE_COUNT];
 		EDGES_Y = new float[EDGE_COUNT];
-		HARBOR_EDGES = new int[HARBOR_COUNT];
-		HARBOR_HEXES = new int[HARBOR_COUNT];
+		HARBOR_EDGE_IDS = new int[HARBOR_COUNT];
+		HARBOR_HEX_IDS = new int[HARBOR_COUNT];
 	}
 
 	public void setCurFocus(int w, int h) {
@@ -148,27 +129,64 @@ public class BoardGeometry {
 		return width < height ? width : height;
 	}
 
+	public int getNearestHexagon(int userX, int userY) {
+		return getNearest(userX, userY, HEXAGONS_X, HEXAGONS_Y, HEX_COUNT);
+	}
+
+	public int getNearestEdge(int userX, int userY) {
+		return getNearest(userX, userY, EDGES_X, EDGES_Y, EDGE_COUNT);
+	}
+
+	public int getNearestVertex(int userX, int userY) {
+		return getNearest(userX, userY, VERTICES_X, VERTICES_Y, VERTEX_COUNT);
+	}
+
+	public float getHexagonX(int index) {
+		return HEXAGONS_X[index];
+	}
+
+	public float getHexagonY(int index) {
+		return HEXAGONS_Y[index];
+	}
+
+	public float getEdgeX(int index) {
+		return EDGES_X[index];
+	}
+
+	public float getEdgeY(int index) {
+		return EDGES_Y[index];
+	}
+
+	public float getVertexX(int index) {
+		return VERTICES_X[index];
+	}
+
+	public float getVertexY(int index) {
+		return VERTICES_Y[index];
+	}
+
+	public float getHarborX(int index) {
+		return HEXAGONS_X[HARBOR_HEX_IDS[index]];
+	}
+
+	public float getHarborY(int index) {
+		return HEXAGONS_Y[HARBOR_HEX_IDS[index]];
+	}
+
+	public float getHarborIconX(int index, Edge e) {
+		float edgeX = EDGES_X[HARBOR_EDGE_IDS[index]];
+		int sign = e.isBorderingSea() ? e.getDirectTowardsSea_X() : e.getOriginHexDirectXsign();
+		return edgeX + 0.28f * ((float) Math.abs(HEX_POINT_SCALE.x)) * (sign);
+	}
+
+	public float getHarborIconY(int index, Edge e) {
+		float edgeY = EDGES_Y[HARBOR_EDGE_IDS[index]];
+		int sign = e.isBorderingSea() ? e.getDirectTowardsSea_Y() : e.getOriginHexDirectYsign();
+		return edgeY + 0.28f * ((float) Math.abs(HEX_POINT_SCALE.y)) * (sign);
+	}
+
 	public float getZoom() {
 		return zoom;
-	}
-
-	public void zoomOut() {
-		cx = cy = 0;
-		zoom = minZoom;
-	}
-
-	public void zoomTo(int userX, int userY) {
-		cx = translateScreenX(userX);
-		cy = translateScreenY(userY);
-		zoom = highZoom;
-		translate(0, 0);
-	}
-
-	public void toggleZoom(int userX, int userY) {
-		if (zoom > (highZoom - 0.01f))
-			zoomOut();
-		else
-			zoomTo(userX, userY);
 	}
 
 	public void zoomBy(float z) {
@@ -184,6 +202,29 @@ public class BoardGeometry {
 			zoom = minZoom;
 
 		translate(0, 0);
+	}
+
+	public void zoomTo(int userX, int userY) {
+		cx = translateScreenX(userX);
+		cy = translateScreenY(userY);
+		zoom = highZoom;
+		translate(0, 0);
+	}
+
+	public void zoomOut() {
+		cx = cy = 0;
+		zoom = minZoom;
+	}
+
+	public void toggleZoom(int userX, int userY) {
+		if (zoom > (highZoom - 0.01f))
+		{
+			zoomOut();
+		}
+		else
+		{
+			zoomTo(userX, userY);
+		}
 	}
 
 	public void translate(float dx, float dy) {
@@ -234,62 +275,6 @@ public class BoardGeometry {
 			}
 		}
 		return best;
-	}
-
-	public int getNearestHexagon(int userX, int userY) {
-		return getNearest(userX, userY, HEXAGONS_X, HEXAGONS_Y, HEX_COUNT);
-	}
-
-	public int getNearestEdge(int userX, int userY) {
-		return getNearest(userX, userY, EDGES_X, EDGES_Y, EDGE_COUNT);
-	}
-
-	public int getNearestVertex(int userX, int userY) {
-		return getNearest(userX, userY, VERTICES_X, VERTICES_Y, VERTEX_COUNT);
-	}
-
-	public float getHexagonX(int index) {
-		return HEXAGONS_X[index];
-	}
-
-	public float getHexagonY(int index) {
-		return HEXAGONS_Y[index];
-	}
-
-	public float getEdgeX(int index) {
-		return EDGES_X[index];
-	}
-
-	public float getEdgeY(int index) {
-		return EDGES_Y[index];
-	}
-
-	public float getVertexX(int index) {
-		return VERTICES_X[index];
-	}
-
-	public float getVertexY(int index) {
-		return VERTICES_Y[index];
-	}
-
-	public float getHarborX(int index) {
-		return HEXAGONS_X[HARBOR_HEXES[index]];
-	}
-
-	public float getHarborY(int index) {
-		return HEXAGONS_Y[HARBOR_HEXES[index]];
-	}
-
-	public float getHarborIconX(int index, Edge e) {
-        float edgeX = EDGES_X[HARBOR_EDGES[index]];
-		int sign = e.isBorderingSea() ? e.getDirectTowardsSea_X() : e.getOriginHexDirectXsign();
-		return edgeX + 0.28f * ((float) Math.abs(HEX_SCALE.x)) * (sign);
-	}
-
-	public float getHarborIconY(int index, Edge e) {
-        float edgeY = EDGES_Y[HARBOR_EDGES[index]];
-		int sign = e.isBorderingSea() ? e.getDirectTowardsSea_Y() : e.getOriginHexDirectYsign();
-        return edgeY + 0.28f * ((float) Math.abs(HEX_SCALE.y)) * (sign);
 	}
 
 	// BOARD POPULATION LOGIC
@@ -550,8 +535,8 @@ public class BoardGeometry {
             candidatePortEdge.setMyHarbor(harbor);
             candidatePortEdge.getV0Clockwise().setHarbor(harbor);
             candidatePortEdge.getV1Clockwise().setHarbor(harbor);
-            HARBOR_EDGES[i] = candidatePortEdge.getId();
-            HARBOR_HEXES[i] = candidatePortEdge.getPortHexId();
+            HARBOR_EDGE_IDS[i] = candidatePortEdge.getId();
+            HARBOR_HEX_IDS[i] = candidatePortEdge.getPortHexId();
         }
     }
 
